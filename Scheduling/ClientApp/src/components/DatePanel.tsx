@@ -23,6 +23,7 @@ class DatePanel extends React.Component {
         super(props);
         this.state = {
             startDate: new Date()
+            startDate: new Date()
         };
 
     };
