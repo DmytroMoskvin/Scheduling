@@ -12,9 +12,47 @@ type TableProps = {
     requests: Array<TimerType>
 }
 
-
+class Popup extends React.Component {
+    render() {
+        const popup = {
+            position: "fixed",
+            width: "100%",
+            height: "100%",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            margin: "auto",
+            zIndex: 2,
+            backgroundColor: "rgba(0, 0, 0, 0.5)"
+    };
+    const popup_inner = {
+        position: "absolute",
+        left: "25%",
+        right: "25%",
+        top: "25%",
+        bottom: "25%",
+        margin: "auto",
+        backgroundColor: "white"
+    };
+        return (
+            <div style = { popup } >
+                <div style={popup_inner}>
+                    <h1>{this.props.text}</h1>
+                    <button onClick={this.props.closePopup}>close me</button>
+                </div>
+            </div>
+        );
+    }
+}
 
 class TimerHistoryTable extends Component {
+    constructor() {
+        super();
+        this.state = {
+            showPopup: false
+        };
+    }
     async componentDidMount() {
         const token = Cookies.get('token');
         if (token) {
@@ -45,6 +83,11 @@ class TimerHistoryTable extends Component {
 
         return hours + ":" + minutes ;
     }
+    togglePopup() {
+        this.setState({
+            showPopup: !this.state.showPopup
+        });
+    }
     render() {
         if (this.props.timerHistory != undefined && this.props.timerHistory.length > 0) {
             console.log('table' + this.props.timerHistory[0].id);
@@ -64,11 +107,23 @@ class TimerHistoryTable extends Component {
                                     <td>{
                                         this.convertMiliseconds(r.finishTime,r.startTime)
                                     }</td>
-                                    <td><button onClick={() => {
+                                    <td>
+                                        <button onClick={() => {
+                                            this.togglePopup()
+                                        }}>Edit</button>
+                                        <button onClick={() => {
                                         this.deleteTimerValue(r.id)
-                                    }}>Delete</button></td>
+                                    }}>Delete</button>
+                                    </td>
 
                                 </tr>)}
+                                {this.state.showPopup ?
+                                    <Popup
+                                        text='Close Me'
+                                        closePopup={this.togglePopup.bind(this)}
+                                    />
+                                    : null
+                                }
                             </tbody>
                             <button id='send-request'>Add new item</button>
 

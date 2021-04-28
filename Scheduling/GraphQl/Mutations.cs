@@ -155,6 +155,7 @@ namespace Scheduling.GraphQl
                 description: "Update value: added finish time"
             ).AuthorizeWith("Authenticated");
 
+
             Field<TimerHistoryType>(
                 "deleteTimerFinishValue",
                 arguments: new QueryArguments(
