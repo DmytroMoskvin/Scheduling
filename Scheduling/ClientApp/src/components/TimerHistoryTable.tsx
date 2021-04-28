@@ -36,23 +36,14 @@ class TimerHistoryTable extends Component {
         }
         var millis = new Date(finishTime) - new Date(startTime);
         var minutes;
-        var seconds;
         var hours;
-        if (millis < 3600000) {
-            minutes = Math.floor(millis / 60000);
-            seconds = ((millis % 60000) / 1000).toFixed(0);
-            var a = minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
-            return a;
-        }
-        seconds = Math.floor((millis / 1000) % 60);
         minutes = Math.floor((millis / (1000 * 60)) % 60);
         hours = Math.floor((millis / (1000 * 60 * 60)) % 24);
 
         hours = (hours < 10) ? "0" + hours : hours;
         minutes = (minutes < 10) ? "0" + minutes : minutes;
-        seconds = (seconds < 10) ? "0" + seconds : seconds;
 
-        return hours + ":" + minutes + ":" + seconds;
+        return hours + ":" + minutes ;
     }
     render() {
         if (this.props.timerHistory != undefined && this.props.timerHistory.length > 0) {
@@ -65,7 +56,7 @@ class TimerHistoryTable extends Component {
                             <tbody>
                                 <tr>
                                     <th>Interval</th>
-                                    <th>Time</th>
+                                    <th>Time(h:m)</th>
                                     <th></th>
                                 </tr>
                                 {this.props.timerHistory.map((r) => <tr key={this.props.timerHistory.indexOf(r)}>
