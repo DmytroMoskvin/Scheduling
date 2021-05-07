@@ -69,12 +69,12 @@ namespace Scheduling
                .AddGraphQLAuthorization(options =>
                {
                    options.AddPolicy("Authenticated", p => p.RequireAuthenticatedUser());
-                   options.AddPolicy("Access to vacation approvals", p => p.RequireClaim("permission", "Access to vacation approvals"));
-                   options.AddPolicy("Part-time", p => p.RequireClaim("permission", "Part-time"));
+                   options.AddPolicy(PermissionName.VacationApprovals.ToString(), p => p.RequireClaim("permission", PermissionName.VacationApprovals.ToString()));
+                   options.AddPolicy(PermissionName.PartTime.ToString(), p => p.RequireClaim("permission", PermissionName.PartTime.ToString()));
                    options.AddPolicy("Full-time", p => p.RequireClaim("permission", "Full-time"));
-                   options.AddPolicy("Accountant", p => p.RequireClaim("permission", "Accountant"));
-                   options.AddPolicy("Access to team management", p => p.RequireClaim("permission", "Access to team management"));
-                   options.AddPolicy("Access to global management", p => p.RequireClaim("permission", "Access to global management"));
+                   options.AddPolicy(PermissionName.Accountant.ToString(), p => p.RequireClaim("permission", PermissionName.Accountant.ToString()));
+                   options.AddPolicy(PermissionName.UserManagement.ToString(), p => p.RequireClaim("permission", PermissionName.UserManagement.ToString()));
+                   //options.AddPolicy("Access to global management", p => p.RequireClaim("permission", "Access to global management"));
                });
 
             services.AddScoped<IdentityService>();

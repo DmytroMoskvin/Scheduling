@@ -41,7 +41,7 @@ namespace Scheduling.GraphQl
                     return dataBaseRepository.GetListOfAvailableTeams();
                 },
                 description: "Get list of available teams."
-            ).AuthorizeWith("Manager");
+            ).AuthorizeWith(PermissionName.UserManagement.ToString());
 
 
             /*Field<ListGraphType<TeamType>>(
@@ -75,7 +75,7 @@ namespace Scheduling.GraphQl
                 {
                     return dataBaseRepository.GetAllPermissions();
                 }
-            ).AuthorizeWith("Manager");
+            ).AuthorizeWith(PermissionName.UserManagement.ToString());
 
             Field<ListGraphType<VacationRequestType>>(
                 "GetCurrentUserRequests",
@@ -101,7 +101,7 @@ namespace Scheduling.GraphQl
                     return dataBaseRepository.Get();
                 }
 
-            );
+            ).AuthorizeWith(PermissionName.UserManagement.ToString());
         }
     }
 }
