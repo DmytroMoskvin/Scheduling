@@ -23,12 +23,11 @@ export const CreateUserForm: React.FC<UserManagementProps> = (props) => {
     const [password, setPassword] = useState("");
     const [position, setPosition] = useState("");
 
-
-    const dispatch = useDispatch();
     const history = useHistory();
 
-    const createUser = () => dispatch({
-        type: 'CREATE_USER', payload: {
+    const dispatch = useDispatch();
+    const requestCreateUser = () => dispatch({
+        type: 'REQUESTED_CREATE_USER', payload: {
             name: name,
             surname: surname,
             email: email,
@@ -37,10 +36,21 @@ export const CreateUserForm: React.FC<UserManagementProps> = (props) => {
         }
     });
 
-    function handleSubmit() {
+    const handleSubmit = async (e: { preventDefault: () => void; }) => {
+        e.preventDefault();
         if (name !== "" && surname !== "" && /^\w+@\w+\.\w+$/.test(email) && password !== "" && position !== "") {
-            createUser();
-            //history.push('/usermanagement');
+            console.log("!!!");
+            requestCreateUser();
+            /*actionCreators.requestedCreateUser({
+                name: name,
+                surname: surname,
+                email: email,
+                password: password,
+                position: position,
+                department: "",
+                computedProps: { permissions: []},
+            });*/
+            history.push('/usermanagement');
         }
     }
 
@@ -50,27 +60,29 @@ export const CreateUserForm: React.FC<UserManagementProps> = (props) => {
                 <h1>Create new user</h1>
                 <form>
                     <table id="fieldsTable">
-                        <tr>
-                            <th><h4>Name</h4></th>
-                            <td><input onChange={(e) => setName(e.target.value)} required /></td>
-                            <th><h4>Surname</h4></th>
-                            <td><input onChange={(e) => setSurname(e.target.value)} required /></td>
-                        </tr>
-                        <tr>
-                            <th><h4>Email</h4></th>
-                            <td><input onChange={(e) => setEmail(e.target.value)} pattern="^\w+@\w+\.\w+$"/></td>
-                            <th><h4>Position</h4></th>
-                            <td><input onChange={(e) => setPosition(e.target.value)} required /></td>
-                        </tr>
-                        <tr>
-                            <th><h4>Password</h4></th>
-                            <td><input onChange={(e) => setPassword(e.target.value)} required /></td>
-                        </tr>
+                        <tbody>
+                            <tr>
+                                <th><h4>Name</h4></th>
+                                <td><input onChange={(e) => setName(e.target.value)} required /></td>
+                                <th><h4>Surname</h4></th>
+                                <td><input onChange={(e) => setSurname(e.target.value)} required /></td>
+                            </tr>
+                            <tr>
+                                <th><h4>Email</h4></th>
+                                <td><input onChange={(e) => setEmail(e.target.value)} pattern="^\w+@\w+\.\w+$"/></td>
+                                <th><h4>Position</h4></th>
+                                <td><input onChange={(e) => setPosition(e.target.value)} required /></td>
+                            </tr>
+                            <tr>
+                                <th><h4>Password</h4></th>
+                                <td><input onChange={(e) => setPassword(e.target.value)} required /></td>
+                            </tr>
+                        </tbody>
                     </table>
                     <div className="border">
                         <h3>Attributes</h3>
                     </div>
-                    <button type="submit" onClick={() => handleSubmit()} id="createButton">Create New User</button>
+                    <button onClick={handleSubmit} id="createButton">Create New User</button>
                     <Link to="/usermanagement" id="cancelButton">Cancel</Link>
                 </form>
             </div>

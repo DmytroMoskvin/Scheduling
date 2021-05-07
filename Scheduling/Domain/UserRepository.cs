@@ -80,17 +80,20 @@ namespace Scheduling.Domain
             return true;
         }
 
-        public bool EditUser(User user)
+        public bool EditUser(string originalEmail, string name, string surname, string email, string position, string password, List<string> permission, List<int> teams)
         {
+            User userToEdit = Context.Users.FirstOrDefault(user => user.Email == originalEmail);
 
-            if (!RemoveUser(user.Email))
+            if (userToEdit == null)
                 return false;
 
-            List<Team> teams = GetUserTeams(user.Id);
+            userToEdit.Name = name;
+            userToEdit.Surname = surname;
+            userToEdit.Password = Hashing.GetHashString(password + userToEdit.Salt);
+            userToEdit.Email = email;
+            userToEdit.Position = position;
 
-            RemoveUserPermissions(user.Id);
-
-            foreach (Permission permmision in user.ComputedProps.Permissions)
+            /*foreach (Permission permmision in user.ComputedProps.Permissions)
             {
                 CreateUserPermission(user.Id, permmision.Name);
             }
@@ -98,9 +101,8 @@ namespace Scheduling.Domain
             foreach (Team team in teams)
             {
                 AddUserToTeam(user.Id, team.Id);
-            }
+            }*/
 
-            Context.Users.Add(user);
             Context.SaveChanges();
             return true;
         }

@@ -19,17 +19,18 @@ const reducer: Reducer<UserManagementState> =
                 };
             }
 
-            case 'CREATE_USER': {
+            case 'USER_CREATED': {
                 if (action.payload === null || action.payload === undefined || action.payload.email === undefined) {
                     return state;
                 }
+                console.log("red");
                 return {
                     ...state, 
                     users: state.users.concat(action.payload as UserData)
                 };
             }
                 
-            case 'EDIT_USER': {
+            case 'USER_EDITED': {
                 return{
                     ...state,
                     users: state.users.map(user => {
@@ -42,7 +43,7 @@ const reducer: Reducer<UserManagementState> =
                 };
             }
                 
-            case 'DELETE_USER': {
+            case 'USER_DELETED': {
                 return {
                     ...state,
                     users: state.users.filter(u => u!.email !== action.payload)

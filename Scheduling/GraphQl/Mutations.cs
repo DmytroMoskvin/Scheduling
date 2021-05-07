@@ -34,9 +34,10 @@ namespace Scheduling.GraphQl
                 description: "Returns JWT."
             );
 
-            Field<BooleanGraphType>(
+            /*Field<BooleanGraphType>(
                 "editUser",
                 arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "Original email", Description = "User original email"},
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "Name", Description = "User name" },
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "Surname", Description = "User surname" },
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "Email", Description = "User email" },
@@ -47,6 +48,7 @@ namespace Scheduling.GraphQl
                 ),
                 resolve: context =>
                 {
+                    string originalEmail = context.GetArgument<string>("Original email");
                     string email = context.GetArgument<string>("Email");
                     string name = context.GetArgument<string>("Name");
                     string surname = context.GetArgument<string>("Surname");
@@ -55,9 +57,9 @@ namespace Scheduling.GraphQl
                     List<string> permissions = context.GetArgument<List<string>>("Permissions");
                     List<int> teamsId = context.GetArgument<List<int>>("Teams");
 
-                    User user = dataBaseRepository.CreateUser(name, surname, email, position, password, permissions, teamsId);
+                    bool isSuccesful = dataBaseRepository.EditUser(originalEmail, name, surname, email, position, password, permissions, teamsId);
 
-                    /*if(user.Email != null)
+                    *//*if(user.Email != null)
                     {
                         try
                         {
@@ -66,11 +68,11 @@ namespace Scheduling.GraphQl
                         {
                             return false;
                         }
-                    }*/
+                    }*//*
 
                     return true;
                 }
-            ).AuthorizeWith("Authenticated");
+            );*/
 
             Field<BooleanGraphType>(
                 "createUser",

@@ -7,9 +7,14 @@ export interface CheckPermissions { type: 'CHECK_PERMISSIONS' };
 export interface AccessAllowed { type: 'ACCESS_ALLOWED' };
 export interface AccessDenied { type: 'ACCESS_DENIED' };
 
-export interface CreateUserAction { type: 'CREATE_USER', payload: UserData };
-export interface DeleteUserAction { type: 'DELETE_USER', payload: string };
-export interface EditUserAction { type: 'EDIT_USER', payload: { email: string, user: UserData }};
+export interface UserCreatedAction { type: 'USER_CREATED', payload: UserData };
+export interface RequestedCreateUserAction { type: 'REQUESTED_CREATE_USER', payload: UserData };
+
+export interface UserDeletedAction { type: 'USER_DELETED', payload: string };
+export interface RequestedDeleteUserAction { type: 'REQUESTED_DELETE_USER', payload: string };
+
+export interface UserEditedAction { type: 'USER_EDITED', payload: { email: string, user: UserData }};
+export interface RequestedEditUserAction { type: 'REQUESTED_EDIT_USER', payload: { email: string, user: UserData }};
 
 
 const receivedUsersData = (users: Array<UserData>) => ({ type: 'RECEIVED_USERS', payload: users } as ReceivedUsersDataAction);
@@ -18,21 +23,27 @@ const checkPermissions = () => ({ type: 'CHECK_PERMISSIONS' } as CheckPermission
 const accessAllowed = () => ({ type: 'ACCESS_ALLOWED' } as AccessAllowed);
 const accessDenied = () => ({ type: 'ACCESS_DENIED' } as AccessDenied);
 
-const createUser = (user: UserData) => ({ type: 'CREATE_USER', payload: user } as CreateUserAction);
-const deleteUser = (email: string) => ({ type: 'DELETE_USER' } as DeleteUserAction);
-const editUser = (email: string, user: UserData) => ({ type: 'EDIT_USER', payload: { email: email, user: user }} as EditUserAction);
+const createUser = (user: UserData) => ({ type: 'USER_CREATED', payload: user } as UserCreatedAction);
+const requestedCreateUser = (user: UserData) => ({ type: 'REQUESTED_CREATE_USER', payload: user } as RequestedCreateUserAction);
+
+const deleteUser = (email: string) => ({ type: 'USER_DELETED', payload: email } as UserDeletedAction);
+const requestedDeleteUser = (email: string) => ({ type: 'REQUESTED_DELETE_USER', payload: email } as RequestedDeleteUserAction);
+
+const editUser = (email: string, user: UserData) => ({ type: 'USER_EDITED', payload: { email: email, user: user }} as UserEditedAction);
+const requestedEditUser = (email: string, user: UserData) => ({ type: 'REQUESTED_EDIT_USER', payload: { email: email, user: user } } as RequestedEditUserAction);
 
 export const actionCreators = {
-    receivedUsersData,
-    requestedUsersData,
+    receivedUsersData, requestedUsersData,
     checkPermissions,
     accessAllowed,
     accessDenied,
-    createUser,
-    deleteUser,
-    editUser
+    createUser, requestedCreateUser,
+    deleteUser, requestedDeleteUser,
+    editUser, requestedEditUser
 };
 
 export type KnownAction = ReceivedUsersDataAction | CheckPermissions |
     RequestedUsersDataAction | AccessAllowed | AccessDenied |
-    CreateUserAction | DeleteUserAction | EditUserAction;
+    UserCreatedAction | RequestedCreateUserAction |
+    UserDeletedAction | RequestedDeleteUserAction |
+    UserEditedAction  | RequestedEditUserAction;

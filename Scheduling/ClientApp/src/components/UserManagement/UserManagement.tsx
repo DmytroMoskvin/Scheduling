@@ -86,6 +86,14 @@ type DeleteBoxProps = {
 };
 
 const DeleteBox: React.FC<DeleteBoxProps> = ({ email, isOpen, setIsOpen }) => {
+    const dispatch = useDispatch();
+    const requestRemoveUser = () => dispatch({ type: 'REQUESTED_DELETE_USER', payload: email });
+    const handleRemoveUser = async (e: { preventDefault: () => void; }) => {
+        e.preventDefault();
+        requestRemoveUser();
+        setIsOpen(false);
+    }
+
     let content = isOpen ?
         <div className="shadowBox">
             <div className="deleteBox">
@@ -93,7 +101,7 @@ const DeleteBox: React.FC<DeleteBoxProps> = ({ email, isOpen, setIsOpen }) => {
                 <div>
                     <button
                         className="deleteUserButton"
-                        onClick={() => { handleDeleteUser(); setIsOpen(false); }}
+                        onClick={handleRemoveUser}
                     >
                         Delete
                     </button>
@@ -102,13 +110,6 @@ const DeleteBox: React.FC<DeleteBoxProps> = ({ email, isOpen, setIsOpen }) => {
             </div>
         </div>
         : null;
-
-    const dispatch = useDispatch();
-
-    const removeUser = () => dispatch({ type: 'DELETE_USER', payload: email });
-    function handleDeleteUser() {
-        removeUser();
-    }
 
     return(
         <React.Fragment>

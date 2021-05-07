@@ -25,20 +25,10 @@ export const EditUserForm: React.FC<UserManagementProps> = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
 
-    const editUser = () => dispatch({
-        type: 'CREATE_USER', payload: {
-            name: name,
-            surname: surname,
-            email: email,
-            password: password,
-            position: position,
-        }
-    });
-
     function handleSubmit() {
         if (name !== "" && surname !== "" && /^\w+@\w+\.\w+$/.test(email) && password !== "" && position !== "") {
-            editUser();
-            //history.push('/usermanagement');
+            
+            history.push('/usermanagement');
         }
     }
 
@@ -48,27 +38,29 @@ export const EditUserForm: React.FC<UserManagementProps> = (props) => {
                 <h1>Edit User</h1>
                 <form>
                     <table id="fieldsTable">
-                        <tr>
-                            <th><h4>Name</h4></th>
-                            <td><input onChange={(e) => setName(e.target.value)} required /></td>
-                            <th><h4>Surname</h4></th>
-                            <td><input onChange={(e) => setSurname(e.target.value)} required /></td>
-                        </tr>
-                        <tr>
-                            <th><h4>Email</h4></th>
-                            <td><input onChange={(e) => setEmail(e.target.value)} required /></td>
-                            <th><h4>Position</h4></th>
-                            <td><input onChange={(e) => setPosition(e.target.value)} required /></td>
-                        </tr>
-                        <tr>
-                            <th><h4>Password</h4></th>
-                            <td><input onChange={(e) => setPassword(e.target.value)} required /></td>
-                        </tr>
+                        <tbody>
+                            <tr>
+                                <th><h4>Name</h4></th>
+                                <td><input onChange={(e) => setName(e.target.value)} required /></td>
+                                <th><h4>Surname</h4></th>
+                                <td><input onChange={(e) => setSurname(e.target.value)} required /></td>
+                            </tr>
+                            <tr>
+                                <th><h4>Email</h4></th>
+                                <td><input onChange={(e) => setEmail(e.target.value)} required /></td>
+                                <th><h4>Position</h4></th>
+                                <td><input onChange={(e) => setPosition(e.target.value)} required /></td>
+                            </tr>
+                            <tr>
+                                <th><h4>Password</h4></th>
+                                <td><input onChange={(e) => setPassword(e.target.value)} required /></td>
+                            </tr>
+                        </tbody>
                     </table>
                     <div className="border">
                         <h3>Attributes</h3>
                     </div>
-                    <button type="submit" onClick={() => handleSubmit()} id="createButton">Edit User</button>
+                    <button onClick={() => handleSubmit()} id="createButton">Edit User</button>
                     <Link to="/usermanagement" id="cancelButton">Cancel</Link>
                 </form>
             </div>

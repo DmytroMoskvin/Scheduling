@@ -10,8 +10,8 @@ import * as actions from "./actions"
 export default function* watchUserManagementSagas() {
     yield all([
         takeEvery('REQUESTED_USERS', receiveUsersSaga),
-        takeEvery('CREATE_USER', createUserSaga),
-        takeEvery('DELETE_USER', removeUserSaga),
+        takeEvery('REQUESTED_CREATE_USER', createUserSaga),
+        takeEvery('REQUESTED_DELETE_USER', removeUserSaga),
     ]);
 }
 
@@ -30,7 +30,7 @@ function* receiveUsersSaga(action: actions.ReceivedUsersDataAction) {
         yield put(actionCreators.accessDenied());
 }
 
-function* createUserSaga(action: actions.CreateUserAction) {
+function* createUserSaga(action: actions.UserCreatedAction) {
     const token = Cookies.get('token');
     if (token) {
         try {
@@ -48,13 +48,13 @@ function* createUserSaga(action: actions.CreateUserAction) {
         yield put(actionCreators.accessDenied());
 }
 
-function* removeUserSaga(action: actions.DeleteUserAction) {
+function* removeUserSaga(action: actions.UserDeletedAction) {
     const token = Cookies.get('token');
     if (token) {
         try {
             const response: UserData = yield removeUser(action.payload, token);
             console.log(response);
-            yield put(actionCreators.deleteUser(response!.email));
+            yield put(actionCreators.deleteUser(action.payload));
         } catch {
             yield put(actionCreators.accessDenied());
         }
