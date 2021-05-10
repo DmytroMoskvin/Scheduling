@@ -83,26 +83,22 @@ namespace Scheduling.Domain
 
         public bool EditUser(User user)
         {
-
-            if (!RemoveUser(user.Email))
+            if (Context.Users.FirstOrDefault(u => u.Id == user.Id) == null)
                 return false;
 
-            List<Team> teams = GetUserTeams(user.Id);
+            Context.Users.Update(user);
+            Context.SaveChanges();
 
             RemoveUserPermissions(user.Id);
 
-            foreach (string permmision in user.ComputedProps.Permissions)
+            if (user.ComputedProps != null)
             {
-                CreateUserPermission(user.Id, permmision);
+                foreach (string permmision in user.ComputedProps.Permissions)
+                {
+                    CreateUserPermission(user.Id, permmision);
+                }
             }
 
-            foreach (Team team in teams)
-            {
-                AddUserToTeam(user.Id, team.Id);
-            }
-
-            Context.Users.Add(user);
-            Context.SaveChanges();
             return true;
         }
 

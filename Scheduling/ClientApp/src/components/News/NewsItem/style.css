@@ -1,0 +1,13 @@
+.news-item
+{
+    margin-bottom: 1rem;
+    padding: 0.5rem 2rem;
+    border: 1px solid lightgray;
+    border-radius: 15px;
+    background-color: white;
+}
+
+.news-item.urgent
+{
+    background-color: #ff5858;
+}

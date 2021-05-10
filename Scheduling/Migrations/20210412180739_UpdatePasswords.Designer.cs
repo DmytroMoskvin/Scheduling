@@ -8,7 +8,7 @@ using Scheduling.Domain;
 
 namespace Scheduling.Migrations
 {
-    [DbContext(typeof(UserDBContext))]
+    [DbContext(typeof(DBContext))]
     [Migration("20210412180739_UpdatePasswords")]
     partial class UpdatePasswords
     {

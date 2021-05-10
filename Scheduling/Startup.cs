@@ -31,7 +31,7 @@ namespace Scheduling
         {
             services.AddControllersWithViews();
 
-            services.AddDbContext<UserDBContext>(options =>
+            services.AddDbContext<DBContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
@@ -74,6 +74,7 @@ namespace Scheduling
                    options.AddPolicy("Accounter", p => p.RequireClaim("permission", "Accounter"));
                    options.AddPolicy("Access to reports", p => p.RequireClaim("permission", "Access to reports"));
                    options.AddPolicy("Access to calendar", p => p.RequireClaim("permission", "Access to calendar"));
+                   options.AddPolicy("canResetPassword", p => p.RequireClaim("permission", "canResetPassword"));
                });
 
             services.AddScoped<IdentityService>();
@@ -88,6 +89,7 @@ namespace Scheduling
             services.AddScoped<TeamType>();
             services.AddScoped<ComputedPropsType>();
             services.AddScoped<VacationRequestType>();
+            services.AddScoped<TimerHistoryType>();
 
             services.AddScoped<ISchema, GraphSchema>();
 

@@ -1,0 +1,49 @@
+@media screen and (max-width: 1000px) {
+    .aside-news {
+        display:none;
+    }
+}
+
+.main-page-container
+{
+    display: flex;
+}
+
+.aside-news
+{
+    padding-left: 1rem;
+    flex: 3;
+}
+
+.main-block
+{
+    display: flex;
+    flex: 7;
+    flex-flow: row wrap;
+}
+
+.main-block .left-side
+{
+    margin-right: 0.5rem;
+    min-width: 200px;
+    flex: 4;
+}
+
+.main-block .right-side
+{
+    min-width: 300px;
+    flex: 6;
+    display: flex;
+    flex-flow: column;
+}
+
+.main-block .top-side
+{
+    margin-bottom: 0.5rem;
+    flex: 4;
+}
+
+.main-block .bottom-side
+{
+    flex: 6;
+}

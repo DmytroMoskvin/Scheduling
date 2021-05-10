@@ -18,24 +18,34 @@ export const ProfileForm: React.FunctionComponent<ProfileProps> = ({ user, logOu
                         <img id='user-form-picture' src={profileImage} alt='UserPicture'/>
                     </div>
                     <div id='user-form-greeting'>
-                        <h1>{user.name} {user.surname}</h1>
-                        <h3>{user.email}</h3>
+                        <h1>Wellcome, {user.name}!</h1>
                     </div>
                     <div id='user-form-info'>
+                        <div>
+                            <label>Name:</label>
+                            <h4>{user.name}</h4>
+                        </div>
                         <div>
                             <label>Department:</label>
                             <h4>{user.department}</h4>
                         </div>
-                        <hr/>
+                        <div>
+                            <label>Surname:</label>
+                            <h4>{user.surname}</h4>
+                        </div>
                         <div>
                             <label>Position:</label>
                             <h4>{user.position}</h4>
                         </div>
+                        <div>
+                            <label>E-mail:</label>
+                            <h4>{user.email}</h4>
+                        </div>
                     </div>
-                </form>
-                <div id='user-form-buttons'>
+                    <div id='user-form-buttons'>
                         <button id='logout-button' type='button' onClick={() => logOut()}>LOGOUT</button>
                     </div>
+                </form>
             </main>
         </React.Fragment>
     );

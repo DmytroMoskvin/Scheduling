@@ -21,6 +21,6 @@ namespace Scheduling.GraphQl.Types
             Field(user => user.Position).Description("User position.");
             Field(user => user.Department).Description("User department.");
             Field<ComputedPropsType>(nameof(User.ComputedProps));
-       }
+        }
     }
 }

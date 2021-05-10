@@ -1,0 +1,14 @@
+.news-block
+{
+    padding: 2rem 1rem;
+    border: 1px solid lightgray;
+    border-radius: 15px;
+    background-color: white;
+}
+
+ul.news-list
+{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}

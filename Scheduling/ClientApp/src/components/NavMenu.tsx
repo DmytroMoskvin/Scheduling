@@ -1,91 +1,55 @@
 import * as React from 'react';
-import { connect } from 'react-redux';
 import { Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
-import { Link, RouteComponentProps } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import './NavMenu.css';
-import { ApplicationState } from '../store/configureStore';
+import { connect } from 'react-redux';
 import { actionCreators } from '../store/User/actions';
-import { UserState } from '../store/User/types';
-
-type UserProps =
-    UserState &
-    typeof actionCreators &
-    RouteComponentProps<{}>;
+import { ApplicationState } from '../store/configureStore';
 
 
-class NavMenu extends React.PureComponent<{}, { isOpen: boolean }> {
+class NavMenu extends React.PureComponent<{ logined: boolean, logOut: () => void }, { isOpen: boolean }> {
     public state = {
         isOpen: false
     };
 
     public render() {
-        // console.log(this.props.user);
-        // if(this.props.logged && this.props.user && this.props.user.computedProps.permissions.includes('Manager'))
-            return (
-                <header>
-                    <Navbar className="navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3" light>
-                        <Container>
-                            <NavbarBrand tag={Link} to="/">Scheduling</NavbarBrand>
-                            <NavbarToggler onClick={this.toggle} className="mr-2"/>
-                            <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={this.state.isOpen} navbar>
-                                <ul className="navbar-nav flex-grow">
-                                    <NavItem>
-                                        <NavLink tag={Link} className="text-dark" to="/">Home</NavLink>
-                                    </NavItem>
-                                    <NavItem>
-                                        <NavLink tag={Link} className="text-dark" to="/vacationrequest">Vacation</NavLink>
-                                    </NavItem>
-                                    <NavItem>
-                                        <NavLink tag={Link} className="text-dark" to="/considervacationrequest">Vacation requests</NavLink>
-                                    </NavItem>
-                                    <NavItem>
-                                        <NavLink tag={Link} className="text-dark" to="/MonthReport">Month reports</NavLink>
-                                    </NavItem>
-                                </ul>
-                            </Collapse>
-                        </Container>
-                    </Navbar>
-                </header>
-            );
-        // if(this.props.logged)
-        //     return (
-        //         <header>
-        //             <Navbar className="navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3" light>
-        //                 <Container>
-        //                     <NavbarBrand tag={Link} to="/">Scheduling</NavbarBrand>
-        //                     <NavbarToggler onClick={this.toggle} className="mr-2"/>
-        //                     <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={this.state.isOpen} navbar>
-        //                         <ul className="navbar-nav flex-grow">
-        //                             <NavItem>
-        //                                 <NavLink tag={Link} className="text-dark" to="/">Home</NavLink>
-        //                             </NavItem>
-        //                             <NavItem>
-        //                                 <NavLink tag={Link} className="text-dark" to="/vacationrequest">Vacation</NavLink>
-        //                             </NavItem>
-        //                         </ul>
-        //                     </Collapse>
-        //                 </Container>
-        //             </Navbar>
-        //         </header>
-        //     );
-        // else
-        //     return (
-        //         <header>
-        //             <Navbar className="navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3" light>
-        //                 <Container>
-        //                     <NavbarBrand tag={Link} to="/">Scheduling</NavbarBrand>
-        //                     <NavbarToggler onClick={this.toggle} className="mr-2"/>
-        //                     <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={this.state.isOpen} navbar>
-        //                         <ul className="navbar-nav flex-grow">
-        //                             <NavItem>
-        //                                 <NavLink tag={Link} className="text-dark" to="/">Home</NavLink>
-        //                             </NavItem>
-        //                         </ul>
-        //                     </Collapse>
-        //                 </Container>
-        //             </Navbar>
-        //         </header>
-        //     );
+        return (
+            <header>
+                <Navbar className="navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3" light>
+                    <Container>
+                        <NavbarBrand tag={Link} to="/">Scheduling</NavbarBrand>
+                        <NavbarToggler onClick={this.toggle} className="mr-2"/>
+                        <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={this.state.isOpen} navbar>
+                            <ul className="navbar-nav flex-grow">
+                                <NavItem>
+                                    <NavLink tag={Link} className="text-dark" to="/">Home</NavLink>
+                                </NavItem>
+                                <NavItem>
+                                    <NavLink tag={Link} className="text-dark" to="/vacationRequest">Vacation</NavLink>
+                                </NavItem>
+                                <NavItem>
+                                    <NavLink tag={Link} className="text-dark" to="/vacationApproving">Vacation Approving</NavLink>
+                                </NavItem>
+                                <NavItem>
+                                    <NavLink tag={Link} className="text-dark" to="/Timer">Timer</NavLink>
+                                </NavItem>
+                                <NavItem>
+                                    <NavLink tag={Link} className="text-dark" to="/timer">Timer</NavLink>
+                                </NavItem>
+                                <NavItem>
+                                    <NavLink tag={Link} className="text-dark" to="/calendar">Calendar</NavLink>
+                                </NavItem>
+                                <NavItem>
+                                    {this.props.logined ? <button className="logout-btn" onClick={() => this.props.logOut()}>
+                                        Logout
+                                    </button>: null}
+                                </NavItem>
+                            </ul>
+                        </Collapse>
+                    </Container>
+                </Navbar>
+            </header>
+        );
     }
 
     private toggle = () => {
@@ -95,7 +59,13 @@ class NavMenu extends React.PureComponent<{}, { isOpen: boolean }> {
     }
 }
 
+const mapStateToProps = (store: ApplicationState) => {
+    return {
+        logined: store.loggedUser.logged
+    }
+}
+
 export default connect(
-    (state: ApplicationState) => state.loggedUser,
+    mapStateToProps,
     actionCreators
 )(NavMenu);

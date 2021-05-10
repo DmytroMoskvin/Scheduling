@@ -10,9 +10,9 @@ namespace Scheduling.Domain
     public partial class DataBaseRepository
     {
 
-        readonly UserDBContext Context;
+        readonly DBContext Context;
 
-        public DataBaseRepository(UserDBContext context)
+        public DataBaseRepository(DBContext context)
         {
             Context = context;
         }

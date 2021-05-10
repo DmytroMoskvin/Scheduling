@@ -8,7 +8,7 @@ using Scheduling.Domain;
 
 namespace Scheduling.Migrations
 {
-    [DbContext(typeof(UserDBContext))]
+    [DbContext(typeof(DBContext))]
     [Migration("20210412113007_initial")]
     partial class initial
     {

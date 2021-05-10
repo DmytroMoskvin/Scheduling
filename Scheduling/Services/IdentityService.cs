@@ -18,6 +18,7 @@ namespace Scheduling.Services
     public interface IIdentityService
     {
         string Authenticate(string email, string password);
+        string GenerateResetPasswordAccessToken(string email);
     }
     public class IdentityService : IIdentityService
     {
@@ -66,6 +67,30 @@ namespace Scheduling.Services
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        public string GenerateResetPasswordAccessToken(string email)
+        {
+            SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.GetSection("SecretKey").Value));
+            SigningCredentials signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            List<Claim> claims = new List<Claim>
+            {
+                new Claim("Email", email),
+                new Claim("permission", "canResetPassword")
+            };
+
+            JwtSecurityToken token = new JwtSecurityToken(
+               "issuer",
+               "audience",
+               claims,
+               expires: DateTime.Now.AddDays(1),
+               signingCredentials: signingCredentials
+           );
+
+            string jwt = new JwtSecurityTokenHandler().WriteToken(token);
+
+            dataBaseRepository.AddJWT(jwt);
+            return jwt;
         }
     }
 }

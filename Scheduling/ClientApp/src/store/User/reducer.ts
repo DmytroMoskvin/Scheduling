@@ -3,11 +3,13 @@ import { Action, Reducer } from "redux";
 import { KnownAction } from "./actions";
 import { UserState } from "./types";
 
-const reducer: Reducer<UserState> = (state: UserState | undefined, incomingAction: Action): UserState => {
-	if (state === undefined) {
-		 
-			return { logged: false, token: null, user: null };
-	}
+const initialState = {
+	logged: !!Cookies.get('token'), 
+	token: Cookies.get('token') || null, 
+	user: null
+}
+
+const reducer: Reducer<UserState> = (state: UserState = initialState , incomingAction: Action): UserState => {
 
 	const action = incomingAction as KnownAction;
 	switch (action.type) {
@@ -19,7 +21,7 @@ const reducer: Reducer<UserState> = (state: UserState | undefined, incomingActio
 					return { logged: false, token: null, user: null  };
 					
 			case 'GET_USER':
-					return { logged: state.logged, token: state.token, user: action.userData };
+					return { ...state, user: action.userData };
 			case 'LOGOUT_USER':
 					Cookies.remove('token');
 					return { logged: false, token: null, user: null };

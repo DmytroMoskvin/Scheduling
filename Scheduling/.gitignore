@@ -26,7 +26,12 @@ Obj/
 
 # Visual Studio 2015 cache/options directory
 .vs/
+/.vs
 /wwwroot/dist/
+/.vs/
+
+# JetBrains products cache/options directory
+.idea/
 
 # MSTest test Results
 [Tt]est[Rr]esult*/

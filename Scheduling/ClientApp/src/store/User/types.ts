@@ -1,4 +1,3 @@
-
 export interface UserState {
 	logged: boolean,
 	token: string | null,

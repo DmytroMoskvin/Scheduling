@@ -9,7 +9,7 @@ using Scheduling.Domain;
 
 namespace Scheduling.Migrations
 {
-    [DbContext(typeof(UserDBContext))]
+    [DbContext(typeof(DBContext))]
     [Migration("20210415013911_UpdatePermissions")]
     partial class UpdatePermissions
     {
