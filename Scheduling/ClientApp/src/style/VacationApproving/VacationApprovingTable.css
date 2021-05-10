@@ -1,0 +1,97 @@
+h2 {
+    transition: 0.1s;
+    margin-bottom: 15px;
+}
+
+#vacation-approving {
+    background-color: white;
+    padding: 50px;
+    border-radius: 15px;
+    position: relative;
+    margin-bottom: 25px;
+    box-shadow: 0px 0px 5px 0px lightgrey;
+}
+
+#approving {
+    padding: 15px;
+    width: 100%;
+    border: 1px solid lightgray;
+    border-radius: 10px;
+    transition: 0.1s;
+}
+
+#approving .my-comment{
+    resize: none;
+}
+
+#approving .button-vacation-agree {
+    width: 40px;
+    height: 40px;
+    background-color: lightgreen;
+    cursor: pointer;
+    margin: 5px;
+    color: black;
+}
+
+#approving .button-vacation-disagree {
+    width: 40px;
+    height: 40px;
+    background-color: lightcoral;
+    cursor: pointer;
+    margin: 5px;
+    color: black;
+}
+
+
+#approving .align-center{
+    text-align: center;
+}
+
+#approving td, #history th {
+    padding: 5px;
+    border-left: 1px solid lightgray;
+}
+
+#approving th {
+    text-align: center;
+}
+
+#approving tr:nth-child(1) {
+    background-color: lightgray;
+}
+
+#approving tr:nth-child(2n+2) {
+    background-color: whitesmoke;
+}
+
+#approving td:nth-child(4) {
+    text-align: center;
+}
+
+#approving button {
+    background-color: #0275d8;
+    border: 1px solid lightgray;
+    border-radius: 7px;
+    padding: 5px 10px;
+    color: white;
+}
+
+.blured {
+    filter: blur(10px) grayscale(100%);
+}
+
+.overflow-loading {
+    position: absolute;
+    display: flex;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.overflow-loading > .loading-container {
+    width: auto;
+    height: auto;
+}

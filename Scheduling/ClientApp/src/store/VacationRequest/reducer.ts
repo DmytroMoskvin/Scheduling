@@ -1,35 +1,39 @@
-import Cookies from "js-cookie";
 import { Action, Reducer } from "redux";
 import { KnownAction } from "./actions";
 import { VacationRequestState } from "./types";
 
-const reducer: Reducer<VacationRequestState> = (state: VacationRequestState | undefined, incomingAction: Action): VacationRequestState => {
+const vacReducer: Reducer<VacationRequestState> = (state: VacationRequestState | undefined, incomingAction: Action): VacationRequestState => {
 	if (state === undefined) {
-		const token = Cookies.get('token');
-		if(token)
-			return { logged: true, token: token, requestHistory: [] };
-		else
-			return { logged: false, token: null, requestHistory: [] };
+		return { requestHistory: [] };
 	}
 
 	const action = incomingAction as KnownAction;
 	switch (action.type) {
 			case 'SET_HISTORY':
+				console.log('set history' + action.requests);
 				if(action.requests.length > 0){
-					console.log('set');
-					return { logged: state.logged, token: state.token, requestHistory: action.requests };
+					return { requestHistory: action.requests };
 				}
-				return { logged: state.logged, token: state.token, requestHistory: [] };
-				
-			case 'CHECK_USER':
-				const token = Cookies.get('token');
-				if(token)
-					return { logged: true, token: token, requestHistory: [] };
-				else
-					return { logged: false, token: null, requestHistory: [] };
+				return { requestHistory: state.requestHistory }
+			case 'ADD_REQUEST':
+				let requests = state.requestHistory;
+				requests.push(action.request);
+				return { requestHistory: requests };
+			case 'REMOVE_REQUEST':
+				let oldRequests = state.requestHistory;
+				console.log(oldRequests, action.id);
+				let i = oldRequests.find(r => r.id === action.id);
+				console.log(i);
+				let j;
+				if(i !== undefined){
+					j = oldRequests.indexOf(i)
+					oldRequests.splice(j, 1);
+					console.log(oldRequests);
+				}
+				return { requestHistory: oldRequests };
 			default:
 				return state;
 	}
 };
 
-export default reducer;
+export default vacReducer;

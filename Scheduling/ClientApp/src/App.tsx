@@ -5,8 +5,9 @@ import Layout from './components/Layout';
 
 import ResetPassword from './components/ResetPassword/ResetPassword';
 import RestorePassword from './components/RestorePassword/RestorePassword';
+import VacationRequest from './components/VacationRequest/VacationRequest';
+import VacationApproving from './components/VacationApproving/VacationApproving';
 import TimerPage from './components/Timer/TimerPage';
-import VacationRequest from './components/VacationRequest';
 import MainPage from './components/MainPage';
 import Login from './components/LoginPage/Login';
 
@@ -27,7 +28,8 @@ export default () => (
             </Route>
             <Route exact path='/login' component={Login} />
 
-            <PrivateRoute exact path='/VacationRequest' component={VacationRequest} />
+            <PrivateRoute exact path='/vacationRequest' component={VacationRequest} />
+            <PrivateRoute exact path='/vacationApproving' component={VacationApproving} />
             <PrivateRoute exact path='/Timer' component={TimerPage} />
             <PrivateRoute exact path='/' component={MainPage} />
             <Route exact path='/calendar' component={AppCalendar} />

@@ -33,21 +33,21 @@ class WhoIsOut extends React.PureComponent<WhoIsOutProps, {usersOnVacationToday:
 
     render() {
         return (
-                <div className="who-is-out">
-                    <h2>Who is out</h2>
+            <div className="who-is-out">
+                <h2>Who is out</h2>
 
-                    <p>Today</p>
-                    <UserList users={this.state.usersOnVacationToday}/>
+                <p>Today</p>
+                <UserList users={this.state.usersOnVacationToday}/>
 
-                    <p>Tomorrow</p>
-                    <UserList users={this.state.usersOnVacationTomorrow}/>
+                <p>Tomorrow</p>
+                <UserList users={this.state.usersOnVacationTomorrow}/>
 
-                    <Link to="/MainPage">
-                        <button className="view-team-calendar-button">View team calendar</button>
-                    </Link>
+                <Link to="/calendar">
+                    <button className="view-team-calendar-button">View team calendar</button>
+                </Link>
 
-                </div>
-            );
+            </div>
+        );
     }
 }
 

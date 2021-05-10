@@ -7,6 +7,7 @@ import Cookies from "js-cookie";
 import { ApplicationState } from "../../store/configureStore";
 import { Data } from "popper.js";
 import { TimerType } from "../../store/Timer/types";
+import "./timer.css"
 
 interface IProps {
     addTime: (time: TimerType) =>
@@ -126,7 +127,7 @@ class Timer extends React.Component<IProps, IState> {
 
     render() {
         return (
-            <div style={{ textAlign: "center" }} className="Timer" >
+            <div style={{ textAlign: "center" }} className="timer" >
                 <div className="timer-text">
                     <h2>{this.state.timer_text}</h2>
                 </div>

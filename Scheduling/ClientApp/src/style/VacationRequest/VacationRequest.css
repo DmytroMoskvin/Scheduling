@@ -1,0 +1,120 @@
+main > div{
+    margin: 20px 0;
+}
+p{
+    margin: 0;
+}
+.data-container input, .data-container textarea{
+    padding: 5px;
+    border: 1px solid lightgray;
+    border-radius: 10px;
+}
+
+#vacation-container{
+    padding: 50px;
+    background-color: white;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    box-shadow: 0px 0px 5px 0px lightgrey;
+}
+
+.line-container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+#vacation-request > h2, #vacation-request > button{
+    margin: 10px;
+}
+
+.data-container{
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+#vacation-info{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.time-tracker{
+    padding: 30px;
+    background-color: rgb(248, 248, 248);
+    border-radius: 15px;
+    height: 100%;
+    width: 300px;
+}
+
+#comment {
+    height: 100px;
+    width: 450px;
+    resize: none;
+}
+
+#send-request{
+    background-color: #0275d8;
+    border: 1px solid lightgray;
+    border-radius: 10px;
+    padding: 10px 20px;
+    margin-top: 10px;
+    color: white;
+    font-weight: bolder;
+}
+
+@media (max-width: 991px){
+    #vacation-container{
+        justify-content: center;
+    }
+    #vacation-container > div, #vacation-container > form{
+        width: 100%;
+    }
+    #vacation-info > div{
+        margin-top: 20px;
+    }
+    #comment{
+        width: 100%;
+    }
+    .time-tracker{
+        width: 100%;
+        height: 200px;
+    }
+}
+.DateRangePicker{
+    margin: 10px;
+}
+.CalendarDay__selected_span{
+    background-color: lightblue;
+    border: 1px double rgb(131, 201, 224);
+}
+.CalendarDay__selected_span:hover{
+    background-color: #97bee0;
+    border: 1px double rgb(131, 201, 224);
+}
+.CalendarDay__selected, .CalendarDay__selected:active, .CalendarDay__selected:hover{
+    background-color: #0275d8;
+}
+.CalendarDay__hovered_span{
+    background-color: #cfe3f5;
+    border: 1px double lightblue;
+}
+.CalendarDay__hovered_span:hover{
+    background-color: #98bedf;
+    border: 1px double lightblue;
+}
+.CalendarDay__hovered_span_3{
+    background-color: #ddefff;
+    border: 1px double lightblue;
+}
+.DayPickerKeyboardShortcuts_show__bottomRight::before{
+    border-right: 33px solid #0275d8;
+}
+.DateInput_input__focused{
+    border-bottom: 2px solid #0275d8;
+}
+

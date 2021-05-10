@@ -114,6 +114,15 @@ namespace Scheduling.GraphQl
                 }
             ).AuthorizeWith("Authenticated");
 
+            Field<ListGraphType<VacationRequestType>>(
+                "GetAllVacationRequests",
+                arguments: null,
+                resolve: context =>
+                {
+                    return dataBaseRepository.GetAllVacationRequests();
+                }
+            ).AuthorizeWith("Manager");
+
             FieldAsync<ListGraphType<TimerHistoryType>, IReadOnlyCollection<TimerHistory>>(
                 "GetTimerHistories",
                 resolve: ctx =>
