@@ -80,21 +80,21 @@ namespace Scheduling.GraphQl
                 }
             );
 
-            Field<ListGraphType<VacationRequestType>>(
+            Field<VacationRequestType>(
                 "addVacationRequest",
                 arguments: new QueryArguments(
-                    new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "UserId", Description = "User id" },
                     new QueryArgument<NonNullGraphType<DateGraphType>> { Name = "StartDate", Description = "Vacation start date" },
                     new QueryArgument<NonNullGraphType<DateGraphType>> { Name = "FinishDate", Description = "Vacation finish date" },
-                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "Status", Description = "Status of the vacation" },
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "Comment", Description = "Comment of the vacation" }
                 ),
                 resolve: context =>
                 {
-                    int userId = context.GetArgument<int>("UserId");
+                    string email = httpContext.HttpContext.User.Claims.First(claim => claim.Type == "Email").Value.ToString();
+                    User user = dataBaseRepository.Get(email);
+                    int userId = user.Id;
                     DateTime startDate = context.GetArgument<DateTime>("StartDate");
                     DateTime finishDate = context.GetArgument<DateTime>("FinishDate");
-                    string status = context.GetArgument<string>("Status");
+                    string status = "Pending consideration...";
                     string comment = context.GetArgument<string>("Comment");
 
                     return dataBaseRepository.AddRequest(userId, startDate, finishDate, status, comment);
@@ -102,7 +102,7 @@ namespace Scheduling.GraphQl
                 description: "Returns user requests."
             ).AuthorizeWith("Authenticated");
 
-            Field<ListGraphType<VacationRequestType>>(
+            Field<BooleanGraphType>(
                 "removeVacationRequest",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "Id", Description = "Vacation request id" }
@@ -113,8 +113,28 @@ namespace Scheduling.GraphQl
 
                     return dataBaseRepository.RemoveRequest(id);
                 },
-                description: "Returns user requests."
+                description: "Remove result of removing."
             ).AuthorizeWith("Authenticated");
+
+            Field<VacationRequestType>(
+                "considerVacationRequest",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "Id", Description = "Vacation request id" },
+                    new QueryArgument<NonNullGraphType<BooleanGraphType>> { Name = "Approved", Description = "Approving or derlining request" },
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "Comment", Description = "The reason ob approving or derlining request" }
+                ),
+                resolve: context =>
+                {
+                    string email = httpContext.HttpContext.User.Claims.First(claim => claim.Type == "Email").Value.ToString();
+                    User user = dataBaseRepository.Get(email);
+                    string name = user.Name;
+                    int id = context.GetArgument<int>("Id");
+                    bool approved = context.GetArgument<bool>("Approved");
+                    string comment = context.GetArgument<string>("Comment");
+                    return dataBaseRepository.ConsiderRequest(id, approved, name, comment);
+                },
+                description: "Remove result of removing."
+            ).AuthorizeWith("Manager");
 
             Field<BooleanGraphType>(
                 "sendResetPasswordLink",

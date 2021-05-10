@@ -9,13 +9,16 @@ namespace Scheduling.Domain
 {
     public partial class DataBaseRepository
     {
-        public List<VacationRequest> GetUserRequests(int userId)
+        public List<VacationRequest> GetUserVacationRequests(int userId)
         {
             List<VacationRequest> requests = Context.VacationRequests.Where(r => r.UserId == userId).ToList();
             return requests;
-
         }
-        public List<VacationRequest> AddRequest(int userId, DateTime startDate, DateTime finishDate, string status, string comment)
+        public List<VacationRequest> GetAllVacationRequests()
+        {
+            return Context.VacationRequests.ToList();
+        }
+        public VacationRequest AddRequest(int userId, DateTime startDate, DateTime finishDate, string status, string comment)
         {
             VacationRequest vacationRequest = new VacationRequest()
             {
@@ -29,17 +32,21 @@ namespace Scheduling.Domain
             Context.VacationRequests.Add(vacationRequest);
             Context.SaveChanges();
 
-            return GetUserRequests(userId);
-
+            return vacationRequest;
         }
-        public List<VacationRequest> RemoveRequest(int id)
+        public bool RemoveRequest(int id)
         {
             VacationRequest vacationRequest = Context.VacationRequests.Single(u => u.Id == id);
             Context.VacationRequests.Remove(vacationRequest);
             Context.SaveChanges();
-
-            return GetUserRequests(vacationRequest.UserId);
-
+            return true;
+        }
+        public VacationRequest ConsiderRequest(int id, bool approved, string name, string comment)
+        {
+            VacationRequest vacationRequest = Context.VacationRequests.Single(u => u.Id == id);
+            vacationRequest.Status = (approved ? "Approved by " : "Declided by ") + name + ". " + comment;
+            Context.SaveChanges();
+            return vacationRequest;
         }
     }
 }

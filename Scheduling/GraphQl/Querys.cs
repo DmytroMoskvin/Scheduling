@@ -47,6 +47,14 @@ namespace Scheduling.GraphQl
                 }
             ).AuthorizeWith("Authenticated");
 
+            Field<ListGraphType<UserType>>(
+                "GetAllUsers",
+                arguments: null,
+                resolve: context =>
+                {
+                    return dataBaseRepository.Get();
+                }
+            ).AuthorizeWith("Manager");
 
             Field<ListGraphType<TeamType>>(
                 "GetTeams",
@@ -102,7 +110,7 @@ namespace Scheduling.GraphQl
                     string email = httpContext.HttpContext.User.Claims.First(claim => claim.Type == "Email").Value.ToString();
                     User user = dataBaseRepository.Get(email);
                     int id = user.Id;
-                    return dataBaseRepository.GetUserRequests(user.Id);
+                    return dataBaseRepository.GetUserVacationRequests(user.Id);
                 }
             ).AuthorizeWith("Authenticated");
 
@@ -143,7 +151,7 @@ namespace Scheduling.GraphQl
 
                     user.ComputedProps.Teams.ForEach((team) => {
                         dataBaseRepository.GetTeamUsers(team.Id).ForEach((user) => {
-                            dataBaseRepository.GetUserRequests(user.Id).ForEach((request) => {
+                            dataBaseRepository.GetUserVacationRequests(user.Id).ForEach((request) => {
                                 if(request.FinishDate >= DateToCheck && request.StartDate <= DateToCheck)
                                 {
                                     if (teammatesOnVacation.Contains(user))
