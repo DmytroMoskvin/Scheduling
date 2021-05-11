@@ -12,6 +12,8 @@ export default function AppCalendar() {
     const [value, setValue] = useState(moment());
     const [eventActive, setEventActive] = useState(false)
     return <div>
-        <App2 value={value} onChange={setValue} />
+        
+        <Calendar value={value} onChange={setValue} />
+        <App2 />
     </div>;
 }
