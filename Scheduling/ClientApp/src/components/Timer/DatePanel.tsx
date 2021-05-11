@@ -101,17 +101,18 @@ class DatePanel extends React.Component<IProps, IState> {
     public render(){
         return (
             <DatePicker
+
+                dateFormat="MM/yyyy"
+                showMonthYearPicker
+                showFullMonthYearPicker
+
                 locale={uk}
-            selected={this.state.startDate}
+                selected={this.state.startDate}
                 onChange={date => {
+                    console.log(date);
                     if (date instanceof Date)
                         date && this.changeDate(date);
-            }}
-            filterDate={(date) => {
-                return new Date() > date;
-            }}
-
-            inline
+                }}
         />
         );
     }
