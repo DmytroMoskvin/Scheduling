@@ -10,8 +10,8 @@ using Scheduling.Domain;
 namespace Scheduling.Migrations
 {
     [DbContext(typeof(UserDBContext))]
-    [Migration("20210506202836_DatabaseRenewed")]
-    partial class DatabaseRenewed
+    [Migration("20210512160501_RenewedDatabase")]
+    partial class RenewedDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -50,16 +50,11 @@ namespace Scheduling.Migrations
                         new
                         {
                             Id = 3,
-                            Name = "FullTime"
+                            Name = "TimeTracking"
                         },
                         new
                         {
                             Id = 4,
-                            Name = "PartTime"
-                        },
-                        new
-                        {
-                            Id = 5,
                             Name = "VacationApprovals"
                         });
                 });
@@ -173,12 +168,12 @@ namespace Scheduling.Migrations
                         new
                         {
                             UserId = 1321313,
-                            PermissionId = 5
+                            PermissionId = 4
                         },
                         new
                         {
                             UserId = 13213133,
-                            PermissionId = 4
+                            PermissionId = 3
                         });
                 });
 

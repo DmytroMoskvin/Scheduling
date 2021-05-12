@@ -70,11 +70,9 @@ namespace Scheduling
                {
                    options.AddPolicy("Authenticated", p => p.RequireAuthenticatedUser());
                    options.AddPolicy(PermissionName.VacationApprovals.ToString(), p => p.RequireClaim("permission", PermissionName.VacationApprovals.ToString()));
-                   options.AddPolicy(PermissionName.PartTime.ToString(), p => p.RequireClaim("permission", PermissionName.PartTime.ToString()));
-                   options.AddPolicy("Full-time", p => p.RequireClaim("permission", "Full-time"));
+                   options.AddPolicy(PermissionName.TimeTracking.ToString(), p => p.RequireClaim("permission", PermissionName.TimeTracking.ToString()));
                    options.AddPolicy(PermissionName.Accountant.ToString(), p => p.RequireClaim("permission", PermissionName.Accountant.ToString()));
                    options.AddPolicy(PermissionName.UserManagement.ToString(), p => p.RequireClaim("permission", PermissionName.UserManagement.ToString()));
-                   //options.AddPolicy("Access to global management", p => p.RequireClaim("permission", "Access to global management"));
                });
 
             services.AddScoped<IdentityService>();
@@ -87,7 +85,6 @@ namespace Scheduling
             services.AddScoped<UserType>();
             services.AddScoped<PermissionType>();
             services.AddScoped<TeamType>();
-            //services.AddScoped<ComputedPropsType>();
             services.AddScoped<VacationRequestType>();
             services.AddScoped<PermissionNameEnum>();
             services.AddScoped<UserPermissionType>();

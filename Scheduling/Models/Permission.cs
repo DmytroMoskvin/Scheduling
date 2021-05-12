@@ -20,8 +20,7 @@ namespace Scheduling.Models
     {
         UserManagement,
         Accountant,
-        PartTime,
-        FullTime,
+        TimeTracking,
         VacationApprovals
     }
 }

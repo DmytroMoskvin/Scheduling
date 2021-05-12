@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Scheduling.Migrations
 {
-    public partial class DatabaseRenewed : Migration
+    public partial class RenewedDatabase : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -113,9 +113,8 @@ namespace Scheduling.Migrations
                 {
                     { 1, "Accountant" },
                     { 2, "UserManagement" },
-                    { 3, "FullTime" },
-                    { 4, "PartTime" },
-                    { 5, "VacationApprovals" }
+                    { 3, "TimeTracking" },
+                    { 4, "VacationApprovals" }
                 });
 
             migrationBuilder.InsertData(
@@ -139,8 +138,8 @@ namespace Scheduling.Migrations
                 values: new object[,]
                 {
                     { 2, 1321313 },
-                    { 5, 1321313 },
-                    { 4, 13213133 }
+                    { 4, 1321313 },
+                    { 3, 13213133 }
                 });
 
             migrationBuilder.InsertData(

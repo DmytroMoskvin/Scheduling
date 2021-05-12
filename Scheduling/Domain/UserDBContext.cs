@@ -14,9 +14,7 @@ namespace Scheduling.Domain
 
         public DbSet<User> Users { get; set; }
         public DbSet<Permission> Permissions { get; set; }
-        //public DbSet<UserPermission> UserPermissions { get; set; }
         public DbSet<Team> Teams { get; set; }
-        //public DbSet<UserTeams> userTeams { get; set; }
         public DbSet<VacationRequest> VacationRequests { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -60,8 +58,8 @@ namespace Scheduling.Domain
             modelBuilder.Entity<UserPermission>().HasData(new List<UserPermission>
             {
                 new UserPermission {PermissionId = 2, UserId = 1321313},
-                new UserPermission {PermissionId = 5, UserId = 1321313},
-                new UserPermission {PermissionId = 4, UserId = 13213133},
+                new UserPermission {PermissionId = 4, UserId = 1321313},
+                new UserPermission {PermissionId = 3, UserId = 13213133},
             });
 
 
@@ -80,18 +78,12 @@ namespace Scheduling.Domain
             modelBuilder.Entity<Permission>().HasData(new Permission
             {
                 Id = 3,
-                Name = PermissionName.FullTime,
+                Name = PermissionName.TimeTracking,
             });
 
             modelBuilder.Entity<Permission>().HasData(new Permission
             {
                 Id = 4,
-                Name = PermissionName.PartTime,
-            });
-
-            modelBuilder.Entity<Permission>().HasData(new Permission
-            {
-                Id = 5,
                 Name = PermissionName.VacationApprovals,
             });
 
