@@ -243,6 +243,40 @@ namespace Scheduling.GraphQl
                 description: "Update value: added finish time"
             );
 
+            Field<ListGraphType<CalendarEventType>>(
+                "addCalendatEvent",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "UserId", Description = "User id" },
+                     new QueryArgument<NonNullGraphType<DateGraphType>> { Name = "WorkDate", Description = "Event start date" },
+                    new QueryArgument<NonNullGraphType<DateGraphType>> { Name = "StartWorkTime", Description = "Event start work time" },
+                    new QueryArgument<NonNullGraphType<DateGraphType>> { Name = "EndWorkTime", Description = "Event end work time" }
+                ),
+                resolve: context =>
+                {
+                    int userId = context.GetArgument<int>("UserId");
+                    DateTime workDate = context.GetArgument<DateTime>("WorkDate");
+                    DateTime startWorkTime = context.GetArgument<DateTime>("StartWorkTime");
+                    DateTime endWorkTime = context.GetArgument<DateTime>("EndWorkTime");
+
+                    return dataBaseRepository.AddEvent(userId, workDate, startWorkTime, endWorkTime);
+                },
+                description: "Returns user events."
+            ).AuthorizeWith("Authenticated");
+
+            Field<ListGraphType<CalendarEventType>>(
+                "removeCalendarEvent",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "Id", Description = "Calendar event id" }
+                ),
+                resolve: context =>
+                {
+                    int id = context.GetArgument<int>("Id");
+
+                    return dataBaseRepository.RemoveEvents(id);
+                },
+                description: "Returns user events."
+            ).AuthorizeWith("Authenticated");
+
         }
     }
 }

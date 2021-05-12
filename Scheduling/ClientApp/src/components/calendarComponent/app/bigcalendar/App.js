@@ -6,6 +6,7 @@ import CalendarPopUp from '../popup/CalendarPopUp';
 //import Layout from 'react-tackle-box/Layout'
 import moment from "moment";
 import "./react-big-calendar.css";
+import { Button } from 'reactstrap';
 //import ExampleControlSlot from '../ExampleControlSlot'
 //let allViews = Object.keys(Views).map(k => Views[k])
 
@@ -31,14 +32,8 @@ class App extends React.Component {
             active: false
         };
 
-        this.handleClick = this.handleClick.bind(this);
-    };
-
-    handleClick() {
-        this.setState(state => ({
-            active: !state.active
-        }));
-    }
+      
+    };    
     
   resizeEvent = (resizeType, { event, start, end }) => {
     const { events } = this.state;
@@ -58,7 +53,7 @@ class App extends React.Component {
   render() {
       return (
           <>
-              <CalendarPopUp  />
+              <CalendarPopUp />
       <Calendar
         /*  events={this.state.events}
             views={Views.WEEK}
