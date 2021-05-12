@@ -2,18 +2,23 @@
 export const getUserData = async (token: string) => {
 	const query = JSON.stringify({
 		query: `{
-			getCurrentUser{
+			getCurrentUser {
 				name
 				surname
 				email
 				position
 				department
-				computedProps {
-					permissions {
-						name
-					}
+				userPermissions {
+				  permission {
+					permissionName
+				  }
+				  permissionId
+				  userId
 				}
-			}
+				team {
+				  name
+				}
+			  }
 		}`
 	});
   

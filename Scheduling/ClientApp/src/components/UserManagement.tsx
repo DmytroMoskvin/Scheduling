@@ -40,7 +40,8 @@ export const UserManagement: React.FC<UserManagementProps> = (props) => {
                             <th>Last Name</th>
                             <th>Email</th>
                             <th>Position</th>
-                            <th>Attributes</th>
+                            <th>Team</th>
+                            <th>Permissions</th>
                             <th></th>
                             <th></th>
                         </tr>
@@ -52,7 +53,11 @@ export const UserManagement: React.FC<UserManagementProps> = (props) => {
                                         <td>{u.surname}</td>
                                         <td>{u.email}</td>
                                         <td>{u.position}</td>
-                                        <td>{}</td>
+                                        <td>{u.team.name}</td>
+                                        <td>{u.userPermissions.map((up) => {
+                                            return(
+                                            <div key={u.userPermissions.indexOf(up)}>{up.permission.permissionName}</div>)})}
+                                        </td>
                                         <td>
                                             <button>Edit</button>
                                         </td>
