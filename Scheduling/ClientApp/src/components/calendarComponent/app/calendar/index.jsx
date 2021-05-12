@@ -14,7 +14,7 @@ export default function Calendar2({ value, onChange, setDay }) {
 
     function onClickFunc(day) {
         !beforeToday(day) && onChange(day);
-        setDay(day.toString());
+        setDay(day.format('l'));
     };
 
     return (

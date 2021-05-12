@@ -8,6 +8,8 @@ import moment from "moment";
 import "./react-big-calendar.css";
 
 import Calendar2 from "../calendar/index";
+
+import 'moment/locale/en-gb'
 //import ExampleControlSlot from '../ExampleControlSlot'
 //let allViews = Object.keys(Views).map(k => Views[k])
 
@@ -24,13 +26,15 @@ moment.locale('en-gb', {
     },
 });
 
+let reg = /\d+/g;
+
 const localizer = momentLocalizer(moment)
 class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             events: events,
-            dayToday: ""
+            dayToday: new Date()
         };
 
         this.handleClick = this.handleClick.bind(this);
@@ -79,7 +83,7 @@ class App extends React.Component {
                         defaultDate={new Date(2015, 3, 1)}
                     */
                     min={new Date(0, 0, 0, 7, 0, 0)}
-                    max={new Date(2021, 5, 20, 22, 0, 0)}
+                    max={new Date(0, 0, 0, 22, 0, 0)}
                     events={this.state.events}
                     nEventDrop={this.moveEvent}
                     //resizable
@@ -89,6 +93,11 @@ class App extends React.Component {
                     views={Views.WEEK}
                     defaultView={Views.WEEK}
 
+                    date={new Date(
+                        parseInt(this.state.dayToday.toString().match(reg)[2]),
+                        parseInt(this.state.dayToday.toString().match(reg)[0]) - 1,
+                        parseInt(this.state.dayToday.toString().match(reg)[1]))}
+                    onNavigate={date => { this.setState({ selectedDate: date }) }}
                     //defaultView={BigCalendar.Views.WEEK}
                     //defaultDate={this.state.dayToday}
                     //defaultDate = {new Date(new Date().setHours(new Date().getHours()))}
@@ -96,7 +105,7 @@ class App extends React.Component {
                     localizer={localizer}
                     culture={'en-GB'} />
                 <div>
-                    {this.state.dayToday}
+                    {this.state.dayToday.toString().match(reg)[0]}
                 </div>
             </>
 
