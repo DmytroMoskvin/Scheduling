@@ -5,14 +5,17 @@ import { History } from 'history';
 import UserReducer from "./User/";
 import RequestReducer from "./VacationRequest/";
 import TimerReducer from "./Timer/";
+import EventReducer from "./CalendarEvent/";
 import { UserState } from './User/types';
 import { VacationRequestState } from './VacationRequest/types';
 import { TimerHistoryState } from './Timer/types';
+import { CalendarEventState } from './CalendarEvent/types';
 
 export interface ApplicationState {
     loggedUser: UserState;
     vacationRequest: VacationRequestState | undefined;
     timerHistory: TimerHistoryState | undefined;
+    calendarEvent: CalendarEventState | undefined;
 };
 
 
@@ -26,6 +29,7 @@ export default function configureStore(history: History, initialState?: Applicat
         loggedUser: UserReducer,
         vacationRequest: RequestReducer,
         timerHistory: TimerReducer,
+        calendarHistory: EventReducer,
         router: connectRouter(history)
     });
 

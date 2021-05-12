@@ -4,7 +4,7 @@ import moment from "moment";
 import App2 from "./bigcalendar/App";
 import "./styles.css";
 import Calendar from './calendar';
-import CalendarPopUp from './popup/CalendarPopUp';
+import CalendarPopUp from './popup/CalendarEvent';
 
 export default function AppCalendar() {
     moment.updateLocale('ru', { week: { dow: 1 } });

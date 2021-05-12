@@ -2,7 +2,7 @@ import React from 'react'
 import { Calendar, momentLocalizer, Views } from "react-big-calendar";
 import { useState } from 'react';
 import events from "./events";
-import CalendarPopUp from '../popup/CalendarPopUp';
+import CalendarEvent from '../popup/CalendarEvent';
 //import Layout from 'react-tackle-box/Layout'
 import moment from "moment";
 import "./react-big-calendar.css";
@@ -53,7 +53,7 @@ class App extends React.Component {
   render() {
       return (
           <>
-              <CalendarPopUp />
+              <CalendarEvent />
       <Calendar
         /*  events={this.state.events}
             views={Views.WEEK}
