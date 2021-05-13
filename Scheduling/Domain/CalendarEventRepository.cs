@@ -8,13 +8,12 @@ namespace Scheduling.Domain
 {
     public partial class DataBaseRepository
     {
-        public List<CalendarEvent> GetUserEvents(int userId)
+        public List<CalendarEvent> GetUserCalendarEvents(int userId)
         {
             List<CalendarEvent> requests = Context.CalendarEvents.Where(r => r.UserId == userId).ToList();
             return requests;
-
         }
-        public List<CalendarEvent> AddEvent(int userId, DateTime workDate, DateTime startWorkTime, DateTime endWorkTime)
+        public List<CalendarEvent> AddCalendarEvent(int userId, DateTime workDate, DateTime startWorkTime, DateTime endWorkTime)
         {
             CalendarEvent CalendarEvent = new CalendarEvent()
             {
@@ -27,7 +26,7 @@ namespace Scheduling.Domain
             Context.CalendarEvents.Add(CalendarEvent);
             Context.SaveChanges();
 
-            return GetUserEvents(userId);
+            return GetUserCalendarEvents(userId);
 
         }
         public List<CalendarEvent> RemoveEvents(int id)
@@ -36,8 +35,7 @@ namespace Scheduling.Domain
             Context.CalendarEvents.Remove(CalendarEvent);
             Context.SaveChanges();
 
-            return GetUserEvents(CalendarEvent.UserId);
-
+            return GetUserCalendarEvents(CalendarEvent.UserId);
         }
     }
 }

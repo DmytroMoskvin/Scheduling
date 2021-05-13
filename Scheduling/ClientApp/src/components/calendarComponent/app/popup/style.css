@@ -1,10 +1,15 @@
 ﻿.popUp {
     opacity: 0;
     transition: 0.1s;
+    position:fixed;
+    top: 50%;
+    left: 35%;
+    
 }
 
     .popUp.active {
         opacity: 1;
+        z-index:1;
     }
 
 form button {
@@ -21,6 +26,7 @@ form button {
 
 form #close-event {
     margin-left: 15px;
+    float: right;
 }
 
     form #close-event:focus {
@@ -44,6 +50,7 @@ form #send-event {
     border-radius: 15px;
     border: 2px solid lightgray;
     width: 350px;
+    background-color: white;
 }
 
     .pop__content .popHead {
@@ -79,3 +86,4 @@ form #send-event {
     text-align: center;
     text-decoration-style: solid;
 }
+

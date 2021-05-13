@@ -1,8 +1,8 @@
 import './style.css';
 import * as React from 'react';
-
-import { addEvent } from "../../../../webAPI/calendarEvent";
-
+import { useState } from 'react';
+import { addEvent, getUserEvents } from "../../../../webAPI/calendarEvent";
+import { CalendarEventType  } from"../../../../store/CalendarEvent/types"
 import Cookies from 'js-cookie';
 
 interface ICalendarEventState {
@@ -12,18 +12,34 @@ interface ICalendarEventState {
     active: boolean
 }
 
-class CalendarEvent extends React.PureComponent<{}, ICalendarEventState> {
-    constructor(props: Readonly<{}>) {
-        super(props);
+interface ICalendarEventProps {
+    eventHistory: Array<CalendarEventType>;
+}
 
+
+
+class CalendarEvent extends React.Component<ICalendarEventProps, ICalendarEventState > {
+    constructor(props: ICalendarEventProps) {
+        super(props);
         this.state = {
             workDate: new Date(),
             startWorkTime: new Date(),
             endWorkTime: new Date(),
-            active: true
+            active: false
         }
 
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.setActive = this.setActive.bind(this);
+    }
+
+    async componentDidMount() {
+        const token = Cookies.get('token');
+        if (token)
+        {
+            const data = await getUserEvents(token);
+        }
+
+        console.log(this.props.eventHistory)
     }
 
     validateTime() {
@@ -51,16 +67,12 @@ class CalendarEvent extends React.PureComponent<{}, ICalendarEventState> {
         if (time && token)
             await addEvent(time.workDate, time.startWorkTime, time.endWorkTime, token);
 
-        this.setState({
-            active:false
-        });
+        this.setActive();
     }
 
     
 
-    async componentDidMount() {
-        
-    }
+    
 
     setActive() {
         this.setState({
@@ -73,7 +85,7 @@ class CalendarEvent extends React.PureComponent<{}, ICalendarEventState> {
         return (
             <React.Fragment>
                 <button id='close-event' type='button' onClick={this.setActive}>Set time</button>
-                <div className="popUp active" >
+                <div className={this.state.active ?  "popUp active" : "popUp"} >
                     <div className="pop__content" >
                         <form>
                         <h2 className="popHead">Plan your time</h2>
@@ -84,7 +96,7 @@ class CalendarEvent extends React.PureComponent<{}, ICalendarEventState> {
                             <input type="time" id="end-work-time" onInput={this.countAmount} />
                             <br />
                             <input type="text" id='isCorrect' readOnly />
-                            <button id='close-event' type='button' onClick={this.setActive}>Close</button>
+                            <button id='close-event-form' type='button' onClick={this.setActive}>Close</button>
                             <button id='send-event' type='button' onClick={this.handleSubmit}>Set time</button>
                         </form>
                     </div>
