@@ -1,7 +1,7 @@
 import './style.css';
 import * as React from 'react';
 import { useState } from 'react';
-import { addEvent, getUserEvents } from "../../../../webAPI/calendarEvent";
+import { addEvent } from "../../../../webAPI/calendarEvent";
 import { CalendarEventType } from "../../../../store/CalendarEvent/types"
 import Cookies from 'js-cookie';
 
@@ -32,14 +32,7 @@ class CalendarEvent extends React.Component<ICalendarEventProps, ICalendarEventS
         this.setActive = this.setActive.bind(this);
     }
 
-    async componentDidMount() {
-        const token = Cookies.get('token');
-        if (token) {
-            const data = await getUserEvents(token);
-        }
-
-        console.log(this.props.eventHistory)
-    }
+    
 
     validateTime() {
         let workDate = new Date(new Date((document.getElementById('work-date') as HTMLInputElement).valueAsNumber));

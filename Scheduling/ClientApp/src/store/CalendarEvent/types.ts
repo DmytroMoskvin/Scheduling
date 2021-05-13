@@ -2,10 +2,10 @@
 	logged: boolean,
 	token: string | null,
 	active:boolean,
-	eventHistory: Array<CalendarEvent>
+	eventHistory: Array<CalendarEventType>
 }
 
-export type CalendarEvent = {
+export type CalendarEventType = {
 	id: number,
 	workDate: Date,
 	startWorkTime: Date,

@@ -1,28 +1,47 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
 
-export default function CalendarHeader({ value, setValue }) {
-    function currMonthName() {
-        return value.format("MMMM");
-    }
-    function currYear() {
-        return value.format("YYYY");
-    }
-    function prevMonth() {
-        return value.clone().subtract(1, "month");
-    }
-    function nextMonth() {
-        return value.clone().add(1, "month");
-    }
-    function thisMonth() {
-        return value.isSame(new Date(), "month");
-    }
+import "./style.css";
+import buildCalendar from "./build";
+import dayStyles, { beforeToday } from "./styles";
+import Header from "./header";
+
+export default function Calendar2({ value, onChange, setDay }) {
+    const [calendar, setCalendar] = useState([]);
+
+    useEffect(() => {
+        setCalendar(buildCalendar(value));
+    }, [value]);
+
+    function onClickFunc(day) {
+        !beforeToday(day) && onChange(day);
+        setDay(day.format('l'));
+    };
+
     return (
-        <div className="header">
-            {/* <div className="previous" onClick={() => !thisMonth() && setValue(prevMonth())}>
-                {!thisMonth() ? String.fromCharCode(171) : null}
+        <div className="calendar">
+            <Header value={value} setValue={onChange} />
+            <div className="body">
+                <div className="day-names">
+                    {
+                        ["m", "t", "w", "t", "f", "s", "s"].map(d => (
+                            <div className="week">{d}</div>
+                        ))
+                    }
+                </div>
+                {calendar.map((week) => (
+                    <div>
+                        {week.map((day) => (
+
+                            <div className="day" onClick={() => onClickFunc(day)}
+                            //onClick={() => setDay()}
+                            >
+                                <div className={dayStyles(day, value)}>
+                                    {day.format("D").toString()}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                ))}
             </div>
-            <div className="current">{currMonthName()} {currYear()}</div>
-            <div className="next" onClick={() => setValue(nextMonth())}>{String.fromCharCode(187)}</div>*/}
-        </div>
-    )
+        </div>)
 }
