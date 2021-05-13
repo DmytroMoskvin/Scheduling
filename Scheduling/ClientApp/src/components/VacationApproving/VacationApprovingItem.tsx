@@ -53,8 +53,10 @@ export const ApprovingItem: React.FunctionComponent<ItemProps> = ({ token, reque
                     <textarea name="comment" className="approving-comment" onInput={(event) => setComment(event.currentTarget.value)}></textarea>
                 </div>
             </div>
-            <button type='button' className='approve-request-button' onClick={() => considerRequest(request.id, true, comment)}>Remove request</button>
-            <button type='button' className='decline-request-button' onClick={() => considerRequest(request.id, false, comment)}>Remove request</button>
+            <div className='approving-button-container'>
+                <button type='button' className='approve-request-button' onClick={() => considerRequest(request.id, true, comment)}>Approve</button>
+                <button type='button' className='decline-request-button' onClick={() => considerRequest(request.id, false, comment)}>Decline</button>
+            </div>
         </div>
 	);
 

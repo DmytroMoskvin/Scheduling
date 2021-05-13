@@ -5,7 +5,6 @@ import { ApplicationState } from '../../store/configureStore';
 import{ VacationRequest, VacationRequestState } from '../../store/VacationRequest/types';
 import '../../style/VacationRequest/VacationRequest.css';
 import { actionCreators } from '../../store/VacationRequest/actions';
-import { RequestsTable } from './RequestsTable';
 import { addUserRequest, getUserRequests, removeUserRequest } from '../../webAPI/vacationRequest';
 import { UserState } from '../../store/User/types';
 import { DataRangePicker } from './DataRangePicker';
@@ -135,7 +134,7 @@ class VacationRequestPage extends React.PureComponent<VacationPageProps, {}> {
                         <div id='vacation-history'>
                             <h5>Vacation history</h5>
                             {!this.state.isLoading?
-                                this.props.requestHistory.map((r) =>
+                                this.props.requestHistory.reverse().map((r) =>
                                     <RequestItem key={r.id} token={this.props.token? this.props.token: ''} request={r} removeRequest={async (id: number) => await this.removeRequest(id)}/>
                                 ):
                                 <LoadingAnimation/>

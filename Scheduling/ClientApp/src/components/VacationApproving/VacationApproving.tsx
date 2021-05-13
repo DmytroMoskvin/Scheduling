@@ -7,8 +7,6 @@ import { UserState } from '../../store/User/types';
 import { considerVacationRequest, getAllRequests } from '../../webAPI/vacationApproving';
 import '../../style/VacationApproving/VacationApprovingTable.css';
 import { VacationRequest } from '../../store/VacationRequest/types';
-import { AllRequestsTable } from './AllRequestsTable';
-import { VacationApprovingTable } from './VacationApprovingTable';
 import { ApprovingItem } from './VacationApprovingItem';
 import { LoadingAnimation } from '../Loading';
 import { RequestItem } from '../VacationRequest/VacationRequestItem';
@@ -96,7 +94,7 @@ class VacationApproving extends React.PureComponent<VacationApprovingProps, { re
                     <div id='vacation-history'>
                         <h2>Response history</h2>
                         {!this.state.isLoading?
-                                this.state.responseHistory.map((r) =>
+                                this.state.responseHistory.reverse().map((r) =>
                                 <RequestItem key={r.id} token={this.props.token? this.props.token: ''} request={r} removeRequest={async (id: number) => {}}/>
                                 ):
                                 <LoadingAnimation/>

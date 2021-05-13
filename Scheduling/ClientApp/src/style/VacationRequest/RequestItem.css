@@ -1,5 +1,6 @@
 h5{
     margin: 0;
+    min-width: 120px;
 }
 
 .request-item{
@@ -29,6 +30,18 @@ h5{
     border: 1px solid white;
 }
 
+.requets-brief-info>p:nth-child(1){
+    width: 25%;
+}
+
+.requets-brief-info>p:nth-child(2){
+    width: 45%;
+}
+
+.requets-brief-info>p:nth-child(3){
+    width: 30%;
+}
+
 .show-full-info-button{
     background-color: transparent;
     border: 1px solid lightgray;
@@ -55,12 +68,11 @@ h5{
     justify-content: flex-start;
 }
 
-.info-data-container > h5, .info-data-container> div{
+.info-data-container > h5, .info-data-container> div, .info-data-container > p{
     margin: 10px 15px;
 }
 
 .info-data-container:nth-child(1){
-    align-items: center;
     margin-top: 10px;
 }
 
@@ -68,7 +80,11 @@ h5{
     margin-bottom: 10px;
 }
 
-.remove-request-button{
+.info-responses-container > p{
+    margin-bottom: 10px;
+}
+
+.remove-request-button, .approve-request-button, .decline-request-button{
     transition: 0.3s;
     margin-bottom: 15px;
     padding: 5px 35px;
@@ -79,13 +95,23 @@ h5{
     color: white;
 }
 
-.remove-request-button:hover{
+.approve-request-button{
+    border: 1px solid #36b932;
+    background-color: #36b932;
+}
+
+.remove-request-button:hover, .decline-request-button:hover{
     background-color: #ff425573;
     color: black;
 }
 
+.approve-request-button:hover{
+    background-color: #36b93279;
+    color: black;
+}
+
 .opened .request-full-info{
-    max-height: 500px;
+    max-height: 1000px;
     transition: max-height 0.5s ease-in;
 }
 .opened .requets-brief-info{
@@ -95,12 +121,21 @@ h5{
 }
 
 .requets-brief-info>p:nth-child(2){
-    display: flex;
     transition: 0.5s;
+    max-width: 45%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-right: 55px;
+    transition: max-width 0.5s ease-in;
+    opacity: 1;
 }
 
 .opened .requets-brief-info>p:nth-child(2){
-    display: none;
+    opacity: 0;
+    max-width: 0;
+    max-height: 0;
+    transition: max-width 0.5s ease-out;
 }
 
 .opened .show-full-info-button{
@@ -158,4 +193,15 @@ h5{
     border: 1px solid lightgray;
     width: 100%;
     border-radius: 7px;
+}
+
+.approving-button-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+}
+
+.approving-button-container > button{
+    margin: 0 20px 15px 20px;
 }
