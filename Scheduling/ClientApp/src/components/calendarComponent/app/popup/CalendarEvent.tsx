@@ -1,11 +1,6 @@
 import './style.css';
 import * as React from 'react';
-import { useState } from 'react';
-import { connect } from 'react-redux';
-import { RouteComponentProps } from 'react-router';
-import { ApplicationState } from '../../../../store/configureStore';
-import { CalendarEventState } from '../../../../store/CalendarEvent/types';
-import { actionCreators } from '../../../../store/CalendarEvent/actions';
+
 import { addEvent } from "../../../../webAPI/calendarEvent";
 
 import Cookies from 'js-cookie';
@@ -78,7 +73,7 @@ class CalendarEvent extends React.PureComponent<{}, ICalendarEventState> {
         return (
             <React.Fragment>
                 <button id='close-event' type='button' onClick={this.setActive}>Set time</button>
-                <div className={true ? "popUp active" : "popUp"} >
+                <div className="popUp active" >
                     <div className="pop__content" >
                         <form>
                         <h2 className="popHead">Plan your time</h2>
@@ -90,7 +85,7 @@ class CalendarEvent extends React.PureComponent<{}, ICalendarEventState> {
                             <br />
                             <input type="text" id='isCorrect' readOnly />
                             <button id='close-event' type='button' onClick={this.setActive}>Close</button>
-                            <button id='send-event' type='button' onClick={this.sendEvent}>Set time</button>
+                            <button id='send-event' type='button' onClick={this.handleSubmit}>Set time</button>
                         </form>
                     </div>
                 </div>
