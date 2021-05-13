@@ -1,15 +1,36 @@
 import * as React from 'react';
+import Cookies from "js-cookie";
 import { Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { ApplicationState } from '../store/configureStore';
+import { actionCreators } from '../store/User/actions';
 import './NavMenu.css';
 
 
-export default class NavMenu extends React.PureComponent<{}, { isOpen: boolean }> {
+class NavMenu extends React.PureComponent<{}, { isOpen: boolean }> {
     public state = {
-        isOpen: false
+        isOpen: false,
     };
 
     public render() {
+        const token = Cookies.get('token');
+
+        const homeLink = (token != null) ?
+            <NavItem>
+                <NavLink tag={Link} className="text-dark" to="/">Home</NavLink>
+            </NavItem> : null;
+
+        const vacationRequestLink = (token != null) ?
+            <NavItem>
+                <NavLink tag={Link} className="text-dark" to="/vacationrequest">Vacation</NavLink>
+            </NavItem> : null;
+
+        const userManagementLink = (token != null) ?
+            <NavItem>
+                <NavLink tag={Link} className="text-dark" to="/usermanagement">User management</NavLink>
+            </NavItem> : null;
+
         return (
             <header>
                 <Navbar className="navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3" light>
@@ -18,15 +39,9 @@ export default class NavMenu extends React.PureComponent<{}, { isOpen: boolean }
                         <NavbarToggler onClick={this.toggle} className="mr-2"/>
                         <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={this.state.isOpen} navbar>
                             <ul className="navbar-nav flex-grow">
-                                <NavItem>
-                                    <NavLink tag={Link} className="text-dark" to="/">Home</NavLink>
-                                </NavItem>
-                                <NavItem>
-                                    <NavLink tag={Link} className="text-dark" to="/vacationrequest">Vacation</NavLink>
-                                </NavItem>
-                                <NavItem>
-                                    <NavLink tag={Link} className="text-dark" to="/usermanagement">User management</NavLink>
-                                </NavItem>
+                                {homeLink}
+                                {vacationRequestLink}
+                                {userManagementLink}
                             </ul>
                         </Collapse>
                     </Container>
@@ -41,3 +56,8 @@ export default class NavMenu extends React.PureComponent<{}, { isOpen: boolean }
         });
     }
 }
+
+export default connect(
+    (state: ApplicationState) => state.loggedUser,
+    actionCreators
+)(NavMenu);

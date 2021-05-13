@@ -39,7 +39,7 @@ export const LoginForm: React.FunctionComponent<LoginProps> = ({ logIn, toggleLo
       userData = await getUserData(data.authentication);
       logIn(data.authentication);
   
-      setUserData(userData.data.getCurrentUser); 
+      setUserData(userData.data.getCurrentUser);
       
       setError(false);
       toggleLoading();

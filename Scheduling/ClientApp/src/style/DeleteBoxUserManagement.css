@@ -1,5 +1,5 @@
 ﻿.shadowBox {
-    position: absolute;
+    position: fixed;
     background-color: rgba(0, 0, 0, 0.71);
     left: 0px;
     top: 0px;
@@ -37,4 +37,8 @@
     color: white;
     position: relative;
     display: inline;
+}
+
+button[class="deleteUserButton"] {
+    background-color: #f11e00;
 }

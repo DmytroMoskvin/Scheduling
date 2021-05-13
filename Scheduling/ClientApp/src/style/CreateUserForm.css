@@ -1,0 +1,40 @@
+﻿.border {
+    border: 1px solid lightgray;
+    padding: 50px;
+    border-radius: 15px;
+}
+
+#fieldsTable {
+    margin: 20px;
+}
+
+#fieldsTable th {
+    padding: 15px 20px 15px 0px;
+}
+
+#fieldsTable td {
+    padding: 15px 80px 15px 0px;
+}
+
+#createButton {
+    margin: 25px 30px 15px 0px;
+    padding: 10px 40px;
+    border-radius: 5px;
+    background-color: #219e02;
+}
+
+#cancelButton {
+    padding: 10px 40px;
+    border-radius: 5px;
+    background-color: #219e02;
+    color: white;
+    background-color: #0275d8;
+}
+
+input {
+    border-radius: 5px;
+}
+
+#cancelButton:hover {
+    text-decoration: none;
+}

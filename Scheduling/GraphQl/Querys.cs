@@ -102,6 +102,7 @@ namespace Scheduling.GraphQl
                 }
 
             ).AuthorizeWith(PermissionName.UserManagement.ToString());
+
         }
     }
 }

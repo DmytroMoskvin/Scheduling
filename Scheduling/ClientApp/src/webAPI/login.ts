@@ -1,8 +1,7 @@
-
-export const authenticate = async (login: string, passsword: string) => {
+export const authenticate = async (login: string, password: string) => {
 	const query = JSON.stringify({
 		query: `mutation {
-			authentication (email: "${login}" password: "${passsword}")
+			authentication (email: "${login}" password: "${password}")
 		}`
 	});
 

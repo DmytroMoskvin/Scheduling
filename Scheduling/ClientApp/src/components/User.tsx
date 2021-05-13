@@ -16,7 +16,7 @@ type UserProps =
     typeof actionCreators &
     RouteComponentProps<{}>;
 
-class User extends React.PureComponent<UserProps, { isLoading: boolean, showError: boolean }>{
+class User extends React.PureComponent<UserProps, { isLoading: boolean, showError: boolean }> {
     public state = {
         isLoading: false,
         showError: false

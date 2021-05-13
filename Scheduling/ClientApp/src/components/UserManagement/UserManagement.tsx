@@ -1,14 +1,14 @@
 import * as React from 'react';
-import Cookies from 'js-cookie';
 import { connect, useDispatch } from 'react-redux';
 import { useState } from 'react';
-import { Redirect, RouteComponentProps } from 'react-router';
-import { ApplicationState } from '../store/configureStore';
-import { UserManagementState } from '../store/UserManagement/types';
-import { actionCreators } from '../store/UserManagement/actions';
+import { RouteComponentProps } from 'react-router';
+import { ApplicationState } from '../../store/configureStore';
+import { UserManagementState } from '../../store/UserManagement/types';
+import { actionCreators } from '../../store/UserManagement/actions';
 import { useEffect } from 'react';
-import '../style/RequestsTableAndUsersTable.css';
-import '../style/DeleteBoxUserManagement.css';
+import '../../style/RequestsTableAndUsersTable.css';
+import '../../style/DeleteBoxUserManagement.css';
+import { Link } from 'react-router-dom';
 
 
 type UserManagementProps =
@@ -18,20 +18,23 @@ type UserManagementProps =
 
 export const UserManagement: React.FC<UserManagementProps> = (props) => {
     const [isDeleteBoxOpen, setIsDeleteBoxOpen] = useState(false);
-    const [userId, setUserId] = useState(0);
+    const [userEmail, setUserEmail] = useState("");
 
     const dispatch = useDispatch();
 
-    const requestUsersCallback = () => dispatch({ type: 'REQUESTED_USERS' });
+    const requestUsers = () => dispatch({ type: 'REQUESTED_USERS' });
     useEffect(() => {
-        requestUsersCallback();
+        requestUsers();
     }, []);
-    console.log(props.users);
+
     return (
         <React.Fragment>
-            <DeleteBox id={userId} isOpen={isDeleteBoxOpen} setIsOpen={setIsDeleteBoxOpen} />
+            <DeleteBox
+                email={userEmail} isOpen={isDeleteBoxOpen}
+                setIsOpen={setIsDeleteBoxOpen}
+            />
             <div id='usersTableBorder'>
-                <button className="createNewUserButton">Create new user</button>
+                <Link to="/createuser" className="createNewUserButton">Create new user</Link>
                 <h1>User managment</h1>
                 <table id='users'>
                     <tbody>
@@ -45,7 +48,7 @@ export const UserManagement: React.FC<UserManagementProps> = (props) => {
                             <th></th>
                             <th></th>
                         </tr>
-                        {props.users.map((u, index) => {
+                        {props.users.map((u) => {
                             if (u != null) {
                                     
                                     return(<tr key={props.users.indexOf(u)}>
@@ -56,15 +59,15 @@ export const UserManagement: React.FC<UserManagementProps> = (props) => {
                                         <td>{u.team.name}</td>
                                         <td>{u.userPermissions.map((up) => {
                                             return(
-                                            <div key={u.userPermissions.indexOf(up)}>{up.permission.permissionName}</div>)})}
+                                            <div key={u.userPermissions.indexOf(up)}>{up.permissionName}</div>)})}
                                         </td>
                                         <td>
-                                            <button>Edit</button>
+                                            <Link to="/edituser" className="editUserButton">Edit</Link>
                                         </td>
                                         <td>
                                             <button
                                                 className="deleteUserButton"
-                                                onClick={() => { setIsDeleteBoxOpen(true); setUserId(index); }}>
+                                                onClick={() => { setIsDeleteBoxOpen(true); setUserEmail(u.email); }}>
                                                 Delete
                                             </button>
                                         </td>
@@ -82,27 +85,36 @@ export const UserManagement: React.FC<UserManagementProps> = (props) => {
 
 
 type DeleteBoxProps = {
-    id: number,
+    email: string,
     isOpen: boolean,
-    setIsOpen: React.Dispatch<React.SetStateAction<boolean>>,
+    setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
 };
 
-const DeleteBox: React.FC<DeleteBoxProps> = ({ id, isOpen, setIsOpen }) => {
+const DeleteBox: React.FC<DeleteBoxProps> = ({ email, isOpen, setIsOpen }) => {
+    const dispatch = useDispatch();
+    const requestRemoveUser = () => dispatch({ type: 'REQUESTED_DELETE_USER', payload: email });
+    const handleRemoveUser = async (e: { preventDefault: () => void; }) => {
+        e.preventDefault();
+        requestRemoveUser();
+        setIsOpen(false);
+    }
+
     let content = isOpen ?
         <div className="shadowBox">
             <div className="deleteBox">
                 <p>Are you sure you want to delete this user ?</p>
                 <div>
-                    <button onClick={() => { handleDeleteUser(); setIsOpen(false); }}>Delete</button>
+                    <button
+                        className="deleteUserButton"
+                        onClick={handleRemoveUser}
+                    >
+                        Delete
+                    </button>
                     <button onClick={() => setIsOpen(false)}>Cancel</button>
                 </div>
             </div>
         </div>
         : null;
-
-    function handleDeleteUser() {
-
-    }
 
     return(
         <React.Fragment>

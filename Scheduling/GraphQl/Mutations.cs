@@ -34,13 +34,55 @@ namespace Scheduling.GraphQl
                 description: "Returns JWT."
             );
 
+            /*Field<BooleanGraphType>(
+                "editUser",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "Original email", Description = "User original email"},
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "Name", Description = "User name" },
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "Surname", Description = "User surname" },
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "Email", Description = "User email" },
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "Position", Description = "User position" },
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "Password", Description = "User password" },
+                    new QueryArgument<NonNullGraphType<ListGraphType<StringGraphType>>> { Name = "Permissions", Description = "User permisions" },
+                    new QueryArgument<ListGraphType<IntGraphType>> { Name = "Teams", Description = "User teams id" }
+                ),
+                resolve: context =>
+                {
+                    string originalEmail = context.GetArgument<string>("Original email");
+                    string email = context.GetArgument<string>("Email");
+                    string name = context.GetArgument<string>("Name");
+                    string surname = context.GetArgument<string>("Surname");
+                    string position = context.GetArgument<string>("Position");
+                    string password = context.GetArgument<string>("Password");
+                    List<string> permissions = context.GetArgument<List<string>>("Permissions");
+                    List<int> teamsId = context.GetArgument<List<int>>("Teams");
+
+                    bool isSuccesful = dataBaseRepository.EditUser(originalEmail, name, surname, email, position, password, permissions, teamsId);
+
+                    *//*if(user.Email != null)
+                    {
+                        try
+                        {
+                            emailService.SendEmail(email, password);
+                        }catch 
+                        {
+                            return false;
+                        }
+                    }*//*
+
+                    return true;
+                }
+            );*/
+
             Field<BooleanGraphType>(
                 "createUser",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "Name", Description = "User name" },
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "Surname", Description = "User surname" },
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "Email", Description = "User email" },
-                    new QueryArgument<NonNullGraphType<ListGraphType<PermissionNameEnum>>> { Name = "Permissions", Description = "User permisions" },
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "Position", Description = "User position" },
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "Department", Description = "User department" },
+                    new QueryArgument<NonNullGraphType<ListGraphType<PermissionNameEnum>>> { Name = "Permissions", Description = "User permissions" },
                     new QueryArgument<IntGraphType> { Name = "Team", Description = "User team id" }
                 ),
                 resolve: context =>
@@ -48,12 +90,14 @@ namespace Scheduling.GraphQl
                     string email = context.GetArgument<string>("Email");
                     string name = context.GetArgument<string>("Name");
                     string surname = context.GetArgument<string>("Surname");
-                    List<Permission> permissions = context.GetArgument<List<Permission>>("Permissions");
+                    string position = context.GetArgument<string>("Position");
+                    string department = context.GetArgument<string>("Department");
+                    List<PermissionName> permissions = context.GetArgument<List<PermissionName>>("Permissions");
                     int teamId = context.GetArgument<int>("Team");
 
                     string password = Guid.NewGuid().ToString();
 
-                    User user = dataBaseRepository.CreateUser(name, surname, email, password, permissions, teamId);
+                    User user = dataBaseRepository.CreateUser(name, surname, email, position, department, password, permissions, teamId);
 
                     if (user.Email != null)
                     {
@@ -72,7 +116,7 @@ namespace Scheduling.GraphQl
             ).AuthorizeWith(PermissionName.UserManagement.ToString());
 
             Field<BooleanGraphType>(
-                "RemoveUser",
+                "removeUser",
                 arguments: new QueryArguments(new QueryArgument<NonNullGraphType<StringGraphType>>{ Name = "Email", Description = "User email" }),
                 resolve: context =>
                 {
