@@ -21,7 +21,7 @@ namespace Scheduling.Domain
         public DbSet<Token> Tokens { get; set; }
         public DbSet<TimerHistory> TimerHistories { get; set; }
         public DbSet<UserTimerHistory> UserTimerHistories { get; set; }
-
+        public DbSet<CalendarEvent> CalendarEvents { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
