@@ -11,7 +11,7 @@ namespace Scheduling.Models
         public List<Team> Teams { get; set; }
         public List<TimerHistory> TimerHistories { get; set; }
         public List<VacationRequest> VacationRequests { get; set; }
-
+        public List<CalendarEvent> CalendarEvents { get; set; } 
         public ComputedProps()
         {
 
@@ -44,6 +44,14 @@ namespace Scheduling.Models
             foreach (Team team in teams)
             {
                 Teams.Add(team);
+            }
+        }
+        public void AddCalendarEvents(List<CalendarEvent> calendarEvents)
+        {
+            CalendarEvents = new List<CalendarEvent>();
+            foreach(CalendarEvent calendarEvent in calendarEvents)
+            {
+                CalendarEvents.Add(calendarEvent);
             }
         }
     }

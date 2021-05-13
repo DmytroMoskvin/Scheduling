@@ -1,9 +1,12 @@
 import './style.css';
 import * as React from 'react';
 import { useState } from 'react';
-import { addEvent } from "../../../../webAPI/calendarEvent";
+import { addEvent, getUserEvents } from "../../../../webAPI/calendarEvent";
 import { CalendarEventType } from "../../../../store/CalendarEvent/types"
 import Cookies from 'js-cookie';
+import { connect } from 'react-redux';
+import { ApplicationState } from '../../../../store/configureStore';
+import { actionCreators } from '../../../../store/CalendarEvent/actions';
 
 interface ICalendarEventState {
     workDate: Date,
@@ -32,12 +35,24 @@ class CalendarEvent extends React.Component<ICalendarEventProps, ICalendarEventS
         this.setActive = this.setActive.bind(this);
     }
 
-    
+    async componentDidMount() {
+        
+        const token = Cookies.get('token');
+        if (token) {
+            
+            const data = await getUserEvents(token);
+            debugger
+            console.log(data);
+        }
+
+        
+    }
 
     validateTime() {
-        let workDate = new Date(new Date((document.getElementById('work-date') as HTMLInputElement).valueAsNumber));
+        let workDate = new Date((document.getElementById('work-date') as HTMLInputElement).value);
         let startWorkTime = new Date(new Date((document.getElementById('start-work-time') as HTMLInputElement).valueAsNumber));
         let endWorkTime = new Date(new Date((document.getElementById('end-work-time') as HTMLInputElement).valueAsNumber));
+        debugger    
         if (startWorkTime && endWorkTime && startWorkTime.getHours() < endWorkTime.getHours())
             return { workDate, startWorkTime, endWorkTime }
         return null
@@ -45,7 +60,7 @@ class CalendarEvent extends React.Component<ICalendarEventProps, ICalendarEventS
 
     countAmount = () => {
         var correct = 'Incorrect time!';
-        debugger
+        
         let time = this.validateTime();
         if (time)
             correct = 'Correct!';
@@ -100,4 +115,7 @@ class CalendarEvent extends React.Component<ICalendarEventProps, ICalendarEventS
 };
 
 
-export default CalendarEvent;
+export default connect(
+    (state: ApplicationState) => state.calendarEvent,
+    actionCreators
+)(CalendarEvent);

@@ -36,7 +36,25 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addEvent = void 0;
+exports.removeEvent = exports.addEvent = exports.getUserEvents = void 0;
+var getUserEvents = function (token) { return __awaiter(void 0, void 0, void 0, function () {
+    var query;
+    return __generator(this, function (_a) {
+        query = JSON.stringify({
+            query: "{\n\t\t\tgetCurrentUserEvents{\n\t\t\t\t\t\n\t\t\t\t\t\tid\n\t\t\t\t\t\tworkDate\n\t\t\t\t\t\tstartWorkTime\n\t\t\t\t\t\tendWorkTime\n\t\t\t\t\t}\n\t\t\t\t\n\t\t\t\n\t\t}"
+        });
+        return [2 /*return*/, fetch('/graphql', {
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json',
+                    'Authorization': "Bearer " + token
+                },
+                body: query
+            })
+                .then(function (data) { return data.json(); })];
+    });
+}); };
+exports.getUserEvents = getUserEvents;
 var addEvent = function (workDate, startWorkTime, endWorkTime, token) { return __awaiter(void 0, void 0, void 0, function () {
     var query;
     return __generator(this, function (_a) {
@@ -55,4 +73,21 @@ var addEvent = function (workDate, startWorkTime, endWorkTime, token) { return _
     });
 }); };
 exports.addEvent = addEvent;
+var removeEvent = function (token, id) { return __awaiter(void 0, void 0, void 0, function () {
+    var query;
+    return __generator(this, function (_a) {
+        query = JSON.stringify({
+            query: "mutation{\n\t\t  removeEvent(id: " + id + "){\n\t\t\t\tid\n\t\t\t\tworkDate\n\t\t\t\tstartWorkTime\n\t\t\t\tendWorkTime\n\t\t\t}\n\t\t}"
+        });
+        return [2 /*return*/, fetch('/graphql', {
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json',
+                    'Authorization': "Bearer " + token
+                },
+                body: query
+            }).then(function (data) { return data.json(); })];
+    });
+}); };
+exports.removeEvent = removeEvent;
 //# sourceMappingURL=calendarEvent.js.map

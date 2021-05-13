@@ -244,7 +244,7 @@ namespace Scheduling.GraphQl
             );
 
             Field<ListGraphType<CalendarEventType>>(
-                "addCalendatEvent",
+                "addCalendarEvent",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "UserId", Description = "User id" },
                      new QueryArgument<NonNullGraphType<DateGraphType>> { Name = "WorkDate", Description = "Event start date" },
