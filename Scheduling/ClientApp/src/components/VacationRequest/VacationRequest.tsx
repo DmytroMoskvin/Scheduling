@@ -2,7 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Redirect, RouteComponentProps } from 'react-router';
 import { ApplicationState } from '../../store/configureStore';
-import{ VacationRequestState } from '../../store/VacationRequest/types';
+import{ VacationRequest, VacationRequestState } from '../../store/VacationRequest/types';
 import '../../style/VacationRequest/VacationRequest.css';
 import { actionCreators } from '../../store/VacationRequest/actions';
 import { RequestsTable } from './RequestsTable';
@@ -10,6 +10,8 @@ import { addUserRequest, getUserRequests, removeUserRequest } from '../../webAPI
 import { UserState } from '../../store/User/types';
 import { DataRangePicker } from './DataRangePicker';
 import Timer from './../Timer/timer';
+import { RequestItem } from './VacationRequestItem';
+import { LoadingAnimation } from '../Loading';
 
 
 type VacationPageProps =
@@ -18,24 +20,37 @@ type VacationPageProps =
     typeof actionCreators &
     RouteComponentProps<{}>;
 
-class VacationRequest extends React.PureComponent<VacationPageProps, {}> {
+type DataObject = {
+    vacationRequest: VacationRequest,
+    vacationResponses: Array<{
+        response: boolean,
+        responderName: string,
+        comment: string}>
+}
+
+class VacationRequestPage extends React.PureComponent<VacationPageProps, {}> {
     public state = {
         startDate: null,
         finishDate: null,
         focusedInput: null,
         comment: '',
-        loading: false
+        isLoading: false
     };
 
     async requestListUpdate() {
         let requests = [];
-        this.setState({loading: true});
+        this.setState({isLoading: true});
         if(this.props.token) {
+            console.log(this.props.token);
             requests = await getUserRequests(this.props.token);
-            if(requests !== undefined)
+            console.log(requests);
+            if(requests !== undefined){
                 this.props.setHistory(requests.data.getCurrentUserRequests);
+                console.log(requests.data.getCurrentUserRequests);
+            }
         }
-        this.setState({loading: false});
+        console.log(this.props.token);
+        this.setState({isLoading: false});
     }
 
     componentDidMount(){
@@ -62,7 +77,7 @@ class VacationRequest extends React.PureComponent<VacationPageProps, {}> {
         let date = this.validateDate();
         if(date && this.props.token) {
             this.clearForm();
-            this.setState({loading: true});
+            this.setState({isLoading: true});
             let comment = this.state.comment;
             let startDate = date.startDate;
             let finishDate = date.finishDate;
@@ -73,7 +88,7 @@ class VacationRequest extends React.PureComponent<VacationPageProps, {}> {
             //requestListUpdate();
             console.log(newRequest);
             console.log(this.props.requestHistory);
-            this.setState({loading: false});
+            this.setState({isLoading: false});
         }
     }  
 
@@ -81,7 +96,7 @@ class VacationRequest extends React.PureComponent<VacationPageProps, {}> {
         let requests = []
         if(this.props.token)
         {
-            this.setState({loading: true});
+            this.setState({isLoading: true});
             requests = await removeUserRequest(this.props.token, id);
             console.log('requests');
             console.log(requests.data.removeVacationRequest);
@@ -89,12 +104,12 @@ class VacationRequest extends React.PureComponent<VacationPageProps, {}> {
                 this.props.removeVacationRequest(id);
                 console.log(this.props.requestHistory);
             }
-            this.setState({loading: false});
+            this.setState({isLoading: false});
         }
     }
 
     public render(){
-        if(this.props.logged){
+        if(this.props.logged && this.props.token){
             return (
                 <React.Fragment>
                     <main>
@@ -109,7 +124,7 @@ class VacationRequest extends React.PureComponent<VacationPageProps, {}> {
                                     <label htmlFor='comment'>Comment</label>
                                     <textarea id='comment' onInput={(event) => this.setState({comment: event.currentTarget.value})}></textarea>
                                 </div>
-                                <button id='send-request' type='button' disabled={this.state.loading} onClick={()=> this.handleSubmit()}>Request vacation</button>
+                                <button id='send-request' type='button' disabled={this.state.isLoading} onClick={()=> this.handleSubmit()}>Request vacation</button>
                             </form>
                             <div id='vacation-info'>
                                 <div className='time-tracker'>
@@ -117,7 +132,16 @@ class VacationRequest extends React.PureComponent<VacationPageProps, {}> {
                                 </div>
                             </div>
                         </div>
-                        <RequestsTable loading={this.state.loading} requests={this.props.requestHistory} removeRequest={async (id: number) => await this.removeRequest(id)}/>
+                        <div id='vacation-history'>
+                            <h5>Vacation history</h5>
+                            {!this.state.isLoading?
+                                this.props.requestHistory.map((r) =>
+                                    <RequestItem key={r.id} token={this.props.token? this.props.token: ''} request={r} removeRequest={async (id: number) => await this.removeRequest(id)}/>
+                                ):
+                                <LoadingAnimation/>
+                            }
+                            {/* // <RequestsTable loading={this.state.loading} requests={this.props.requestHistory} removeRequest={async (id: number) => await this.removeRequest(id)}/> */}
+                        </div>
                     </main>
                 </React.Fragment>
             );
@@ -131,4 +155,4 @@ class VacationRequest extends React.PureComponent<VacationPageProps, {}> {
 export default connect(
     (state: ApplicationState) => ({...state.loggedUser, ...state.vacationRequest}),
     actionCreators
-)(VacationRequest);
+)(VacationRequestPage);

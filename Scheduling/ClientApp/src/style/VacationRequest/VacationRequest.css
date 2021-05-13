@@ -7,7 +7,7 @@ p{
 .data-container input, .data-container textarea{
     padding: 5px;
     border: 1px solid lightgray;
-    border-radius: 10px;
+    border-radius: 7px;
 }
 
 #vacation-container{
@@ -52,9 +52,14 @@ p{
 }
 
 #comment {
+    transition: 0.5s;
     height: 100px;
     width: 450px;
     resize: none;
+}
+
+#comment:hover{
+    border: 1px solid #0275d8;
 }
 
 #send-request{
@@ -118,3 +123,11 @@ p{
     border-bottom: 2px solid #0275d8;
 }
 
+#vacation-history .windows8{
+    margin: 90px 0 70px 0;
+}
+
+#vacation-history .loading-container{
+    height: auto;
+    justify-content: center;
+}

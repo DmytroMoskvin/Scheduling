@@ -3,13 +3,35 @@ export const getUserRequests = async (token: string) => {
 	const query = JSON.stringify({
 		query: `{
 			getCurrentUserRequests{
-                id
-                userId
-                startDate
-                finishDate
-                status
-                comment
-              }
+				id
+				startDate
+				finishDate
+				comment
+				status
+			}
+		}`
+	});
+  
+	return fetch('/graphql', {
+		method: 'POST',
+		headers: {
+			'content-type': 'application/json',
+			'Authorization': `Bearer ${token}`
+		},
+		body: query
+	})
+	.then(data => data.json());
+};
+
+export const getRequestInfo = async (token: string, requestId: number) => {
+	const query = JSON.stringify({
+		query: `{
+			getVacationRequestInfo(requestID: ${requestId}){
+				id
+				response
+				comment
+				responderName
+			  }
 		}`
 	});
   

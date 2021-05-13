@@ -32,13 +32,11 @@ export const RequestsTable: React.FunctionComponent<TableProps> = ({ loading, re
                         <tr>
                             <th>Range</th>
                             <th>Status</th>
-                            <th>Comment</th>
                             <th></th>
                         </tr>
                         {requests.map((r) => <tr key={requests.indexOf(r)}>
                             <td>{convertDate(r.startDate)}-{convertDate(r.finishDate)}</td>
                             <td>{r.status}</td>
-                            <td>{r.comment}</td>
                             <td className='table-button-delete'><button onClick={() => removeRequest(r.id)}>Delete</button></td>
                         </tr>)}
                     </tbody>

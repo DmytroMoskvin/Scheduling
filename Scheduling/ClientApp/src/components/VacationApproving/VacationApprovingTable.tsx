@@ -34,7 +34,7 @@ export const VacationApprovingTable: React.FunctionComponent<TableProps> = ({ lo
                             <th>My comment</th>
                             <th>My respons</th>
                         </tr>
-                        {requests.filter(r => r.status === "Pending consideration...").map((r) =>
+                        {requests.filter(r => r.status === "Pending consideration").map((r) =>
                             <tr key={requests.indexOf(r)}>
                                 <ApprovingLine request={r} considerRequest={(reaction: boolean, requestId: number, comment: string)=>considerRequest(reaction, requestId, comment)}/>
                             </tr>

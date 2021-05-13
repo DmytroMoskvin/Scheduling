@@ -10,11 +10,12 @@ const vacReducer: Reducer<VacationRequestState> = (state: VacationRequestState |
 	const action = incomingAction as KnownAction;
 	switch (action.type) {
 			case 'SET_HISTORY':
-				console.log('set history' + action.requests);
+				console.log('set history');
+				console.log(action.requests);
 				if(action.requests.length > 0){
 					return { requestHistory: action.requests };
 				}
-				return { requestHistory: state.requestHistory }
+				return { requestHistory: new Array() }
 			case 'ADD_REQUEST':
 				let requests = state.requestHistory;
 				requests.push(action.request);

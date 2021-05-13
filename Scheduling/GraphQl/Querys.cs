@@ -114,6 +114,18 @@ namespace Scheduling.GraphQl
                 }
             ).AuthorizeWith("Authenticated");
 
+            Field<ListGraphType<VacationResponseType>>(
+                "GetVacationRequestInfo",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "RequestID" }
+                ),
+                resolve: context =>
+                {
+                    int requestId = context.GetArgument<int>("RequestID");
+                    return dataBaseRepository.GetVacationRequestResponses(requestId);
+                }
+            ).AuthorizeWith("Authenticated");
+
             Field<ListGraphType<VacationRequestType>>(
                 "GetAllVacationRequests",
                 arguments: null,

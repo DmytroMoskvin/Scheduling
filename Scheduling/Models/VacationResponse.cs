@@ -6,18 +6,16 @@ using System.Threading.Tasks;
 
 namespace Scheduling.Models
 {
-    public class VacationRequest
+    public class VacationResponse
     {
         public int Id { get; set; }
-        public int UserId { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime FinishDate { get; set; }
+        public int RequestId { get; set; }
+        public int ResponderId { get; set; }
+        public bool Response { get; set; }
         public string Comment { get; set; }
         [NotMapped]
-        public string Status { get; set; }
-        [NotMapped]
-        public string UserName { get; set; }
-        public VacationRequest()
+        public string ResponderName { get; set; }
+        public VacationResponse()
         {
 
         }

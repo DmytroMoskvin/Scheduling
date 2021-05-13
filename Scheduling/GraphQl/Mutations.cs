@@ -94,10 +94,9 @@ namespace Scheduling.GraphQl
                     int userId = user.Id;
                     DateTime startDate = context.GetArgument<DateTime>("StartDate");
                     DateTime finishDate = context.GetArgument<DateTime>("FinishDate");
-                    string status = "Pending consideration...";
                     string comment = context.GetArgument<string>("Comment");
 
-                    return dataBaseRepository.AddRequest(userId, startDate, finishDate, status, comment);
+                    return dataBaseRepository.AddRequest(userId, startDate, finishDate, comment);
                 },
                 description: "Returns user requests."
             ).AuthorizeWith("Authenticated");

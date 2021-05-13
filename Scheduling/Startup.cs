@@ -89,6 +89,8 @@ namespace Scheduling
             services.AddScoped<TeamType>();
             services.AddScoped<ComputedPropsType>();
             services.AddScoped<VacationRequestType>();
+            services.AddScoped<VacationResponseType>();
+            services.AddScoped<VacationRequestInfoType>();
             services.AddScoped<TimerHistoryType>();
 
             services.AddScoped<ISchema, GraphSchema>();
