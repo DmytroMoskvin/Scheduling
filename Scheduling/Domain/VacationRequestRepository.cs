@@ -62,18 +62,36 @@ namespace Scheduling.Domain
             return currentResponses;
         }
 
-        public List<VacationRequest> GetAllVacationRequests()
+        //public List<VacationRequest> GetAllVacationRequests()
+        //{
+        //    List<VacationRequest> requests = Context.VacationRequests.ToList();
+        //    foreach (VacationRequest request in requests)
+        //    {
+        //        List<VacationResponse> currentResponses = Context.VacationResponses.Where(r => r.RequestId == request.Id).ToList();
+        //        foreach (VacationResponse response in currentResponses)
+        //        {
+        //            User responder = Context.Users.Single(u => u.Id == response.ResponderId);
+        //            response.ResponderName = responder.Name + " " + responder.Surname;
+        //        }
+        //        string status = currentResponses.Count > 0 ? (currentResponses.Where(r => r.Response == false).ToList()).Count > 0 ? "Declined" : "Approved" : "Pending consideration";
+        //        User user = Context.Users.Single(u => u.Id == request.UserId);
+        //        string userName = user.Name + " " + user.Surname;
+        //        request.Status = status;
+        //        request.UserName = userName;
+        //    }
+        //    return requests;
+        //}
+
+        public List<VacationRequest> GetRequestsForConsideration(int responderId)
         {
-            List<VacationRequest> requests = Context.VacationRequests.ToList();
+            List<VacationResponse> currentResponses = Context.VacationResponses.Where(r => r.ResponderId == responderId).ToList();
+            List<int> idList = new List<int>();
+            foreach (VacationResponse response in currentResponses)
+                idList.Add(response.RequestId);
+            List<VacationRequest> requests = Context.VacationRequests.Where(r => !idList.Contains(r.Id) && r.UserId != responderId).ToList();
             foreach (VacationRequest request in requests)
             {
-                List<VacationResponse> currentResponses = Context.VacationResponses.Where(r => r.RequestId == request.Id).ToList();
-                foreach (VacationResponse response in currentResponses)
-                {
-                    User responder = Context.Users.Single(u => u.Id == response.ResponderId);
-                    response.ResponderName = responder.Name + " " + responder.Surname;
-                }
-                string status = currentResponses.Count > 0 ? (currentResponses.Where(r => r.Response == false).ToList()).Count > 0 ? "Declined" : "Approved" : "Pending consideration";
+                string status = "Pending consideration";
                 User user = Context.Users.Single(u => u.Id == request.UserId);
                 string userName = user.Name + " " + user.Surname;
                 request.Status = status;
@@ -81,6 +99,23 @@ namespace Scheduling.Domain
             }
             return requests;
         }
+
+        public List<VacationRequest> GetConsideredRequests(int responderId)
+        {
+            List<VacationResponse> currentResponses = Context.VacationResponses.Where(r => r.ResponderId == responderId).ToList();
+            List<int> idList = new List<int>();
+            foreach (VacationResponse response in currentResponses)
+                idList.Add(response.RequestId);
+            List<VacationRequest> requests = Context.VacationRequests.Where(r => idList.Contains(r.Id) && r.UserId != responderId).ToList();
+            foreach (VacationRequest request in requests)
+            {
+                User user = Context.Users.Single(u => u.Id == request.UserId);
+                request.Status = currentResponses.Find(r => r.RequestId == request.Id).Response? "Approved": "Declined";
+                request.UserName = user.Name + " " + user.Surname;
+            }
+            return requests;
+        }
+
         public VacationRequest AddRequest(int userId, DateTime startDate, DateTime finishDate, string comment)
         {
             VacationRequest vacationRequest = new VacationRequest()
@@ -95,6 +130,9 @@ namespace Scheduling.Domain
             Context.VacationRequests.Add(vacationRequest);
             Context.SaveChanges();
 
+            User user = Context.Users.Single(u => u.Id == userId);
+            vacationRequest.UserName = user.Name + " " + user.Surname;
+
             return vacationRequest;
         }
         public bool RemoveRequest(int id)
@@ -104,10 +142,22 @@ namespace Scheduling.Domain
             Context.SaveChanges();
             return true;
         }
-        public VacationRequest ConsiderRequest(int id, bool approved, string name, string comment)
+        public VacationRequest ConsiderRequest(int requestId, int responderId, bool response, string comment)
         {
-            VacationRequest vacationRequest = Context.VacationRequests.Single(u => u.Id == id);
+            VacationResponse vacationResponse = new VacationResponse()
+            {
+                RequestId = requestId,
+                ResponderId = responderId,
+                Response = response,
+                Comment = comment,
+            };
+            Context.VacationResponses.Add(vacationResponse);
             Context.SaveChanges();
+
+            VacationRequest vacationRequest = Context.VacationRequests.Single(r => r.Id == requestId);
+            vacationRequest.Status = response ? "Approved" : "Declined";
+            User user = Context.Users.Single(u => u.Id == vacationRequest.UserId);
+            vacationRequest.UserName = user.Name + " " + user.Surname;
             return vacationRequest;
         }
     }

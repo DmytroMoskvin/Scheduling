@@ -5,6 +5,7 @@ export interface VacationRequestState {
 export type VacationRequest = {
 	id: number,
 	userId: number,
+	userName: string,
 	startDate: Date, 
 	finishDate: Date,
 	status: string,

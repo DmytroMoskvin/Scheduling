@@ -5,17 +5,21 @@ import { ApplicationState } from '../../store/configureStore';
 import { actionCreators } from '../../store/VacationRequest/actions';
 import { UserState } from '../../store/User/types';
 import { considerVacationRequest, getAllRequests } from '../../webAPI/vacationApproving';
+import '../../style/VacationApproving/VacationApprovingTable.css';
 import { VacationRequest } from '../../store/VacationRequest/types';
 import { AllRequestsTable } from './AllRequestsTable';
 import { VacationApprovingTable } from './VacationApprovingTable';
+import { ApprovingItem } from './VacationApprovingItem';
+import { LoadingAnimation } from '../Loading';
+import { RequestItem } from '../VacationRequest/VacationRequestItem';
 
 type ApprovingRequest = {
     id: number,
     startDate: Date,
     finishDate: Date,
-    name: string,
+    userName: string,
     status: string,
-    comment: string,
+    comment: string
 }
 
 type VacationApprovingProps =
@@ -23,62 +27,43 @@ type VacationApprovingProps =
     typeof actionCreators &
     RouteComponentProps<{}>;
 
-class VacationApproving extends React.PureComponent<VacationApprovingProps, { requests: Array<ApprovingRequest>, loading: boolean, comment: string}> {
+class VacationApproving extends React.PureComponent<VacationApprovingProps, { requestsForConsideration: Array<ApprovingRequest>, responseHistory: Array<VacationRequest>, isLoading: boolean, comment: string}> {
     public state = {
-        requests: Array<{
-            id: number,
-            startDate: Date,
-            finishDate: Date,
-            name: string,
-            status: string,
-            comment: string,
-        }>(),
-        loading: false,
+        requestsForConsideration: Array<ApprovingRequest>(),
+        responseHistory: Array<VacationRequest>(),
+        isLoading: false,
         comment: ''
     }
 
-    async considerRequest(reaction: boolean, requestId: number, comment: string) {
+    async considerRequest(requestId: number, response: boolean, comment: string) {
         if(this.props.token) {
-            let res = await considerVacationRequest(this.props.token, requestId, reaction, comment);
+            let res = await considerVacationRequest(this.props.token, requestId, response, comment);
             let index = null;
-            let requests = this.state.requests.slice();
+            let requests = this.state.requestsForConsideration.slice();
+            let history = this.state.responseHistory.slice();
             let rec = requests.find(r => r.id === requestId);
             if(rec){
                 index = requests.indexOf(rec);
-                requests[index].status = res.data.considerVacationRequest.status;
-                this.setState({requests: requests});
+                requests.splice(index, 1);
+                history.push(res.data.considerVacationRequest);
+                this.setState({requestsForConsideration: requests, responseHistory: history});
             }
         }
     }
 
-    getUserName(users: Array<{id: number, name: string, surname: string}>, id: number){
-        let user = users.find(u => u.id === id);
-        if(user)
-            return user.name + ' ' + user.surname;
-        return '';
-    }
-    
     async requestListUpdate() {
-        this.setState({loading: true});
+        this.setState({isLoading: true});
         if(this.props.token) {
             let data = await getAllRequests(this.props.token);
             if(data !== undefined) {
-                let requests: { id: number; startDate: Date; finishDate: Date; name: string; status: string; comment: string; }[] = [];
-                console.log(data);
-                data.data.getAllVacationRequests.forEach((request: VacationRequest) => {
-                    requests.push({ 
-                        id: request.id, 
-                        startDate: request.startDate, 
-                        finishDate: request.finishDate, 
-                        name: this.getUserName(data.data.getAllUsers, request.userId),
-                        status: request.status,
-                        comment: request.comment
-                    });
+                this.setState({
+                    requestsForConsideration: data.data.getRequestsForConsideration,
+                    responseHistory: data.data.getConsideredRequests
                 });
-                this.setState({requests: requests});
+                console.log(this.state.requestsForConsideration);
             }
         }
-        this.setState({loading: false});
+        this.setState({isLoading: false});
     }
 
     componentDidMount(){
@@ -99,11 +84,24 @@ class VacationApproving extends React.PureComponent<VacationApprovingProps, { re
             return (
                 <React.Fragment>
                     <main>
-                        <div id='approving-container'>
-                            <VacationApprovingTable loading={this.state.loading} requests={this.state.requests}
-                                considerRequest={(reaction: boolean, requestId: number, comment: string)=>this.considerRequest(reaction, requestId, comment)}/>
-                            <AllRequestsTable loading={this.state.loading} requests={this.state.requests}/>
-                        </div>
+                    <div id='vacation-approving'>
+                        <h2>Vacation approving</h2>
+                        {!this.state.isLoading?
+                                this.state.requestsForConsideration.map((r) =>
+                                    <ApprovingItem key={r.id} token={this.props.token? this.props.token: ''} request={r} considerRequest={async (requestId: number, response: boolean, comment: string) => await this.considerRequest(requestId, response, comment)}/>
+                                ):
+                                <LoadingAnimation/>
+                            }
+                    </div>
+                    <div id='vacation-history'>
+                        <h2>Response history</h2>
+                        {!this.state.isLoading?
+                                this.state.responseHistory.map((r) =>
+                                <RequestItem key={r.id} token={this.props.token? this.props.token: ''} request={r} removeRequest={async (id: number) => {}}/>
+                                ):
+                                <LoadingAnimation/>
+                            }
+                    </div>
                     </main>
                 </React.Fragment>
             );

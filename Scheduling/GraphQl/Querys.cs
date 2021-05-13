@@ -127,11 +127,26 @@ namespace Scheduling.GraphQl
             ).AuthorizeWith("Authenticated");
 
             Field<ListGraphType<VacationRequestType>>(
-                "GetAllVacationRequests",
+                "GetRequestsForConsideration",
                 arguments: null,
                 resolve: context =>
                 {
-                    return dataBaseRepository.GetAllVacationRequests();
+                    string email = httpContext.HttpContext.User.Claims.First(claim => claim.Type == "Email").Value.ToString();
+                    User user = dataBaseRepository.Get(email);
+                    int id = user.Id;
+                    return dataBaseRepository.GetRequestsForConsideration(id);
+                }
+            ).AuthorizeWith("Manager");
+
+            Field<ListGraphType<VacationRequestType>>(
+                "GetConsideredRequests",
+                arguments: null,
+                resolve: context =>
+                {
+                    string email = httpContext.HttpContext.User.Claims.First(claim => claim.Type == "Email").Value.ToString();
+                    User user = dataBaseRepository.Get(email);
+                    int id = user.Id;
+                    return dataBaseRepository.GetConsideredRequests(id);
                 }
             ).AuthorizeWith("Manager");
 

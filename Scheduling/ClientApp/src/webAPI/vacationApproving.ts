@@ -1,19 +1,24 @@
 export const getAllRequests = async (token: string) => {
 	const query = JSON.stringify({
 		query: `{
-			getAllVacationRequests{
-                id
-                userId
-                startDate
-                finishDate
-                status
-                comment
-              }
-            getAllUsers{
-                id
-                name
-                surname
-            }
+			getRequestsForConsideration{
+				id
+				userId
+				userName
+				startDate
+				finishDate
+				comment
+				status
+			  }
+			  getConsideredRequests{
+				id
+				userId
+				userName
+				startDate
+				finishDate
+				comment
+				status
+			  }
 		}`
 	});
   
@@ -33,7 +38,13 @@ export const considerVacationRequest = async (token: string, id: number, reactio
 	const query = JSON.stringify({
 		query: `mutation {
 			considerVacationRequest(id: ${id} approved: ${reaction} comment: "${comment}"){
-				status
+                id
+                userId
+				userName
+                startDate
+                finishDate
+                status
+                comment
 			}
 		  }`
 	});

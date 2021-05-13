@@ -126,11 +126,11 @@ namespace Scheduling.GraphQl
                 {
                     string email = httpContext.HttpContext.User.Claims.First(claim => claim.Type == "Email").Value.ToString();
                     User user = dataBaseRepository.Get(email);
-                    string name = user.Name;
+                    int responderId = user.Id;
                     int id = context.GetArgument<int>("Id");
-                    bool approved = context.GetArgument<bool>("Approved");
+                    bool response = context.GetArgument<bool>("Approved");
                     string comment = context.GetArgument<string>("Comment");
-                    return dataBaseRepository.ConsiderRequest(id, approved, name, comment);
+                    return dataBaseRepository.ConsiderRequest(id, responderId, response, comment);
                 },
                 description: "Remove result of removing."
             ).AuthorizeWith("Manager");

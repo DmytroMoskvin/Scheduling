@@ -43,6 +43,7 @@ const Login: React.FunctionComponent<LoginProps> = ({ logIn, setUserData, logine
 		let userData = null;
 
 		if(!data || !data.authentication){
+			setIsLoading(false);
 			return setErrorMessage('Error! Incorrect login or passsword.');
     	}
 

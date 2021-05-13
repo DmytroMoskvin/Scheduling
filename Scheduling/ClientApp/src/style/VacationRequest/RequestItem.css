@@ -146,3 +146,16 @@ h5{
 	height: 6px;
 	border-radius: 6px;
 }
+
+.approving-comment-container{
+    display: flex;
+    width: 830px;
+    height: 150px;
+}
+
+.approving-comment{
+    padding: 5px;
+    border: 1px solid lightgray;
+    width: 100%;
+    border-radius: 7px;
+}

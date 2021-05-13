@@ -4,6 +4,7 @@ export const getUserRequests = async (token: string) => {
 		query: `{
 			getCurrentUserRequests{
 				id
+				userName
 				startDate
 				finishDate
 				comment
@@ -63,6 +64,7 @@ export const addUserRequest = async (token: string, request: {startDate: Date, f
 		query: `mutation{
 			addVacationRequest(startDate: "${convertDate(request.startDate)}" finishDate: "${convertDate(request.finishDate)}" comment: "${request.comment}"){
                 id
+				userName
                 userId
                 startDate
                 finishDate
