@@ -37,8 +37,8 @@ function* createUserSaga(action: actions.UserCreatedAction) {
         try {
             const response: UserData = yield createUser(
                 action.payload!.name, action.payload!.surname,
-                action.payload!.email, action.payload!.position, action.payload!.password, ["Part-time", ""],
-                [1, 2], token).then(response => response.data);
+                action.payload!.email, action.payload!.position, action.payload!.password, ["TIME_TRACKING"],
+                1, token).then(response => response.data);
             console.log(response);
             yield put(actionCreators.createUser(response));
         } catch {
