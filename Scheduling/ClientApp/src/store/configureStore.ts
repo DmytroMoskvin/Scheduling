@@ -11,8 +11,8 @@ import { TimerHistoryState } from './Timer/types';
 
 export interface ApplicationState {
     loggedUser: UserState;
-    vacationRequest: VacationRequestState | undefined;
-    timerHistory: TimerHistoryState | undefined;
+    vacationRequest: VacationRequestState;
+    timerHistory: TimerHistoryState;
 };
 
 
