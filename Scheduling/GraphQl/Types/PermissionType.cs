@@ -14,7 +14,7 @@ namespace Scheduling.GraphQl.Types
             Name = "Permission";
 
             Field(permission => permission.Id).Description("Permission id.");
-            Field<PermissionNameEnum>("PermissionName", resolve: p => p.Source.Name);
+            Field<PermissionNameEnum>("Name", resolve: p => p.Source.Name);
         }
 
     }

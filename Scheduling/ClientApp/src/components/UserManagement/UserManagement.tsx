@@ -58,8 +58,9 @@ export const UserManagement: React.FC<UserManagementProps> = (props) => {
                                         <td>{u.position}</td>
                                         <td>{u.team.name}</td>
                                         <td>{u.userPermissions.map((up) => {
+                                           console.log(up.permission.name)
                                             return(
-                                            <div key={u.userPermissions.indexOf(up)}>{up.permissionName}</div>)})}
+                                            <div key={u.userPermissions.indexOf(up)}>{up.permission.name}</div>)})}
                                         </td>
                                         <td>
                                             <Link to="/edituser" className="editUserButton">Edit</Link>

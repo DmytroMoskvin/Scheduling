@@ -9,7 +9,7 @@ export const getUsersData = async (token: string) => {
         department
         userPermissions {
           permission {
-            permissionName
+            name
           }
         }
         team {

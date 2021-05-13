@@ -2,8 +2,16 @@
     password: string, permissions: string[], teams: number[], token: string) => {
     const query = JSON.stringify({
         query: `mutation {
-            createUser (name: "${name}" surname: "${surname}" email: "${email}" position: "${position}" password: "${password}" permissions: "${permissions}" teams: [${teams}])
-		}`
+            createUser(
+              name: ${name}
+              surname: ${surname}
+              email: ${email}
+              position: ${position}
+              department: ${name}
+              permissions: TIME_TRACKING
+              team: 1
+            )
+          }`
     });
 
     return fetch('/graphql', {

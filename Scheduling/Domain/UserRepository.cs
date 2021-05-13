@@ -21,26 +21,25 @@ namespace Scheduling.Domain
                 .ThenInclude(up => up.Permission).Include(u => u.Team)
                 .FirstOrDefault(us => us.Email == email);
         }
-            
 
-        public User CreateUser(string name, string surname, string email, string position, string password, List<Permission> permissions, int teamId)
+
+        public User CreateUser(string name, string surname, string email,
+            string position, string department, string password, List<PermissionName> permissionNames, int teamId)
         {
-            string userId = Guid.NewGuid().ToString();
-            string salt = Guid.NewGuid().ToString();
-            User checkUser = Context.Users.FirstOrDefault(user => user.Email == email);
-
-            if (checkUser != null)
+            //string userId = Guid.NewGuid().ToString();
+            if (Context.Users.FirstOrDefault(u => u.Email == email) != null)
             {
                 return null;
             }
 
-            List<UserPermission> userPermissions = new List<UserPermission>();
-
-            foreach (var permission in permissions)
-            {
-                userPermissions.Add(new UserPermission {Permission = permission});
-            }
-
+            string salt = Guid.NewGuid().ToString();
+            List<Permission> permissions = new List<Permission>(Context.Permissions.Where(p => permissionNames.Contains(p.Name)));
+            /* foreach (var permission in permissions)
+             {
+                 userPermissions.Add(new UserPermission {Permission = permission});
+             }*/
+            var userPermissions = new List<UserPermission>();
+            permissions.ForEach(p => userPermissions.Add(new UserPermission(){Permission = p}));
             User user = new User()
             {
                 Email = email,
@@ -48,29 +47,31 @@ namespace Scheduling.Domain
                 Name = name,
                 Surname = surname,
                 Position = position,
-                Department = "",
+                Department = department,
                 Salt = salt,
                 Team = GetTeam(teamId),
                 UserPermissions = userPermissions
             };
 
+
+
             Context.Users.Add(user);
             Context.SaveChangesAsync();
 
-           /* User newUser = Context.Users.Single(user => user.Email == email);
+            /* User newUser = Context.Users.Single(user => user.Email == email);
 
-            //foreach (string perm in permission)
-            //{
-            //    CreateUserPermission(newUser.Id, perm);
-            //}
+             //foreach (string perm in permission)
+             //{
+             //    CreateUserPermission(newUser.Id, perm);
+             //}
 
-            //if (teams == null)
-            //    return newUser;
+             //if (teams == null)
+             //    return newUser;
 
-            foreach (int teamId in teams)
-            {
-                AddUserToTeam(user.Id, teamId);
-            }*/
+             foreach (int teamId in teams)
+             {
+                 AddUserToTeam(user.Id, teamId);
+             }*/
 
             return user;
         }

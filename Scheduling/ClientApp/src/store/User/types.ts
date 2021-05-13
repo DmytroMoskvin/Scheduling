@@ -16,7 +16,7 @@ export interface Team {
 }
 
 export interface UserPermission {
-	permissionName: Permission,
+	permission: Permission,
 }
 
 export type UserData = { 
