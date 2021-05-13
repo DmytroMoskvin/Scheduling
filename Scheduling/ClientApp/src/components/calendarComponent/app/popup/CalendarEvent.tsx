@@ -56,9 +56,7 @@ class CalendarEvent extends React.PureComponent<{}, ICalendarEventState> {
         if (time && token)
             await addEvent(time.workDate, time.startWorkTime, time.endWorkTime, token);
 
-        this.setState({
-            active:false
-        });
+        
     }
 
     
