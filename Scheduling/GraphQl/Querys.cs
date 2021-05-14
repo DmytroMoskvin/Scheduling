@@ -201,6 +201,18 @@ namespace Scheduling.GraphQl
                     return teammatesOnVacation;
                 }
             ).AuthorizeWith("Authenticated");
+
+            Field<ListGraphType<CalendarEventType>>(
+                "GetCurrentUserEvents",
+                arguments: null,
+                resolve: context =>
+                {
+                    string email = httpContext.HttpContext.User.Claims.First(claim => claim.Type == "Email").Value.ToString();
+                    User user = dataBaseRepository.Get(email);
+                    int id = user.Id;
+                    return dataBaseRepository.GetUserRequests(user.Id);
+                }
+            ).AuthorizeWith("Authenticated");
         }
     }
 }

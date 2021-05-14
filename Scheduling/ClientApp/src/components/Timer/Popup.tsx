@@ -7,6 +7,7 @@ import { ApplicationState } from '../../store/configureStore';
 import { actionCreators } from '../../store/Timer/actions';
 import { TimerType } from '../../store/Timer/types';
 import '../../style/VacationRequest/RequestsTable.css';
+
 import { deleteTimer, addTimerValue, getUserTimerData, getUserTimerDataDate, editTimerValue } from '../../webAPI/timer';
 
 type TableProps = {
@@ -194,6 +195,7 @@ class Popup extends React.Component<IProps, IState> {
         let todayStr = yyyy + '-' + mm + '-' + dd;
         return (todayStr);
     }
+
 
     async changeDate(date: Date) { // ������ ��� ���
         const token = Cookies.get('token');

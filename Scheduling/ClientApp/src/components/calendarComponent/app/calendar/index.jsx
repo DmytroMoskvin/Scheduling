@@ -5,12 +5,17 @@ import buildCalendar from "./build";
 import dayStyles, { beforeToday } from "./styles";
 import Header from "./header";
 
-export default function Calendar({ value, onChange }) {
+export default function Calendar2({ value, onChange, setDay }) {
     const [calendar, setCalendar] = useState([]);
 
     useEffect(() => {
         setCalendar(buildCalendar(value));
     }, [value]);
+
+    function onClickFunc(day) {
+        !beforeToday(day) && onChange(day);
+        setDay(day.format('l'));
+    };
 
     return (
         <div className="calendar">
@@ -26,7 +31,10 @@ export default function Calendar({ value, onChange }) {
                 {calendar.map((week) => (
                     <div>
                         {week.map((day) => (
-                            <div className="day" onClick={() => !beforeToday(day) && onChange(day)}>
+
+                            <div className="day" onClick={() => onClickFunc(day)}
+                            //onClick={() => setDay()}
+                            >
                                 <div className={dayStyles(day, value)}>
                                     {day.format("D").toString()}
                                 </div>

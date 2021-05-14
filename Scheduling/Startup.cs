@@ -91,6 +91,7 @@ namespace Scheduling
             services.AddScoped<VacationRequestType>();
             services.AddScoped<VacationResponseType>();
             services.AddScoped<TimerHistoryType>();
+            services.AddScoped<CalendarEventType>();
 
             services.AddScoped<ISchema, GraphSchema>();
 

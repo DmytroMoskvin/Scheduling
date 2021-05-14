@@ -35,7 +35,29 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\store\CalendarEvent\actions.ts" />
+    <None Remove="ClientApp\src\store\CalendarEvent\index.ts" />
+    <None Remove="ClientApp\src\store\CalendarEvent\reducer.ts" />
+    <None Remove="ClientApp\src\store\CalendarEvent\types.ts" />
+    <None Remove="ClientApp\src\webAPI\calendarEvent.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="ClientApp\src\containers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\store\CalendarEvent\actions.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\store\CalendarEvent\reducer.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\store\CalendarEvent\types.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\store\CalendarEvent\index.ts" />
+    <TypeScriptCompile Include="ClientApp\src\webAPI\calendarEvent.ts" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

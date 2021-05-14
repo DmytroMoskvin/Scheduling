@@ -9,6 +9,7 @@ import { Data } from "popper.js";
 import { TimerType } from "../../store/Timer/types";
 import "./timer.css"
 
+
 interface IProps {
     addTime: (time: TimerType) =>
         ({

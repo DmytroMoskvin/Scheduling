@@ -4,7 +4,7 @@ import moment from "moment";
 import App2 from "./bigcalendar/App";
 import "./styles.css";
 import Calendar from './calendar';
-import CalendarPopUp from './popup/CalendarPopUp';
+
 
 export default function AppCalendar() {
     moment.updateLocale('ru', { week: { dow: 1 } });
@@ -12,8 +12,6 @@ export default function AppCalendar() {
     const [value, setValue] = useState(moment());
     const [eventActive, setEventActive] = useState(false)
     return <div>
-        
-        <Calendar value={value} onChange={setValue} />
-        <App2 />
+        <App2 value={value} onChange={setValue} />
     </div>;
 }

@@ -6,6 +6,7 @@ import { ApplicationState } from '../../store/configureStore';
 import { actionCreators } from '../../store/Timer/actions';
 import { TimerType } from '../../store/Timer/types';
 import '../../style/VacationRequest/RequestsTable.css';
+
 import { deleteTimer, getUserTimerData } from '../../webAPI/timer';
 import Popup from './Popup';
 
