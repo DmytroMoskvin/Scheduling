@@ -24,7 +24,6 @@ namespace Scheduling.Models
         }
         public void AddTimerHistory(List<TimerHistory> timerHistory)
         {
-            TimerHistories = new List<TimerHistory>();
             foreach (TimerHistory timerHistoryValue in timerHistory)
             {
                 TimerHistories.Add(timerHistoryValue);

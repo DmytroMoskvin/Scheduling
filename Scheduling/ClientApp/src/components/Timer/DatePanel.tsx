@@ -113,6 +113,7 @@ class DatePanel extends React.Component<IProps, IState> {
                     if (date instanceof Date)
                         date && this.changeDate(date);
                 }}
+                inline
         />
         );
     }

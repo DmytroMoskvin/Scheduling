@@ -14,50 +14,43 @@ namespace Scheduling.Domain
 
         public User Get(string email) =>
             Context.Users.FirstOrDefault(user => user.Email == email);
-
-        public User CreateUser(string name, string surname, string email, string password, List<string> permission, List<int> teams)
+        private void CheckDublicatedEmail(string email)
         {
-            string userId = Guid.NewGuid().ToString();
-            string salt = Guid.NewGuid().ToString();
-
             User checkUser = Context.Users.FirstOrDefault(user => user.Email == email);
 
             if (checkUser != null)
-            {
-                return new User();
-            }
+                throw new Exception("Dublicated, user email existed");
+        }
 
-            User user = new User()
+        public User CreateUser(string name, string surname, string email, string password, List<string> permissions, List<int> teams)
+        {
+            string salt = Guid.NewGuid().ToString();
+
+            CheckDublicatedEmail(email);
+
+            User user = new()
             {
                 Email = email,
                 Password = Hashing.GetHashString(password + salt),
                 Name = name,
                 Surname = surname,
-                Position = "",
-                Department = "",
                 Salt = salt
             };
-
 
             Context.Users.Add(user);
             Context.SaveChanges();
 
-            User newUser = Context.Users.Single(user => user.Email == email);
-
-            foreach (string perm in permission)
+            foreach (string perm in permissions)
             {
-                CreateUserPermission(newUser.Id, perm);
+                CreateUserPermission(user.Id, perm);
             }
-
-            if (teams == null)
-                return newUser;
 
             foreach (int teamId in teams)
             {
                 AddUserToTeam(user.Id, teamId);
             }
 
-            return newUser;
+            return user;
         }
 
 
@@ -70,7 +63,7 @@ namespace Scheduling.Domain
 
             RemoveUserPermissions(user.Id);
 
-            List<UserTeams> teams = Context.userTeams.Where(team => team.UserId == user.Id).ToList();
+            List<UserTeams> teams = Context.UserTeams.Where(team => team.UserId == user.Id).ToList();
             foreach (UserTeams team in teams)
             {
                 RemoveUserFromTeam(team.UserId, team.TeamId);

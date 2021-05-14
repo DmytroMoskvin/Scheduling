@@ -31,11 +31,10 @@ namespace Scheduling.GraphQl
                     user.ComputedProps.AddTeams(dataBaseRepository.GetUserTeams(user.Id));
 
 
-                    System.DateTime? selectedDay = context.GetArgument<System.DateTime?>("CalendarDay");
-                    if (selectedDay.HasValue)
+                    System.DateTime? selectedMonth = context.GetArgument<System.DateTime?>("CalendarDay");
+                    if (selectedMonth.HasValue)
                     {
-                        var a = dataBaseRepository.GetTimerHistory(user.Id)
-                            .Where(r => r.StartTime.Value.ToShortDateString() == selectedDay.Value.Date.ToShortDateString());
+                        var a = dataBaseRepository.GetTimerHistory(user.Id, selectedMonth);
 
                         user.ComputedProps.AddTimerHistory(new List<TimerHistory>(a.OfType<TimerHistory>()));
 

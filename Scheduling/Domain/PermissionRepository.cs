@@ -31,7 +31,12 @@ namespace Scheduling.Domain
             if (permission == null)
                 return;
 
-            UserPermission userPermission = new UserPermission() { UserId = userId, PermisionId = permission.Id };
+            var userPermission = new UserPermission() 
+            { 
+                UserId = userId, 
+                PermisionId = permission.Id
+            };
+
             Context.UserPermissions.Add(userPermission);
             Context.SaveChanges();
         }

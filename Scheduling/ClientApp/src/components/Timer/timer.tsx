@@ -55,6 +55,9 @@ class Timer extends React.Component<IProps, IState> {
             let startTime: Date;
             var lastValue = data.data.getCurrentUser.computedProps
                 .timerHistories[data.data.getCurrentUser.computedProps.timerHistories.length - 1];
+            if (lastValue == undefined) {
+                return;
+            }
             if (lastValue.finishTime == null) {
                 startTime = ((new Date((new Date(lastValue.startTime)).toString() + " UTC")));
                 this.state.timer.start({ startValues: { seconds: (Math.floor((new Date().getTime() - startTime.getTime()) / 1000)) } });

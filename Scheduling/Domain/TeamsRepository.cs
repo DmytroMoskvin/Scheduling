@@ -17,7 +17,7 @@ namespace Scheduling.Domain
             if (team == null)
                 return false;
 
-            List<UserTeams> userTeams = Context.userTeams.Where(userTeam => userTeam.TeamId == teamId).ToList();
+            List<UserTeams> userTeams = Context.UserTeams.Where(userTeam => userTeam.TeamId == teamId).ToList();
 
             foreach (UserTeams userTeam in userTeams)
             {
@@ -53,7 +53,7 @@ namespace Scheduling.Domain
                 return;
             }
 
-            Context.userTeams.Add(new UserTeams { TeamId = teamId, UserId = userId });
+            Context.UserTeams.Add(new UserTeams { TeamId = teamId, UserId = userId });
             Context.SaveChanges();
         }
 
@@ -67,7 +67,7 @@ namespace Scheduling.Domain
                 return;
             }
 
-            Context.userTeams.Remove(Context.userTeams.Single(team => team.TeamId == teamId && team.UserId == userId));
+            Context.UserTeams.Remove(Context.UserTeams.Single(team => team.TeamId == teamId && team.UserId == userId));
             Context.SaveChanges();
         }
 
@@ -76,10 +76,10 @@ namespace Scheduling.Domain
 
         public List<Team> GetUserTeams(int id)
         {
-            List<UserTeams> userTeams = Context.userTeams.Where(team => team.UserId == id).ToList();
+            List<UserTeams> userTeams = Context.UserTeams.Where(team => team.UserId == id).ToList();
             List<Team> teams = new List<Team>();
 
-            foreach (UserTeams team in userTeams)
+            foreach (var team in userTeams)
             {
                 teams.Add(Context.Teams.Single(t => t.Id == team.TeamId));
             }
@@ -87,9 +87,22 @@ namespace Scheduling.Domain
             return teams;
         }
 
+        public Team GetTeam(int id)
+            => Context.Teams.Single(it => it.Id == id);
+
+        public List<Team> GetUserTeams2(int userId)
+        {
+            var userTeams = Context.UserTeams.Where(team => team.UserId == userId).ToList();
+
+            return userTeams
+                .Select(it => it.TeamId)
+                .Select(GetTeam)
+                .ToList();
+        }
+
         public List<User> GetTeamUsers(int teamId)
         {
-            List<UserTeams> userTeams = Context.userTeams.Where(team => team.TeamId == teamId).ToList();
+            List<UserTeams> userTeams = Context.UserTeams.Where(team => team.TeamId == teamId).ToList();
             List<User> users = new List<User>();
 
             foreach (UserTeams teams in userTeams)

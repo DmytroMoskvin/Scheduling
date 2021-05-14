@@ -226,9 +226,9 @@ namespace Scheduling.GraphQl
             Field<TimerHistoryType>(
                 "editTimerFinishValue",
                 arguments: new QueryArguments(
-                    new QueryArgument<DateTimeGraphType> { Name = "StartTime", Description = "Timer started" },
-                    new QueryArgument<DateTimeGraphType> { Name = "FinishTime", Description = "Timer finished" },
-                    new QueryArgument<IntGraphType> { Name = "id", Description = "Edit Timer finished" }
+                    new QueryArgument<NonNullGraphType<DateTimeGraphType>> { Name = "StartTime", Description = "Timer started" },
+                    new QueryArgument<NonNullGraphType<DateTimeGraphType>> { Name = "FinishTime", Description = "Timer finished" },
+                    new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "id", Description = "Edit Timer finished" }
                 ),
                 resolve: context =>
                 {
@@ -236,12 +236,12 @@ namespace Scheduling.GraphQl
                     
                     User user = dataBaseRepository.Get(email);
 
-                    Nullable<DateTime> startTime = context.GetArgument<Nullable<DateTime>>("StartTime", defaultValue: null);
-                    Nullable<DateTime> finishTime = context.GetArgument<Nullable<DateTime>>("FinishTime", defaultValue: null);
+                    DateTime startTime = context.GetArgument<DateTime>("StartTime");
+                    DateTime finishTime = context.GetArgument<DateTime>("FinishTime");
 
                     finishTime = (finishTime == null) ? DateTime.UtcNow : finishTime;
 
-                    Nullable<int> id = context.GetArgument<Nullable<int>>("id", defaultValue: null);
+                    int id = context.GetArgument<int>("id");
 
                     return dataBaseRepository.EditTimerValue(startTime, finishTime, user.Id, id);
                 },
