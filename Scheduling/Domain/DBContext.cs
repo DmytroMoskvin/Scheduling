@@ -18,6 +18,7 @@ namespace Scheduling.Domain
         public DbSet<Team> Teams { get; set; }
         public DbSet<UserTeams> userTeams { get; set; }
         public DbSet<VacationRequest> VacationRequests { get; set; }
+        public DbSet<VacationResponse> VacationResponses { get; set; }
         public DbSet<CalendarEvent> CalendarEvents { get; set; }
         public DbSet<Token> Tokens { get; set; }
         public DbSet<TimerHistory> TimerHistories { get; set; }
@@ -32,10 +33,34 @@ namespace Scheduling.Domain
                 Id = 1321313,
                 Email = "admin@gmail.com",
                 Password = "5dj3bhWCfxuHmONkBdvFrA==",
-                Name = "Admin",
-                Surname = "Adminov",
-                Position = "lol",
-                Department = "Memes",
+                Name = "Denis",
+                Surname = "Pensiya",
+                Position = "Nachalnik",
+                Department = "Nachalstvo",
+                Salt = "91ed90df-3289-4fdf-a927-024b24bea8b7",
+            });
+
+            modelBuilder.Entity<User>().HasData(new User
+            {
+                Id = 1321314,
+                Email = "admin2@gmail.com",
+                Password = "5dj3bhWCfxuHmONkBdvFrA==",
+                Name = "Arkadiy",
+                Surname = "Cisterna",
+                Position = "Pochti nachalstvo",
+                Department = "Nachalstvo",
+                Salt = "91ed90df-3289-4fdf-a927-024b24bea8b7",
+            });
+
+            modelBuilder.Entity<User>().HasData(new User
+            {
+                Id = 1321315,
+                Email = "admin3@gmail.com",
+                Password = "5dj3bhWCfxuHmONkBdvFrA==",
+                Name = "Arkadiy",
+                Surname = "Cisterna",
+                Position = "Pochti nachalstvo",
+                Department = "Nachalstvo",
                 Salt = "91ed90df-3289-4fdf-a927-024b24bea8b7",
             });
 
@@ -80,28 +105,56 @@ namespace Scheduling.Domain
                 Id = 6,
                 Name = "Access to calendar"
             });
-            
+
             modelBuilder.Entity<UserPermission>().HasData(new UserPermission
-            { 
-                Id = 3,
-                PermisionId = 1,
-                UserId = 1321313
+            {
+                Id = 1,
+                PermisionId = 3,
+                UserId = 13213133
             });
 
             modelBuilder.Entity<UserPermission>().HasData(new UserPermission
             { 
-                Id = 4,
-                PermisionId = 3,
-                UserId = 13213133
+                Id = 2,
+                PermisionId = 1,
+                UserId = 1321313
             });
             
             modelBuilder.Entity<UserPermission>().HasData(new UserPermission
             { 
-                Id = 5,
+                Id = 3,
                 PermisionId = 2,
                 UserId = 1321313
             });
-            
+
+            modelBuilder.Entity<UserPermission>().HasData(new UserPermission
+            {
+                Id = 4,
+                PermisionId = 1,
+                UserId = 1321314
+            });
+
+            modelBuilder.Entity<UserPermission>().HasData(new UserPermission
+            {
+                Id = 5,
+                PermisionId = 2,
+                UserId = 1321314
+            });
+
+            modelBuilder.Entity<UserPermission>().HasData(new UserPermission
+            {
+                Id = 6,
+                PermisionId = 1,
+                UserId = 1321315
+            });
+
+            modelBuilder.Entity<UserPermission>().HasData(new UserPermission
+            {
+                Id = 7,
+                PermisionId = 2,
+                UserId = 1321315
+            });
+
             modelBuilder.Entity<Team>().HasData(new Team
             { 
                 Id = 6,
@@ -122,7 +175,6 @@ namespace Scheduling.Domain
                 UserId = 13213133,
                 StartDate = new DateTime(2021, 04, 20),
                 FinishDate = new DateTime(2021, 05, 20),
-                Status = "Declined. Declined by PM. Declined by TL.",
                 Comment = "I want to see a bober."
             });
 
@@ -132,7 +184,6 @@ namespace Scheduling.Domain
                 UserId = 13213133,
                 StartDate = new DateTime(2021, 04, 22),
                 FinishDate = new DateTime(2021, 04, 28),
-                Status = "Declined. Declined by PM. Declined by TL.",
                 Comment = "I really want to see a bober."
             });
 
@@ -142,9 +193,36 @@ namespace Scheduling.Domain
                 UserId = 13213133,
                 StartDate = new DateTime(2021, 04, 25),
                 FinishDate = new DateTime(2021, 04, 29),
-                Status = "Pending consideration...",
                 Comment = "Please, it`s my dream to see a bober."
             });
+
+            modelBuilder.Entity<VacationResponse>().HasData(new VacationResponse
+            {
+                Id = 1,
+                RequestId = 1,
+                ResponderId = 1321313,
+                Response = true,
+                Comment = "No problem. Let`s go!"
+            });
+
+            modelBuilder.Entity<VacationResponse>().HasData(new VacationResponse
+            {
+                Id = 2,
+                RequestId = 1,
+                ResponderId = 1321314,
+                Response = true,
+                Comment = "Oke. Goodbye :((((((((("
+            });
+
+            modelBuilder.Entity<VacationResponse>().HasData(new VacationResponse
+            {
+                Id = 3,
+                RequestId = 1,
+                ResponderId = 1321315,
+                Response = false,
+                Comment = "Nea. Sidi tut!"
+            });
+
             modelBuilder.Entity<TimerHistory>().HasData(new TimerHistory
             {
                 Id = 1,

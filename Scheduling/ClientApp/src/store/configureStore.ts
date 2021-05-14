@@ -13,9 +13,10 @@ import { CalendarEventState } from './CalendarEvent/types';
 
 export interface ApplicationState {
     loggedUser: UserState;
-    vacationRequest: VacationRequestState | undefined;
-    timerHistory: TimerHistoryState | undefined;
-    calendarEvent: CalendarEventState | undefined;
+    calendarEvent: CalendarEventState;
+    vacationRequest: VacationRequestState;
+    timerHistory: TimerHistoryState;
+
 };
 
 

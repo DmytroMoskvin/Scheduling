@@ -1,12 +1,12 @@
 export interface TimerHistoryState {
 	logged: boolean,
 	token: string | null,
-	timerHistory: Array<TimerType>
+	timerHistory: Array<TimerType>,
+	date: Date,
 }
 
 export type TimerType = {
 	id: number,
-	DateTimeStart: Date, 
-	DateTimeFinish: Date,
-	Time: string
+	startTime: string,
+	finishTime: Date,
 }

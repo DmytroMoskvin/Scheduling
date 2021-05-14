@@ -47,6 +47,14 @@ namespace Scheduling.GraphQl
                 }
             ).AuthorizeWith("Authenticated");
 
+            Field<ListGraphType<UserType>>(
+                "GetAllUsers",
+                arguments: null,
+                resolve: context =>
+                {
+                    return dataBaseRepository.Get();
+                }
+            ).AuthorizeWith("Manager");
 
             Field<ListGraphType<TeamType>>(
                 "GetTeams",
@@ -102,9 +110,45 @@ namespace Scheduling.GraphQl
                     string email = httpContext.HttpContext.User.Claims.First(claim => claim.Type == "Email").Value.ToString();
                     User user = dataBaseRepository.Get(email);
                     int id = user.Id;
-                    return dataBaseRepository.GetUserRequests(user.Id);
+                    return dataBaseRepository.GetUserVacationRequests(user.Id);
                 }
             ).AuthorizeWith("Authenticated");
+
+            Field<ListGraphType<VacationResponseType>>(
+                "GetVacationRequestInfo",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "RequestID" }
+                ),
+                resolve: context =>
+                {
+                    int requestId = context.GetArgument<int>("RequestID");
+                    return dataBaseRepository.GetVacationRequestResponses(requestId);
+                }
+            ).AuthorizeWith("Authenticated");
+
+            Field<ListGraphType<VacationRequestType>>(
+                "GetRequestsForConsideration",
+                arguments: null,
+                resolve: context =>
+                {
+                    string email = httpContext.HttpContext.User.Claims.First(claim => claim.Type == "Email").Value.ToString();
+                    User user = dataBaseRepository.Get(email);
+                    int id = user.Id;
+                    return dataBaseRepository.GetRequestsForConsideration(id);
+                }
+            ).AuthorizeWith("Manager");
+
+            Field<ListGraphType<VacationRequestType>>(
+                "GetConsideredRequests",
+                arguments: null,
+                resolve: context =>
+                {
+                    string email = httpContext.HttpContext.User.Claims.First(claim => claim.Type == "Email").Value.ToString();
+                    User user = dataBaseRepository.Get(email);
+                    int id = user.Id;
+                    return dataBaseRepository.GetConsideredRequests(id);
+                }
+            ).AuthorizeWith("Manager");
 
             FieldAsync<ListGraphType<TimerHistoryType>, IReadOnlyCollection<TimerHistory>>(
                 "GetTimerHistories",
@@ -143,7 +187,7 @@ namespace Scheduling.GraphQl
 
                     user.ComputedProps.Teams.ForEach((team) => {
                         dataBaseRepository.GetTeamUsers(team.Id).ForEach((user) => {
-                            dataBaseRepository.GetUserRequests(user.Id).ForEach((request) => {
+                            dataBaseRepository.GetUserVacationRequests(user.Id).ForEach((request) => {
                                 if(request.FinishDate >= DateToCheck && request.StartDate <= DateToCheck)
                                 {
                                     if (teammatesOnVacation.Contains(user))

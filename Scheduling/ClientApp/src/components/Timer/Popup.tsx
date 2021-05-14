@@ -6,7 +6,8 @@ import { connect } from 'react-redux';
 import { ApplicationState } from '../../store/configureStore';
 import { actionCreators } from '../../store/Timer/actions';
 import { TimerType } from '../../store/Timer/types';
-import '../../style/RequestsTable.css';
+import '../../style/VacationRequest/RequestsTable.css';
+
 import { deleteTimer, addTimerValue, getUserTimerData, getUserTimerDataDate, editTimerValue } from '../../webAPI/timer';
 
 type TableProps = {
@@ -195,7 +196,8 @@ class Popup extends React.Component<IProps, IState> {
         return (todayStr);
     }
 
-    async changeDate(date: Date) { // додати два дні
+
+    async changeDate(date: Date) { // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ
         const token = Cookies.get('token');
         if (token) {
             var dayBefore = (new Date(date.getTime()));
