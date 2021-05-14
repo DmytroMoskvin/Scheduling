@@ -11,7 +11,7 @@ import {ApplicationState} from "../../store/configureStore";
 import {actionCreators} from "../../store/User/actions";
 import Cookies from "js-cookie";
 import {getUserData} from "../../webAPI/user";
-import Timer from "../timer";
+import Timer from '../Timer/timer';
 import WhoIsOut from "../WhoIsOut";
 
 type MainPageProps =
@@ -48,9 +48,7 @@ class MainPage extends React.PureComponent<MainPageProps> {
                     <div className="right-side">
                         <div className="top-side">
                             <div className="timer-container">
-                                <h2>Time tracker</h2>
-                                
-                                {"timer"}
+                                <Timer/>
                             </div>
                         </div>
                         <div className="bottom-side">

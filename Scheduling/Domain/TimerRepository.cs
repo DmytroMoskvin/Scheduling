@@ -84,7 +84,8 @@ namespace Scheduling.Domain
 
             var dbRecordUser = Context.Users.Single(user => user.Id == userId);
 
-            IEnumerable<UserTimerHistory> userTimerHistoryHistories = Context.UserTimerHistories.OrderBy(userTimerHistory => userTimerHistory.UserId == userId);
+            IEnumerable<UserTimerHistory> userTimerHistoryHistories = Context.UserTimerHistories.OrderBy(userTimerHistory => userTimerHistory.UserId == userId)
+                .ThenBy(userTimerHistory => userTimerHistory.TimerHistoryId);
 
             UserTimerHistory dbRecord;
             TimerHistory dbRecordTimerHistory;

@@ -6,6 +6,7 @@ import{ VacationRequestState } from '../store/VacationRequest/types';
 import '../style/VacationRequest.css';
 import { actionCreators } from '../store/VacationRequest/actions';
 import { RequestsTable } from './RequestsTable';
+import Timer from './Timer/timer';
 
 type VacationRequestProps =
     VacationRequestState &
@@ -110,7 +111,7 @@ class VacationRequest extends React.PureComponent<VacationRequestProps>{
                                 <p id='avaible-time'>0.00 days</p>
                             </div>
                             <div className='time-tracker'>
-                                <h5>Time tracker</h5>
+                                <Timer/>
                             </div>
                         </div>
                     </div>

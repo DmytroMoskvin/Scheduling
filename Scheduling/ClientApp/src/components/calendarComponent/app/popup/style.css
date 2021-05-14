@@ -1,0 +1,60 @@
+﻿.popUp {
+    
+    opacity: 0;
+    transition: 0.1s;
+}
+
+.popUp.active {
+        opacity: 1;
+    }
+.pop__content {
+    position: relative;
+    margin-top: 150px;
+    margin-left: 600px;
+    padding: 10px;
+    border: 5px solid;
+    border-radius: 15px;
+    border-color: black;
+    height: 185px;
+    width: 350px;
+}
+
+    .pop__content .popHead {
+        text-align: left;
+        margin: 0px;
+        margin-left: 15px;
+        padding: 0px;
+    }
+
+    .pop__content .date {
+        text-align: left;
+    }
+
+.datePick {
+    padding: 0px;
+    margin: 15px;
+    margin-left: 15px;
+    text-align: center;
+    width: 100px;
+}
+
+.start-work-time {
+    margin-left: 50px;
+}
+
+.end-work-time {
+    margin-left: 60px;
+}
+
+
+.buttons {
+    margin-top: 15px;
+}
+
+.ok-pop {
+    margin-right: 20px;
+}
+
+.close-pop {
+    margin-left: 20px;
+}

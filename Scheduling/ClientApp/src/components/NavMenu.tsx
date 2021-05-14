@@ -30,6 +30,12 @@ class NavMenu extends React.PureComponent<{ logined: boolean, logOut: () => void
                                 <NavItem>
                                     <NavLink tag={Link} className="text-dark" to="/Timer">Timer</NavLink>
                                 </NavItem>
+                                <NavItem>
+                                    <NavLink tag={Link} className="text-dark" to="/timer">Timer</NavLink>
+                                </NavItem>
+                                <NavItem>
+                                    <NavLink tag={Link} className="text-dark" to="/calendar">Calendar</NavLink>
+                                </NavItem>
                             </ul>
                         </Collapse>
                         {this.props.logined ? <button className="logout-btn" onClick={() => this.props.logOut()}>
