@@ -102,6 +102,9 @@ class DatePanel extends React.Component<IProps, IState> {
                         date && this.changeDate(date);
                 }}
                 inline
+                filterDate={(date) => {
+                    return new Date() > date;
+                }}
         />
         );
     }

@@ -13,7 +13,8 @@ interface IProps {
         ({
         type: "ADD_TIME",
         time: TimerType
-    })
+        })
+    date: Date
 }
 
 interface IState {
@@ -95,6 +96,7 @@ class Timer extends React.Component<IProps, IState> {
         if (token) {
             const data = await addTimerStart(token);
             data.data.addTimerStartValue.startTime = data.data.addTimerStartValue.startTime.split("Z")[0];
+            if (new Date(this.props.date).getMonth() == new Date().getMonth())
             if (data.data) {
                 this.props.addTime(data.data.addTimerStartValue);
             }
@@ -120,7 +122,7 @@ class Timer extends React.Component<IProps, IState> {
             const data:MyData = await addTimerFinish(token);
 
             data.data.addTimerFinishValue.finishTime = new Date(data.data.addTimerFinishValue.finishTime).toISOString();
-
+            if (new Date(data.data.addTimerFinishValue.finishTime).getMonth() == new Date().getMonth())
             if (data.data) {
                 this.props.addTime({ finishTime: new Date(data.data.addTimerFinishValue.finishTime.split("Z")[0]), id: data.data.addTimerFinishValue.id, startTime: "" });
             }

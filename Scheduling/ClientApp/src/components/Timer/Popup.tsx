@@ -316,7 +316,12 @@ class Popup extends React.Component<IProps, IState> {
                                 if (date instanceof Date) {
                                     date && this.handleChangeStartTimeDate(date); this.handleChangeFinishTimeDate(date)
                                 }
-                            }}
+                            }
+                            }
+                            filterDate={(date) => {
+                                return new Date() > date;
+                            }
+                            }
                         />
                         {this.state.showWarning ?
                             <button disabled>{this.props.buttonText}</button>
