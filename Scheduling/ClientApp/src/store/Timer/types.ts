@@ -9,4 +9,5 @@ export type TimerType = {
 	id: number,
 	startTime: string,
 	finishTime: Date,
+	isModified: boolean,
 }

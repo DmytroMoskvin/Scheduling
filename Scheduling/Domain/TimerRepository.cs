@@ -84,6 +84,7 @@ namespace Scheduling.Domain
                 StartTime = startTime,
                 FinishTime = finishTime,
                 UserId = userId,
+                IsModified = true,
             };
 
             Context.Add(timerValues);
@@ -95,6 +96,8 @@ namespace Scheduling.Domain
         public TimerHistory EditTimerValue(DateTime startTime, DateTime finishTime, int userId, int recordId)
         {
             var dbRecord = Context.TimerHistories.Single(it => it.Id == recordId && it.UserId == userId);
+
+            dbRecord.IsModified = true;
 
             dbRecord.FinishTime = finishTime;
 

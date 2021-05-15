@@ -37,6 +37,7 @@ export const getUserTimerDataDate = async (token: string, selectedDate: string) 
 						id
 						startTime
 						finishTime
+						isModified
 					}
 				}
 			}

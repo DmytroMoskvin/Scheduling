@@ -14,6 +14,7 @@ namespace Scheduling.Models
         public DateTime? FinishTime { get; set; }
 
         public int UserId { get; set; }
+        public bool? IsModified { get; set; }
 
         public void AddStartTime(DateTime startTime)
         {

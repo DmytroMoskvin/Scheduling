@@ -24,6 +24,7 @@ interface IState {
     startTime: Date;
     finishTime: Date;
     buttonText: string;
+    isModified?: boolean;
 }
 
 class TimerHistoryTable extends React.Component<IProps, IState> {
@@ -108,13 +109,7 @@ class TimerHistoryTable extends React.Component<IProps, IState> {
         })
     }
     getConvertedDate(date: Date) {
-        var today = date;
-        var dd = String(today.getDate()).padStart(2, '0');
-        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-        var yyyy = today.getFullYear();
-
-        let todayStr = yyyy + '-' + mm + '-' + dd;
-        return (todayStr);
+        return (new Date(date + " UTC").toLocaleDateString());
     }
     render() {
         if (this.props.timerHistory != undefined && this.props.timerHistory.length > 0) {
@@ -131,6 +126,7 @@ class TimerHistoryTable extends React.Component<IProps, IState> {
                                     <th>Date</th>
                                     <th>Interval</th>
                                     <th>Time(h:m)</th>
+                                    <th>Modified time</th>
                                     <th></th>
                                 </tr>
                                 {this.props.timerHistory.map((r) => <tr key={this.props.timerHistory.indexOf(r)}>
@@ -144,6 +140,10 @@ class TimerHistoryTable extends React.Component<IProps, IState> {
                                             .toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })))}</td>
                                     <td>{
                                         this.convertMiliseconds(r.finishTime, new Date(r.startTime))
+                                    }</td>
+                                    <td>{
+                                        r.isModified == true &&
+                                            "+"
                                     }</td>
                                     <td>
                                         <button onClick={() => {

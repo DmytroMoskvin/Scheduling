@@ -17,6 +17,7 @@ namespace Scheduling.GraphQl.Types
             Field(l => l.Id).Description("Id of timer record.");
             Field(l => l.StartTime, nullable: true).Description("Value when timer was runned");
             Field(l => l.FinishTime, nullable: true).Description("Value when timer was stopped");
+            Field(l => l.IsModified, nullable: true).Description("If value are modified");
         }
     }
 }
