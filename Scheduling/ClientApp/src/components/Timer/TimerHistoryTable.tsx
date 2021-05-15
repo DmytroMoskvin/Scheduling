@@ -107,6 +107,15 @@ class TimerHistoryTable extends React.Component<IProps, IState> {
             buttonText: text
         })
     }
+    getConvertedDate(date: Date) {
+        var today = date;
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+
+        let todayStr = yyyy + '-' + mm + '-' + dd;
+        return (todayStr);
+    }
     render() {
         if (this.props.timerHistory != undefined && this.props.timerHistory.length > 0) {
             this.props.timerHistory
@@ -119,11 +128,15 @@ class TimerHistoryTable extends React.Component<IProps, IState> {
                         <table id='history'>
                             <tbody>
                                 <tr>
+                                    <th>Date</th>
                                     <th>Interval</th>
                                     <th>Time(h:m)</th>
                                     <th></th>
                                 </tr>
                                 {this.props.timerHistory.map((r) => <tr key={this.props.timerHistory.indexOf(r)}>
+                                    <td>
+                                        {this.getConvertedDate(new Date(r.startTime))}
+                                    </td>
                                     <td>{
                                         ((new Date((new Date(r.startTime)).toString() + " UTC"))
                                             .toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }))}-{(r.finishTime == null ? "still in action" :

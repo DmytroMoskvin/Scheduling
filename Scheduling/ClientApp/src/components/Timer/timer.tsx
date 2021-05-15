@@ -113,16 +113,16 @@ class Timer extends React.Component<IProps, IState> {
         if (token) {
             type MyData = {
                 data: {
-                        editTimerFinishValue: { finishTime: string, id: number }
+                    addTimerFinishValue: { finishTime: string, id: number }
                     }
             };
 
             const data:MyData = await addTimerFinish(token);
 
-            data.data.editTimerFinishValue.finishTime = new Date(data.data.editTimerFinishValue.finishTime).toISOString();
+            data.data.addTimerFinishValue.finishTime = new Date(data.data.addTimerFinishValue.finishTime).toISOString();
 
             if (data.data) {
-                this.props.addTime({ finishTime: new Date(data.data.editTimerFinishValue.finishTime.split("Z")[0]), id: data.data.editTimerFinishValue.id, startTime: "" });
+                this.props.addTime({ finishTime: new Date(data.data.addTimerFinishValue.finishTime.split("Z")[0]), id: data.data.addTimerFinishValue.id, startTime: "" });
             }
         }
     }

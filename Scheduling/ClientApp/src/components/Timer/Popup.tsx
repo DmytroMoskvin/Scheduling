@@ -7,6 +7,7 @@ import { ApplicationState } from '../../store/configureStore';
 import { actionCreators } from '../../store/Timer/actions';
 import { TimerType } from '../../store/Timer/types';
 import '../../style/RequestsTable.css';
+import DatePicker from "react-datepicker";
 import { deleteTimer, addTimerValue, getUserTimerData, getUserTimerDataDate, editTimerValue } from '../../webAPI/timer';
 
 type TableProps = {
@@ -30,6 +31,10 @@ interface IProps {
             requests: Array<TimerType>
         });
     closePopup: (idArg?: string, startTime?: Date, finishTime?: Date) => void;
+    setDate: (time: Date) => ({
+        type: 'SET_DATE',
+        time: Date
+    });
 }
 
 interface IState {
@@ -114,6 +119,7 @@ class Popup extends React.Component<IProps, IState> {
                 console.log("loh")
             }
         }
+        this.props.setDate(time);
     }
     setFinishTime(time: Date) {
         if (this.state.startTime != null) {
@@ -130,6 +136,7 @@ class Popup extends React.Component<IProps, IState> {
                 console.log("loh")
             }
         }
+        this.props.setDate(time);
     }
     convertDateToHoursMinutesStart(time: Date) {
         let hours = new Date(time).getHours();
@@ -166,17 +173,10 @@ class Popup extends React.Component<IProps, IState> {
     }
     async editValue(startTimeArg: Date, finishTimeArg: Date, id: number) {
         if (finishTimeArg > startTimeArg) {
-            var startTime = new Date(this.props.timerHistory[this.props.timerHistory.length - 1].startTime); // from store
-            startTime.setHours(startTimeArg.getHours());
-            startTime.setMinutes(startTimeArg.getMinutes());
-            var finishTime = new Date(this.props.timerHistory[this.props.timerHistory.length - 1].finishTime); // from store
-            finishTime.setHours(finishTimeArg.getHours());
-            finishTime.setMinutes(finishTimeArg.getMinutes());
-
 
             const token = Cookies.get('token');
             if (token) {
-                const data = await editTimerValue(token, startTime.toISOString(), finishTime.toISOString(), id);
+                const data = await editTimerValue(token, startTimeArg.toISOString(), finishTimeArg.toISOString(), id);
             }
 
             this.changeDate(this.props.date);
@@ -195,31 +195,53 @@ class Popup extends React.Component<IProps, IState> {
         return (todayStr);
     }
 
-    async changeDate(date: Date) { // додати два дні
+    async changeDate(date: Date) {
         const token = Cookies.get('token');
         if (token) {
-            var dayBefore = (new Date(date.getTime()));
-            dayBefore.setDate(date.getDate() - 1);
+            type MyData = {
+                data: {
+                    getCurrentUser: {
+                        computedProps: {
+                            timerHistories: Array<TimerType>
+                        }
+                    }
+                }
+            };
+            //const data:MyData = await getUserTimerDataDate(token, this.getConvertedDate(date));
 
-            let data = await getUserTimerDataDate(token, this.getConvertedDate(date));
-            console.log(this.getConvertedDate(date))
-            let dataDayBefore = await getUserTimerDataDate(token, this.getConvertedDate(dayBefore));
-            console.log(this.getConvertedDate(dayBefore));
-
-            data.data.getCurrentUser.computedProps.timerHistories = data.data.getCurrentUser.computedProps.timerHistories.concat(
-                dataDayBefore.data.getCurrentUser.computedProps.timerHistories)
-
-            data.data.getCurrentUser.computedProps.timerHistories =
-                data.data.getCurrentUser.computedProps.timerHistories
-                    .filter((time: { startTime: string }) => ((new Date(new Date(time.startTime) + " UTC").toLocaleDateString())) == date.toLocaleDateString());
+            let data: MyData = await getUserTimerDataDate(token, this.getConvertedDate(date));
+            console.log(this.getConvertedDate(date));
 
             console.log(data);
 
+
             let currentDate = data.data.getCurrentUser.computedProps.timerHistories
-                .sort((a: { startTime: Date; }, b: { startTime: Date; }) => new Date(a.startTime).valueOf() - new Date(b.startTime).valueOf());
+                .sort((a: { startTime: string; }, b: { startTime: string; }) => new Date(a.startTime).valueOf() - new Date(b.startTime).valueOf());
 
             this.props.setTimerHistory(currentDate);
         }
+    }
+    handleChangeStartTimeDate(date: Date) {
+        let time = new Date();
+        time.setMonth(date.getMonth());
+        time.setDate(date.getDate());
+        time.setFullYear(date.getFullYear());
+        this.setState({
+            startTime: time,
+            showWarning: false,
+        });
+        this.props.setDate(time);
+    }
+    handleChangeFinishTimeDate(date: Date) {
+        let time = new Date();
+        time.setMonth(date.getMonth());
+        time.setDate(date.getDate());
+        time.setFullYear(date.getFullYear());
+        this.setState({
+            finishTime: time,
+            showWarning: false,
+        });
+        this.props.setDate(time);
     }
     render() {
         const closeButton: React.CSSProperties = {
@@ -287,6 +309,15 @@ class Popup extends React.Component<IProps, IState> {
                     <input type="time" value={this.convertDateToHoursMinutesStart(this.state.startTime)} onChange={this.handleChangeStartTime} style={timeInput} />
                     -
                     <input type="time" min={this.convertDateToHoursMinutesStart(this.state.startTime)} value={this.convertDateToHoursMinutesStart(this.state.finishTime)} style={timeInput} onChange={this.handleChangeFinishTime} />
+                        <DatePicker
+                            dateFormat="yyyy/MM/dd"
+                            selected={this.props.date}
+                            onChange={date => {
+                                if (date instanceof Date) {
+                                    date && this.handleChangeStartTimeDate(date); this.handleChangeFinishTimeDate(date)
+                                }
+                            }}
+                        />
                         {this.state.showWarning ?
                             <button disabled>{this.props.buttonText}</button>
                             :

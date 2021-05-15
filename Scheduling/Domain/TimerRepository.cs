@@ -27,7 +27,7 @@ namespace Scheduling.Domain
             if (monthFilter.HasValue)
             {
                 userTimerHistories = userTimerHistories
-                    .Where(it => 
+                    .Where(it =>
                         it.StartTime.Value.Month == monthFilter.Value.Month &&
                         it.StartTime.Value.Year == monthFilter.Value.Year);
             }
@@ -103,6 +103,17 @@ namespace Scheduling.Domain
             Context.SaveChanges();
 
             return dbRecord;
+        }
+        public TimerHistory AddTimerFinishValue(int userId)
+        {
+            var dbRecordTimerValue = Context.TimerHistories.Where(timeH => timeH.UserId == userId).OrderBy(timeH => timeH.Id).Last();
+            //dbRecordTimerValue.FinishTime = finishTime;
+
+            dbRecordTimerValue.FinishTime = DateTime.UtcNow;
+
+            Context.SaveChanges();
+
+            return dbRecordTimerValue;
         }
         //public TimerHistory EditTimerValue(int id, DateTime? startTime, DateTime? finishtTime)
         //{

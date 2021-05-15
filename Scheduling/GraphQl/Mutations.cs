@@ -224,7 +224,7 @@ namespace Scheduling.GraphQl
 
 
             Field<TimerHistoryType>(
-                "editTimerFinishValue",
+                "editTimerValue",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<DateTimeGraphType>> { Name = "StartTime", Description = "Timer started" },
                     new QueryArgument<NonNullGraphType<DateTimeGraphType>> { Name = "FinishTime", Description = "Timer finished" },
@@ -244,6 +244,21 @@ namespace Scheduling.GraphQl
                     int id = context.GetArgument<int>("id");
 
                     return dataBaseRepository.EditTimerValue(startTime, finishTime, user.Id, id);
+                },
+                description: "Update value: added finish time"
+            ).AuthorizeWith("Authenticated");
+
+            Field<TimerHistoryType>(
+                "addTimerFinishValue",
+                arguments: new QueryArguments(
+                ),
+                resolve: context =>
+                {
+                    string email = httpContext.HttpContext.User.Claims.First(claim => claim.Type == "Email").Value.ToString();
+                    
+                    User user = dataBaseRepository.Get(email);
+
+                    return dataBaseRepository.AddTimerFinishValue(user.Id);
                 },
                 description: "Update value: added finish time"
             ).AuthorizeWith("Authenticated");

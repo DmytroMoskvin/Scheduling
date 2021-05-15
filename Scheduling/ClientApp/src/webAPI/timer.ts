@@ -80,7 +80,7 @@ export const addTimerStart = async (token: string) => {
 export const addTimerFinish = async (token: string) => {
 	const query = JSON.stringify({
 		query: `mutation{
-		  editTimerFinishValue{
+		  addTimerFinishValue{
 				id
 				startTime
 				finishTime
@@ -120,7 +120,7 @@ export const addTimerValue = async (token: string, startTime: string, finishTime
 export const editTimerValue = async (token: string, startTime: string, finishTime: string, id: number) => {
 	const query = JSON.stringify({
 		query: `mutation{
-		  editTimerFinishValue(startTime: "${startTime}", finishTime: "${finishTime}", id: ${id}){
+		  editTimerValue(startTime: "${startTime}", finishTime: "${finishTime}", id: ${id}){
 				id
 				startTime
 				finishTime
