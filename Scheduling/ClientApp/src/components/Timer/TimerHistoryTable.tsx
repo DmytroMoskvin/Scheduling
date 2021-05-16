@@ -129,7 +129,7 @@ class TimerHistoryTable extends React.Component<IProps, IState> {
                                     <th>Modified time</th>
                                     <th></th>
                                 </tr>
-                                {this.props.timerHistory.map((r) => <tr key={this.props.timerHistory.indexOf(r)}>
+                                {this.props.timerHistory.slice(0).reverse().map((r) => <tr key={this.props.timerHistory.indexOf(r)}>
                                     <td>
                                         {this.getConvertedDate(new Date(r.startTime))}
                                     </td>
