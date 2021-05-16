@@ -42,6 +42,9 @@ namespace Scheduling.GraphQl
                     else
                         user.ComputedProps.AddTimerHistory(dataBaseRepository.GetTimerHistory(user.Id));
 
+                    DateTime dt = new DateTime(2021, 4, 3, 5, 10, 20);
+                    int? b = dataBaseRepository.GetTimeByMonth(1321313, dt);
+                    Console.WriteLine(b);
                     return user;
                 }
             ).AuthorizeWith("Authenticated");

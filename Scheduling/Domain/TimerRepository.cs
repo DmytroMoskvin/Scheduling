@@ -163,5 +163,17 @@ namespace Scheduling.Domain
 
             return dbRecord;
         }
+        public int? GetTimeByMonth(int userId, DateTime monthDate)
+        {
+            var dbRecords = Context.TimerHistories
+                        .Where(it => it.UserId == userId 
+                        && it.StartTime.Value.Month == monthDate.Month
+                        && it.StartTime.Value.Year == monthDate.Year
+                        )
+                        ;
+
+            return dbRecords.Select(it => (EF.Functions.DateDiffMinute(it.StartTime, it.FinishTime))).Sum();
+
+        }
     }
 }
