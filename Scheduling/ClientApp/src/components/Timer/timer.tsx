@@ -54,14 +54,25 @@ class Timer extends React.Component<IProps, IState> {
         if (token) {
             const data = await getUserTimerData(token);
             let startTime: Date;
-            var lastValue = data.data.getCurrentUser.computedProps
-                .timerHistories[data.data.getCurrentUser.computedProps.timerHistories.length - 1];
+            var lastValue;
+            data.data.getCurrentUser.computedProps.timerHistories.forEach(function (v, i) {
+                if (
+                    // get all properties and check any of it's value is null
+                    Object.keys(v).some(function (k) {
+                        return v[k] == null;
+                    })
+                )
+                    lastValue = v;
+            });
+
+
+
             if (lastValue == undefined) {
                 return;
             }
             if (lastValue.finishTime == null) {
                 startTime = ((new Date((new Date(lastValue.startTime)).toString() + " UTC")));
-                this.state.timer.start({ startValues: { seconds: (Math.floor((new Date().getTime() - startTime.getTime()) / 1000)) } });
+                this.state.timer.start({ startValues: { seconds: (Math.floor((new Date().getTime() - new Date(startTime).getTime()) / 1000)) } });
                 this.setState({
                     timer_state: "ticking"
                 })
@@ -83,9 +94,6 @@ class Timer extends React.Component<IProps, IState> {
     }
 
     async startTimer() {
-        this.state.timer.reset();
-        this.state.timer.pause();
-        this.state.timer.start();
         console.log(this.props);
 
         this.setState({
@@ -94,11 +102,40 @@ class Timer extends React.Component<IProps, IState> {
         })
         const token = Cookies.get('token');
         if (token) {
-            const data = await addTimerStart(token);
-            data.data.addTimerStartValue.startTime = data.data.addTimerStartValue.startTime.split("Z")[0];
-            if (new Date(this.props.date).getMonth() == new Date().getMonth())
-            if (data.data) {
-                this.props.addTime(data.data.addTimerStartValue);
+            const dataGetTimer = await getUserTimerData(token);
+
+            var lastValue;
+            dataGetTimer.data.getCurrentUser.computedProps.timerHistories.forEach(function (v, i) {
+                if (
+                    // get all properties and check any of it's value is null
+                    Object.keys(v).some(function (k) {
+                        return v[k] == null;
+                    })
+                )
+                    lastValue = v;
+            });
+            let data;
+            if (lastValue == null) {
+                data = await addTimerStart(token);
+                data.data.addTimerStartValue.startTime = data.data.addTimerStartValue.startTime.split("Z")[0];
+                if (new Date(this.props.date).getMonth() == new Date().getMonth())
+                    if (data.data) {
+                        this.props.addTime(data.data.addTimerStartValue);
+                        this.state.timer.start(); ///
+                    }
+            }
+            else { ///asdasdasdasd
+                this.props.addTime(lastValue);
+                lastValue = ((new Date((new Date(lastValue.startTime)).toString() + " UTC")));
+
+                //this.state.timer.start({ startValues: { seconds: (Math.floor((new Date().getTime() - new Date(lastValue).getTime()) / 1000)) } });
+
+                console.log({ startValues: { seconds: (Math.floor((new Date().getTime() - new Date(lastValue).getTime()) / 1000)) } });
+                
+                this.setState({
+                    timer_state: "ticking"
+                });
+                this.state.timer.start({ startValues: { seconds: (Math.floor((new Date().getTime() - new Date(lastValue).getTime()) / 1000)) } } );
             }
         }
     }
@@ -106,9 +143,11 @@ class Timer extends React.Component<IProps, IState> {
     async resetTimer() {
         this.state.timer.reset();
         this.state.timer.pause();
+
+        console.log(this.state.timer.getTimeValues().toString());
         this.setState({
             ...this.state,
-            timer_text: this.state.timer.getTimeValues().toString(),
+            timer_text: "00:00:00",
             timer_state: "pause"
         })
         const token = Cookies.get('token');
@@ -120,12 +159,22 @@ class Timer extends React.Component<IProps, IState> {
             };
 
             const data:MyData = await addTimerFinish(token);
-
-            data.data.addTimerFinishValue.finishTime = new Date(data.data.addTimerFinishValue.finishTime).toISOString();
-            if (new Date(data.data.addTimerFinishValue.finishTime).getMonth() == new Date().getMonth())
-            if (data.data) {
-                this.props.addTime({ finishTime: new Date(data.data.addTimerFinishValue.finishTime.split("Z")[0]), id: data.data.addTimerFinishValue.id, startTime: "" });
+            if (data.data.addTimerFinishValue != null) {
+                data.data.addTimerFinishValue.finishTime = new Date(data.data.addTimerFinishValue.finishTime).toISOString();
+                if (new Date(data.data.addTimerFinishValue.finishTime).getMonth() == new Date().getMonth())
+                    if (data.data) {
+                        this.props.addTime({
+                            finishTime: new Date(data.data.addTimerFinishValue.finishTime.split("Z")[0]),
+                            id: data.data.addTimerFinishValue.id,
+                            startTime: "",
+                            isModified: false
+                        });
+                    }
+                console.log(new Date(new Date(data.data.addTimerFinishValue.finishTime) + " UTC"),)
+                console.log(new Date(data.data.addTimerFinishValue.finishTime.split("Z")[0]));
+                console.log(data.data.addTimerFinishValue.finishTime.split("Z")[0]);
             }
+
         }
     }
 

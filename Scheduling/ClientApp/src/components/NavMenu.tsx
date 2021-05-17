@@ -28,9 +28,6 @@ class NavMenu extends React.PureComponent<{ logined: boolean, logOut: () => void
                                     <NavLink tag={Link} className="text-dark" to="/VacationRequest">Vacation</NavLink>
                                 </NavItem>
                                 <NavItem>
-                                    <NavLink tag={Link} className="text-dark" to="/Timer">Timer</NavLink>
-                                </NavItem>
-                                <NavItem>
                                     <NavLink tag={Link} className="text-dark" to="/timer">Timer</NavLink>
                                 </NavItem>
                                 <NavItem>

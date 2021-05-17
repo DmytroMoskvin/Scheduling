@@ -75,16 +75,24 @@ namespace Scheduling.Domain
 
         }
         public TimerHistory AddTimerStartValue(DateTime startTime, int userId)
-            => AddTimerValue(startTime, null, userId);
+            => AddTimerValue(startTime, finishTime: null, userId, isModified:false);
 
-        public TimerHistory AddTimerValue(DateTime? startTime, DateTime? finishTime, int userId)
+        public TimerHistory AddTimerValue(DateTime? startTime, DateTime? finishTime, int userId, bool isModified = true)
         {
+            TimerHistory? dbRecordTimerValue = Context.TimerHistories.SingleOrDefault(timeH => timeH.UserId == userId && timeH.FinishTime == null);
+
+            if (dbRecordTimerValue != null)
+            {
+
+                return dbRecordTimerValue;
+            }
+
             var timerValues = new TimerHistory()
             {
                 StartTime = startTime,
                 FinishTime = finishTime,
                 UserId = userId,
-                IsModified = true,
+                IsModified = isModified,
             };
 
             Context.Add(timerValues);
@@ -109,7 +117,16 @@ namespace Scheduling.Domain
         }
         public TimerHistory AddTimerFinishValue(int userId)
         {
-            var dbRecordTimerValue = Context.TimerHistories.Where(timeH => timeH.UserId == userId).OrderBy(timeH => timeH.Id).Last();
+            TimerHistory dbRecordTimerValue;
+            try
+            {
+                dbRecordTimerValue = Context.TimerHistories.Single(timeH => timeH.UserId == userId && timeH.FinishTime == null);
+            }
+            catch (InvalidOperationException ex)
+            {
+                dbRecordTimerValue = Context.TimerHistories.Where(timeH => timeH.UserId == userId).OrderBy(timeH => timeH.FinishTime).Last();
+                return dbRecordTimerValue;
+            }
             //dbRecordTimerValue.FinishTime = finishTime;
 
             dbRecordTimerValue.FinishTime = DateTime.UtcNow;
