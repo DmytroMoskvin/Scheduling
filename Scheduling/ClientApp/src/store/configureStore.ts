@@ -5,15 +5,15 @@ import { History } from 'history';
 import UserReducer from "./User/";
 import RequestReducer from "./VacationRequest/";
 import TimerReducer from "./Timer/";
-import EventReducer from "./CalendarEvent/";
+//import EventReducer from "./CalendarEvent/";
 import { UserState } from './User/types';
 import { VacationRequestState } from './VacationRequest/types';
 import { TimerHistoryState } from './Timer/types';
-import { CalendarEventState } from './CalendarEvent/types';
+//import { CalendarEventState } from './CalendarEvent/types';
 
 export interface ApplicationState {
     loggedUser: UserState;
-    calendarEvent: CalendarEventState;
+    //calendarEvent: CalendarEventState;
     vacationRequest: VacationRequestState;
     timerHistory: TimerHistoryState;
 
@@ -30,7 +30,7 @@ export default function configureStore(history: History, initialState?: Applicat
         loggedUser: UserReducer,
         vacationRequest: RequestReducer,
         timerHistory: TimerReducer,
-        calendarHistory: EventReducer,
+        //calendarHistory: EventReducer,
         router: connectRouter(history)
     });
 

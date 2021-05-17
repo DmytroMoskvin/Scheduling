@@ -360,7 +360,7 @@ namespace Scheduling.Migrations
                 });
 
             modelBuilder.Entity("Scheduling.Models.VacationRequest", b =>
-
+                { 
                     b.HasData(
                         new
                         {
