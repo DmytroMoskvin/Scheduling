@@ -54,7 +54,10 @@ class Timer extends React.Component<IProps, IState> {
         if (token) {
             const data = await getUserTimerData(token);
             let startTime: Date;
-            var lastValue;
+            var lastValue: {
+                finishTime: Date,
+                startTime: Date,
+            };
             data.data.getCurrentUser.computedProps.timerHistories.forEach(function (v, i) {
                 if (
                     // get all properties and check any of it's value is null
@@ -64,8 +67,6 @@ class Timer extends React.Component<IProps, IState> {
                 )
                     lastValue = v;
             });
-
-
 
             if (lastValue == undefined) {
                 return;
@@ -104,7 +105,10 @@ class Timer extends React.Component<IProps, IState> {
         if (token) {
             const dataGetTimer = await getUserTimerData(token);
 
-            var lastValue;
+            var lastValue: {
+                finishTime: Date,
+                startTime: Date,
+            };;
             dataGetTimer.data.getCurrentUser.computedProps.timerHistories.forEach(function (v, i) {
                 if (
                     // get all properties and check any of it's value is null
@@ -115,6 +119,7 @@ class Timer extends React.Component<IProps, IState> {
                     lastValue = v;
             });
             let data;
+            let currentTimerValue;
             if (lastValue == null) {
                 data = await addTimerStart(token);
                 data.data.addTimerStartValue.startTime = data.data.addTimerStartValue.startTime.split("Z")[0];
@@ -126,16 +131,16 @@ class Timer extends React.Component<IProps, IState> {
             }
             else { ///asdasdasdasd
                 this.props.addTime(lastValue);
-                lastValue = ((new Date((new Date(lastValue.startTime)).toString() + " UTC")));
+                currentTimerValue = ((new Date((new Date(lastValue.startTime)).toString() + " UTC")));
 
                 //this.state.timer.start({ startValues: { seconds: (Math.floor((new Date().getTime() - new Date(lastValue).getTime()) / 1000)) } });
 
-                console.log({ startValues: { seconds: (Math.floor((new Date().getTime() - new Date(lastValue).getTime()) / 1000)) } });
+                console.log({ startValues: { seconds: (Math.floor((new Date().getTime() - new Date(currentTimerValue).getTime()) / 1000)) } });
                 
                 this.setState({
                     timer_state: "ticking"
                 });
-                this.state.timer.start({ startValues: { seconds: (Math.floor((new Date().getTime() - new Date(lastValue).getTime()) / 1000)) } } );
+                this.state.timer.start({ startValues: { seconds: (Math.floor((new Date().getTime() - new Date(currentTimerValue).getTime()) / 1000)) } } );
             }
         }
     }
@@ -160,7 +165,7 @@ class Timer extends React.Component<IProps, IState> {
 
             const data:MyData = await addTimerFinish(token);
             if (data.data.addTimerFinishValue != null) {
-                data.data.addTimerFinishValue.finishTime = new Date(data.data.addTimerFinishValue.finishTime).toISOString();
+                //data.data.addTimerFinishValue.finishTime = new Date(data.data.addTimerFinishValue.finishTime).toISOString();
                 if (new Date(data.data.addTimerFinishValue.finishTime).getMonth() == new Date().getMonth())
                     if (data.data) {
                         this.props.addTime({

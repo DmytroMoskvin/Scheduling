@@ -122,7 +122,7 @@ namespace Scheduling.Domain
             {
                 dbRecordTimerValue = Context.TimerHistories.Single(timeH => timeH.UserId == userId && timeH.FinishTime == null);
             }
-            catch (InvalidOperationException ex)
+            catch (InvalidOperationException)
             {
                 dbRecordTimerValue = Context.TimerHistories.Where(timeH => timeH.UserId == userId).OrderBy(timeH => timeH.FinishTime).Last();
                 return dbRecordTimerValue;
