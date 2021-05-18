@@ -41,7 +41,7 @@ var getUserEvents = function (token) { return __awaiter(void 0, void 0, void 0, 
     var query;
     return __generator(this, function (_a) {
         query = JSON.stringify({
-            query: "{\n\t\t\tgetCurrentUserEvents{\n\t\t\t\t\t\n\t\t\t\t\t\tid\n\t\t\t\t\t\tworkDate\n\t\t\t\t\t\tstartWorkTime\n\t\t\t\t\t\tendWorkTime\n\t\t\t\t\t}\n\t\t\t\t\n\t\t\t\n\t\t}"
+            query: "{\n\t\t\tgetCurrentUserEvents{\n\t\t\t\t\t\tid\n\t\t\t\t\t\tworkDate\n\t\t\t\t\t\tstartWorkTime\n\t\t\t\t\t\tendWorkTime\n\t\t\t\t\t}\n\t\t\t\t\n\t\t\t\n\t\t}"
         });
         return [2 /*return*/, fetch('/graphql', {
                 method: 'POST',
@@ -59,7 +59,7 @@ var addEvent = function (workDate, startWorkTime, endWorkTime, token) { return _
     var query;
     return __generator(this, function (_a) {
         query = JSON.stringify({
-            query: "mutation {\n\t\t\taddCalendarEvent (\n\t\t\t\tworkDate: \"" + workDate + "\"\n\t\t\t\tstartWorkTime: \"" + startWorkTime + "\"\n\t\t\t\tendWorkTime: \"" + endWorkTime + "\")\n\t\t}"
+            query: "mutation{\n\t\t  addCalendarEvent( workDate: " + workDate + "\tstartWorkTime: " + startWorkTime + "\tendWorkTime: " + endWorkTime + ")\n\t\t\t{\n\t\t\t\tworkDate\n\t\t\t\tstartWorkTime\n\t\t\t\tendWorkTime\n\t\t\t}\n\t\t}"
         });
         return [2 /*return*/, fetch('/graphql', {
                 method: 'POST',

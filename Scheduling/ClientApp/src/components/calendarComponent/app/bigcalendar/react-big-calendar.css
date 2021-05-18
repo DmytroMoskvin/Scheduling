@@ -19,14 +19,18 @@ button.rbc-input::-moz-focus-inner {
 .rbc-calendar {
   box-sizing: border-box;
   height: 100%;
+  width: 600px;
+flex-grow: 2;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-flex-direction: column;
-      -ms-flex-direction: column;
+  flex-wrap: nowrap;
+  align-self: stretch;
+
+
+
           flex-direction: column;
-  -webkit-align-items: stretch;
-      -ms-flex-align: stretch;
+
           align-items: stretch;
 }
 .rbc-calendar *,

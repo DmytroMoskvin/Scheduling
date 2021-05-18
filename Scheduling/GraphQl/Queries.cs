@@ -10,9 +10,9 @@ using System.Linq;
 
 namespace Scheduling.GraphQl
 {
-    public class Querys : ObjectGraphType
+    public class Queries : ObjectGraphType
     {
-        public Querys(IHttpContextAccessor httpContext, DataBaseRepository dataBaseRepository)
+        public Queries(IHttpContextAccessor httpContext, DataBaseRepository dataBaseRepository, IServiceProvider serviceProvider)
         {
 
             Name = "Query";
@@ -158,17 +158,8 @@ namespace Scheduling.GraphQl
                 }
             ).AuthorizeWith("Authenticated");
 
-            Field<ListGraphType<CalendarEventType>>(
-                "GetCurrentUserEvents",
-                arguments: null,
-                resolve: context =>
-                {
-                    string email = httpContext.HttpContext.User.Claims.First(claim => claim.Type == "Email").Value.ToString();
-                    User user = dataBaseRepository.Get(email);
-                    int id = user.Id;
-                    return dataBaseRepository.GetUserRequests(user.Id);
-                }
-            ).AuthorizeWith("Authenticated");
+            new CalendarEventQuery(this, serviceProvider);
+
         }
     }
 }

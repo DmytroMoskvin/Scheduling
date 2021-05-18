@@ -1,7 +1,20 @@
 .calendar {
   box-sizing: border-box;
   font-size: 1rem;
-  max-width: 400px;
+  max-width: 350px;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  flex-wrap: nowrap;
+  flex-grow: 1;
+  align-self: flex-start;
+  justify-content: flex-start;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-align-items: stretch;
+      -ms-flex-align: stretch;
+          align-items: stretch;
 }
 
 .calendar .header {

@@ -12,7 +12,7 @@ namespace Scheduling.GraphQl
     {
         public GraphSchema(IServiceProvider provider) : base(provider)
         {
-            Query = provider.GetRequiredService<Querys>();
+            Query = provider.GetRequiredService<Queries>();
             Mutation = provider.GetRequiredService<Mutations>();
         }
     }

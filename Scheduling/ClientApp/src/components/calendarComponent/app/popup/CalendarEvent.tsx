@@ -7,12 +7,14 @@ import Cookies from 'js-cookie';
 import { connect } from 'react-redux';
 import { ApplicationState } from '../../../../store/configureStore';
 import { actionCreators } from '../../../../store/CalendarEvent/actions';
+import { debug } from 'console';
 
 interface ICalendarEventState {
-    workDate: Date,
-    startWorkTime: Date,
-    endWorkTime: Date,
-    active: boolean
+    workDate: string,
+    startWorkTime: string,
+    endWorkTime: string,
+    active: boolean,
+    isCorrect: boolean
 }
 
 interface ICalendarEventProps {
@@ -25,15 +27,21 @@ class CalendarEvent extends React.Component<ICalendarEventProps, ICalendarEventS
     constructor(props: ICalendarEventProps) {
         super(props);
         this.state = {
-            workDate: new Date(),
-            startWorkTime: new Date(),
-            endWorkTime: new Date(),
-            active: false
+            workDate: "",
+            startWorkTime: "",
+            endWorkTime: "",
+            active: false,
+            isCorrect: false
         }
 
         this.handleSubmit = this.handleSubmit.bind(this);
         this.setActive = this.setActive.bind(this);
+        this.setStartTime = this.setStartTime.bind(this);
+        this.setEndTime = this.setEndTime.bind(this);
+        this.setWorkDate = this.setWorkDate.bind(this);
     }
+
+    
 
     async componentDidMount() {
         
@@ -41,7 +49,6 @@ class CalendarEvent extends React.Component<ICalendarEventProps, ICalendarEventS
         if (token) {
             
             const data = await getUserEvents(token);
-            debugger
             console.log(data);
         }
 
@@ -49,43 +56,81 @@ class CalendarEvent extends React.Component<ICalendarEventProps, ICalendarEventS
     }
 
     validateTime() {
-        let workDate = new Date((document.getElementById('work-date') as HTMLInputElement).value);
-        let startWorkTime = new Date(new Date((document.getElementById('start-work-time') as HTMLInputElement).valueAsNumber));
-        let endWorkTime = new Date(new Date((document.getElementById('end-work-time') as HTMLInputElement).valueAsNumber));
-        debugger    
-        if (startWorkTime && endWorkTime && startWorkTime.getHours() < endWorkTime.getHours())
+        let workDateUnix = new Date(this.state.workDate);
+
+        let workDate = workDateUnix.getTime() / 1000;
+
+        let dateString = this.state.workDate + " " + this.state.startWorkTime;
+
+        let startWorkTimeUnix = new Date(dateString).getTime();
+        let startWorkTime = startWorkTimeUnix / 1000;
+
+        dateString = this.state.workDate + " " + this.state.endWorkTime;
+
+        let endWorkTimeUnix = new Date(dateString).getTime();
+        let endWorkTime = endWorkTimeUnix / 1000;
+
+
+        if (workDate && startWorkTime && endWorkTime && startWorkTime < endWorkTime)
             return { workDate, startWorkTime, endWorkTime }
+
         return null
     }
 
-    countAmount = () => {
+    countTimes = () => {
         var correct = 'Incorrect time!';
         
         let time = this.validateTime();
+
         if (time)
             correct = 'Correct!';
+
         (document.getElementById('isCorrect') as HTMLInputElement).value = correct;
     }
 
     async handleSubmit(event: { preventDefault: () => void; }) {
         event.preventDefault();
-        const token = Cookies.get('token');
-        let time = this.validateTime();
-        if (time && token)
-            await addEvent(time.workDate, time.startWorkTime, time.endWorkTime, token);
 
+        const token = Cookies.get('token');
+
+        let time = this.validateTime();
+
+        if (time && token) {
+            await addEvent(time.workDate, time.startWorkTime, time.endWorkTime, token);
+        }
+        
         this.setActive();
     }
 
+    async setStartTime(e: { preventDefault: () => void; target: { value: string; }; }){
+        e.preventDefault();
+        
+        this.setState({
+            startWorkTime: e.target.value
+        });
+    }
 
+    async setEndTime(e: { preventDefault: () => void; target: { value: string; }; }) {
+        e.preventDefault();
+        
+        this.setState({
+            endWorkTime: e.target.value
+        });
+    }
 
+    async setWorkDate(e: { preventDefault: () => void; target: { value: string; }; }) {
+        e.preventDefault();
+        
+        this.setState({
+            workDate: e.target.value
+        });
+    }
 
 
     setActive() {
         this.setState({
             active: !this.state.active
         });
-
     }
 
     render() {
@@ -97,12 +142,12 @@ class CalendarEvent extends React.Component<ICalendarEventProps, ICalendarEventS
                         <form>
                             <h2 className="popHead">Plan your time</h2>
 
-                            <input type='date' id='work-date' onInput={this.countAmount}></input>
+                            <input type='date' id='work-date' onChange={e => this.setWorkDate(e)}  required></input>
                             <br />
-                            <input type="time" id="start-work-time" onInput={this.countAmount} />
-                            <input type="time" id="end-work-time" onInput={this.countAmount} />
+                            <input type="time" id="start-work-time" onChange={e => this.setStartTime(e)} required/>
+                            <input type="time" id="end-work-time" onChange={e => this.setEndTime(e)} required/>
                             <br />
-                            <input type="text" id='isCorrect' readOnly />
+                            <input type="text" id='isCorrect' readOnly value={this.state.isCorrect ? "Correct!" : "Incorrect time"} />
                             <button id='close-event-form' type='button' onClick={this.setActive}>Close</button>
                             <button id='send-event' type='button' onClick={this.handleSubmit}>Set time</button>
                         </form>

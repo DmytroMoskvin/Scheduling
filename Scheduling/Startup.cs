@@ -80,9 +80,10 @@ namespace Scheduling
             services.AddScoped<IdentityService>();
             services.AddScoped<EmailService>();
             services.AddScoped<DataBaseRepository>();
+            services.AddScoped<CalendarEventRepository>();
             services.AddHttpContextAccessor();
 
-            services.AddScoped<Querys>();
+            services.AddScoped<Queries>();
             services.AddScoped<Mutations>();
             services.AddScoped<UserType>();
             services.AddScoped<PermissionType>();

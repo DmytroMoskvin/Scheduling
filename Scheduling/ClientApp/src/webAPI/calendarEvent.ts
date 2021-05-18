@@ -2,7 +2,6 @@
 	const query = JSON.stringify({
 		query: `{
 			getCurrentUserEvents{
-					
 						id
 						workDate
 						startWorkTime
@@ -24,13 +23,15 @@
 		.then(data => data.json());
 };
 
-export const addEvent = async (workDate: Date, startWorkTime: Date, endWorkTime: Date, token: string) => {
+export const addEvent = async (workDate: number, startWorkTime: number, endWorkTime: number, token: string) => {
 	const query = JSON.stringify({
-		query: `mutation {
-			addCalendarEvent (
-				workDate: "${workDate}"
-				startWorkTime: "${startWorkTime}"
-				endWorkTime: "${endWorkTime}")
+		query: `mutation{
+		  addCalendarEvent( workDate: ${workDate}	startWorkTime: ${startWorkTime}	endWorkTime: ${endWorkTime})
+			{
+				workDate
+				startWorkTime
+				endWorkTime
+			}
 		}`
 	});
 

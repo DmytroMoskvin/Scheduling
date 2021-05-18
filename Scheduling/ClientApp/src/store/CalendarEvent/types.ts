@@ -1,7 +1,6 @@
 ﻿export interface CalendarEventState {
 	logged: boolean,
 	token: string | null,
-	active:boolean,
 	eventHistory: Array<CalendarEventType>
 }
 

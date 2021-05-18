@@ -6,17 +6,23 @@ using Scheduling.Models;
 
 namespace Scheduling.Domain
 {
-    public partial class DataBaseRepository
+    public class CalendarEventRepository
     {
+        private readonly DBContext dbContext;
+
+        public CalendarEventRepository(DBContext dbContext)
+        {
+            this.dbContext = dbContext;
+        }
+
         public List<CalendarEvent> GetUserEvents(int userId)
         {
-            List<CalendarEvent> requests = Context.CalendarEvents.Where(r => r.UserId == userId).ToList();
-            return requests;
-
+            return dbContext.CalendarEvents.Where(r => r.UserId == userId).ToList(); 
         }
-        public List<CalendarEvent> AddEvent(int userId, DateTime workDate, DateTime startWorkTime, DateTime endWorkTime)
+
+        public CalendarEvent AddEvent(int userId, DateTime workDate, DateTime startWorkTime, DateTime endWorkTime)
         {
-            CalendarEvent CalendarEvent = new CalendarEvent()
+            var calendarEvent = new CalendarEvent()
             {
                 UserId = userId,
                 WorkDate = workDate,
@@ -24,20 +30,20 @@ namespace Scheduling.Domain
                 EndWorkTime = endWorkTime
             };
 
-            Context.CalendarEvents.Add(CalendarEvent);
-            Context.SaveChanges();
+            dbContext.CalendarEvents.Add(calendarEvent);
+            dbContext.SaveChanges();
 
-            return GetUserEvents(userId);
-
+            return calendarEvent;
         }
-        public List<CalendarEvent> RemoveEvents(int id)
+
+        public void RemoveEvents(int id, int userId)
         {
-            CalendarEvent CalendarEvent = Context.CalendarEvents.Single(u => u.Id == id);
-            Context.CalendarEvents.Remove(CalendarEvent);
-            Context.SaveChanges();
+            var calendarEvent = dbContext.CalendarEvents.SingleOrDefault(u => u.Id == id && u.UserId == userId);
+            if (calendarEvent == null)
+                return;
 
-            return GetUserEvents(CalendarEvent.UserId);
-
+            dbContext.CalendarEvents.Remove(calendarEvent);
+            dbContext.SaveChanges();
         }
     }
 }
