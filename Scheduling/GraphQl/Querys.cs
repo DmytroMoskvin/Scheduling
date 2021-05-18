@@ -187,7 +187,7 @@ namespace Scheduling.GraphQl
 
                     user.ComputedProps.Teams.ForEach((team) => {
                         dataBaseRepository.GetTeamUsers(team.Id).ForEach((user) => {
-                            dataBaseRepository.GetUserVacationRequests(user.Id).ForEach((request) => {
+                            dataBaseRepository.GetUserVacationRequests(user.Id).ToList().ForEach((request) => {
                                 if(request.FinishDate >= DateToCheck && request.StartDate <= DateToCheck)
                                 {
                                     if (teammatesOnVacation.Contains(user))
