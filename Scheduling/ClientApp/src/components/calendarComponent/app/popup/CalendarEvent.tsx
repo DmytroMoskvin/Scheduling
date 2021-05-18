@@ -7,12 +7,11 @@ import Cookies from 'js-cookie';
 import { connect } from 'react-redux';
 import { ApplicationState } from '../../../../store/configureStore';
 import { actionCreators } from '../../../../store/CalendarEvent/actions';
-import { debug } from 'console';
 
 interface ICalendarEventState {
     workDate: string,
-    startWorkTime: string,
-    endWorkTime: string,
+    startWorkTime: number,
+    endWorkTime: number,
     active: boolean,
     isCorrect: boolean
 }
@@ -28,8 +27,8 @@ class CalendarEvent extends React.Component<ICalendarEventProps, ICalendarEventS
         super(props);
         this.state = {
             workDate: "",
-            startWorkTime: "",
-            endWorkTime: "",
+            startWorkTime: 0,
+            endWorkTime: 0,
             active: false,
             isCorrect: false
         }
@@ -56,36 +55,18 @@ class CalendarEvent extends React.Component<ICalendarEventProps, ICalendarEventS
     }
 
     validateTime() {
-        let workDateUnix = new Date(this.state.workDate);
 
+        let workDateUnix = new Date(this.state.workDate);
         let workDate = workDateUnix.getTime() / 1000;
 
-        let dateString = this.state.workDate + " " + this.state.startWorkTime;
+        let startWorkTime = this.state.startWorkTime;
 
-        let startWorkTimeUnix = new Date(dateString).getTime();
-        let startWorkTime = startWorkTimeUnix / 1000;
+        let endWorkTime = this.state.endWorkTime;
 
-        dateString = this.state.workDate + " " + this.state.endWorkTime;
-
-        let endWorkTimeUnix = new Date(dateString).getTime();
-        let endWorkTime = endWorkTimeUnix / 1000;
-
-
-        if (workDate && startWorkTime && endWorkTime && startWorkTime < endWorkTime)
+        if (workDate && startWorkTime && endWorkTime && startWorkTime < endWorkTime) 
             return { workDate, startWorkTime, endWorkTime }
-
-        return null
-    }
-
-    countTimes = () => {
-        var correct = 'Incorrect time!';
         
-        let time = this.validateTime();
-
-        if (time)
-            correct = 'Correct!';
-
-        (document.getElementById('isCorrect') as HTMLInputElement).value = correct;
+        return null
     }
 
     async handleSubmit(event: { preventDefault: () => void; }) {
@@ -104,17 +85,30 @@ class CalendarEvent extends React.Component<ICalendarEventProps, ICalendarEventS
 
     async setStartTime(e: { preventDefault: () => void; target: { value: string; }; }){
         e.preventDefault();
+
+        let dateString = e.target.value;
+
+        let startWorkTimeUnix = new Date(this.state.workDate + " " + dateString).getTime();
+
+        let startWorkTime = (startWorkTimeUnix / 1000) + 10800;
         
         this.setState({
-            startWorkTime: e.target.value
+            startWorkTime: startWorkTime
         });
     }
 
     async setEndTime(e: { preventDefault: () => void; target: { value: string; }; }) {
         e.preventDefault();
+
+        let dateString = e.target.value;
+
+        let endWorkTimeUnix = new Date(this.state.workDate + " " + dateString).getTime();
+
+        let endWorkTime = (endWorkTimeUnix / 1000) + 10800;
+
         
         this.setState({
-            endWorkTime: e.target.value
+            endWorkTime: endWorkTime
         });
     }
 
@@ -136,6 +130,7 @@ class CalendarEvent extends React.Component<ICalendarEventProps, ICalendarEventS
     render() {
         return (
             <React.Fragment>
+
                 <button id='close-event' type='button' onClick={this.setActive}>Set time</button>
                 <div className={this.state.active ? "popUp active" : "popUp"} >
                     <div className="pop__content" >
@@ -147,7 +142,7 @@ class CalendarEvent extends React.Component<ICalendarEventProps, ICalendarEventS
                             <input type="time" id="start-work-time" onChange={e => this.setStartTime(e)} required/>
                             <input type="time" id="end-work-time" onChange={e => this.setEndTime(e)} required/>
                             <br />
-                            <input type="text" id='isCorrect' readOnly value={this.state.isCorrect ? "Correct!" : "Incorrect time"} />
+                            <input type="text" id='isCorrect' readOnly value={(this.state.startWorkTime < this.state.endWorkTime) ? "Correct!" : "Incorrect time"} />
                             <button id='close-event-form' type='button' onClick={this.setActive}>Close</button>
                             <button id='send-event' type='button' onClick={this.handleSubmit}>Set time</button>
                         </form>
