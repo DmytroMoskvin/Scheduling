@@ -3,55 +3,23 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Scheduling.Domain;
 
 namespace Scheduling.Migrations
 {
     [DbContext(typeof(DBContext))]
-    partial class UserDBContextModelSnapshot : ModelSnapshot
+    [Migration("20210511095901_AddVacationResponses")]
+    partial class AddVacationResponses
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.5")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("Scheduling.Models.CalendarEvent", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("EndWorkTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("StartWorkTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("WorkDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CalendarEvents");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            EndWorkTime = new DateTime(2021, 5, 15, 18, 0, 0, 0, DateTimeKind.Unspecified),
-                            StartWorkTime = new DateTime(2021, 5, 15, 9, 0, 0, 0, DateTimeKind.Unspecified),
-                            UserId = 13213133,
-                            WorkDate = new DateTime(2021, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        });
-                });
 
             modelBuilder.Entity("Scheduling.Models.Permission", b =>
                 {
@@ -142,21 +110,14 @@ namespace Scheduling.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("TimerHistories");
-                });
 
-            modelBuilder.Entity("Scheduling.Models.Token", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Jwt")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Tokens");
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            FinishTime = new DateTime(2021, 1, 1, 1, 1, 2, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2021, 1, 1, 1, 1, 1, 0, DateTimeKind.Unspecified)
+                        });
                 });
 
             modelBuilder.Entity("Scheduling.Models.Token", b =>
@@ -357,9 +318,6 @@ namespace Scheduling.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("UserTimerHistories");
-                });
-
-            modelBuilder.Entity("Scheduling.Models.VacationRequest", b =>
 
                     b.HasData(
                         new

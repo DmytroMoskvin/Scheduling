@@ -25,7 +25,10 @@ class NavMenu extends React.PureComponent<{ logined: boolean, logOut: () => void
                                     <NavLink tag={Link} className="text-dark" to="/">Home</NavLink>
                                 </NavItem>
                                 <NavItem>
-                                    <NavLink tag={Link} className="text-dark" to="/VacationRequest">Vacation</NavLink>
+                                    <NavLink tag={Link} className="text-dark" to="/vacationRequest">Vacation</NavLink>
+                                </NavItem>
+                                <NavItem>
+                                    <NavLink tag={Link} className="text-dark" to="/vacationApproving">Vacation Approving</NavLink>
                                 </NavItem>
                                 <NavItem>
                                     <NavLink tag={Link} className="text-dark" to="/Timer">Timer</NavLink>
@@ -36,11 +39,13 @@ class NavMenu extends React.PureComponent<{ logined: boolean, logOut: () => void
                                 <NavItem>
                                     <NavLink tag={Link} className="text-dark" to="/calendar">Calendar</NavLink>
                                 </NavItem>
+                                <NavItem>
+                                    {this.props.logined ? <button className="logout-btn" onClick={() => this.props.logOut()}>
+                                        Logout
+                                    </button>: null}
+                                </NavItem>
                             </ul>
                         </Collapse>
-                        {this.props.logined ? <button className="logout-btn" onClick={() => this.props.logOut()}>
-                            Logout
-                        </button>: null}
                     </Container>
                 </Navbar>
             </header>
