@@ -40,7 +40,7 @@ namespace Scheduling.GraphQl
 
                     workDate = workDate.AddSeconds(context.GetArgument<int>("WorkDate"));
 
-                    DateTime startWorkTime = new DateTime(1970, 1, 1, 0, 0, 0, 0).;
+                    DateTime startWorkTime = new DateTime(1970, 1, 1, 0, 0, 0, 0);
 
                     startWorkTime = startWorkTime.AddSeconds(context.GetArgument<int>("StartWorkTime"));
 
