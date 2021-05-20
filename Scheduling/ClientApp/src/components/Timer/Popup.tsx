@@ -8,7 +8,6 @@ import { actionCreators } from '../../store/Timer/actions';
 import { TimerType } from '../../store/Timer/types';
 import '../../style/RequestsTable.css';
 import DatePicker from "react-datepicker";
-import '../../style/VacationRequest/RequestsTable.css';
 import { deleteTimer, addTimerValue, getUserTimerData, getUserTimerDataDate, editTimerValue } from '../../webAPI/timer';
 
 type TableProps = {
@@ -74,7 +73,7 @@ class Popup extends React.Component<IProps, IState> {
     async deleteTimerValue(id: number) {
         const token = Cookies.get('token');
         let data;
-        if (token != null)
+        if(token != null)
             data = await deleteTimer(token, id);
 
         if (data.data) {
@@ -272,42 +271,42 @@ class Popup extends React.Component<IProps, IState> {
             margin: "auto",
             backgroundColor: "white",
             padding: "2vw"
-        };
+            };
         const timeInput = {
             margin: "5px",
         };
         if (this.props.buttonText == "Edit")
-            return (
-                <div style={popup} onClick={proxy => proxy.stopPropagation()} >
-                    <div style={popup_inner}>
-                        <h6>{this.props.buttonText}</h6>
-                        <input type="time" value={this.convertDateToHoursMinutesStart(this.state.startTime)} onChange={this.handleChangeStartTime} style={timeInput} />
+        return (
+            <div style={popup} onClick={proxy => proxy.stopPropagation() } >
+                <div style={popup_inner}>
+                    <h6>{this.props.buttonText}</h6>
+                    <input type="time" value={this.convertDateToHoursMinutesStart(this.state.startTime)} onChange={this.handleChangeStartTime} style={timeInput} />
                     -
                     <input type="time" value={this.convertDateToHoursMinutesStart(this.state.finishTime)} style={timeInput} onChange={this.handleChangeFinishTime} />
 
-                        {this.state.showWarning ?
-                            <button disabled>{this.props.buttonText}</button>
-                            :
-                            <button onClick={(e) => { this.editValue(this.state.startTime, this.state.finishTime, this.props.editId); this.props.closePopup() }}>{this.props.buttonText}</button>
-                        }
+                    {this.state.showWarning ?
+                        <button disabled>{this.props.buttonText}</button>
+                        :
+                        <button onClick={(e) => { this.editValue(this.state.startTime, this.state.finishTime, this.props.editId); this.props.closePopup() }}>{this.props.buttonText}</button>
+                    }
 
-                        <button onClick={(e) => { this.props.closePopup() }} style={closeButton}>Close</button>
-                        <button onClick={() => {
-                            this.deleteTimerValue(this.props.editId)
-                        }}>Delete</button>
-                        {this.state.showWarning ?
-                            <h6>finish time must be greater than start time</h6>
-                            : null
-                        }
-                    </div>
+                    <button onClick={(e) => { this.props.closePopup() }}  style={closeButton}>Close</button>
+                    <button onClick={() => {
+                        this.deleteTimerValue(this.props.editId)
+                    }}>Delete</button>
+                    {this.state.showWarning ?
+                        <h6>finish time must be greater than start time</h6>
+                        : null
+                    }
                 </div>
+            </div>
             );
         else
             return (
                 <div style={popup} onClick={proxy => proxy.stopPropagation()} >
                     <div style={popup_inner}>
                         <h6>{this.props.buttonText}</h6>
-                        <input type="time" value={this.convertDateToHoursMinutesStart(this.state.startTime)} onChange={this.handleChangeStartTime} style={timeInput} />
+                    <input type="time" value={this.convertDateToHoursMinutesStart(this.state.startTime)} onChange={this.handleChangeStartTime} style={timeInput} />
                     -
                     <input type="time" min={this.convertDateToHoursMinutesStart(this.state.startTime)} value={this.convertDateToHoursMinutesStart(this.state.finishTime)} style={timeInput} onChange={this.handleChangeFinishTime} />
                         <DatePicker
