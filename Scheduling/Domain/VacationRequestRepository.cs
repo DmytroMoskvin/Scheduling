@@ -12,11 +12,12 @@ namespace Scheduling.Domain
     {
         private void SetComputedData(VacationRequest request, int userId, StatusType status)
         {
-            var user = Context.Users.Single(u => u.Id == userId);
+            var user = Context.Users
+                .Single(u => u.Id == userId);
 
             request.Status = status;
 
-            request.UserName = user.Name + " " + user.Surname;
+            request.UserName =  $"{user.Name} {user.Surname}";
         }
 
         private void SetResponderName(VacationResponse response)
@@ -24,7 +25,7 @@ namespace Scheduling.Domain
             var responder = Context.Users
                 .Single(u => u.Id == response.ResponderId);
 
-            response.ResponderName = responder.Name + " " + responder.Surname;
+            response.ResponderName = $"{responder.Name} {responder.Surname}";
         }
 
         public IEnumerable<VacationRequest> GetUserVacationRequests(int userId)
@@ -37,8 +38,8 @@ namespace Scheduling.Domain
                 var currentResponses = Context.VacationResponses.Where(r => r.RequestId == request.Id).ToList();
                 currentResponses.ForEach(it =>
                 {
-                    User responder = Context.Users.Single(u => u.Id == it.ResponderId);
-                    it.ResponderName = responder.Name + " " + responder.Surname;
+                    var responder = Context.Users.Single(u => u.Id == it.ResponderId);
+                    it.ResponderName = $"{responder.Name} {responder.Surname}";
                 });
 
                 var status = currentResponses.Count == 3 ?
@@ -124,7 +125,7 @@ namespace Scheduling.Domain
         }
         public bool RemoveRequest(int id)
         {
-            VacationRequest vacationRequest = Context.VacationRequests
+            var vacationRequest = Context.VacationRequests
                 .Single(u => u.Id == id);
 
             Context.VacationRequests
@@ -148,7 +149,7 @@ namespace Scheduling.Domain
 
             Context.SaveChanges();
 
-            VacationRequest vacationRequest = Context.VacationRequests.Single(r => r.Id == requestId);
+            var vacationRequest = Context.VacationRequests.Single(r => r.Id == requestId);
 
             var status = response ? StatusType.Approved : StatusType.Declined;
 
