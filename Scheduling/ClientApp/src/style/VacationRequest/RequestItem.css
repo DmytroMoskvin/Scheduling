@@ -30,6 +30,16 @@ h5{
     border: 1px solid white;
 }
 
+.red{
+    background-color: #ff001938;
+    border: 1px solid #ff001938;
+}
+
+.green{
+    background-color: rgba(0, 187, 0, 0.39);
+    border: 1px solid rgba(0, 187, 0, 0.39);
+}
+
 .requets-brief-info>p:nth-child(1){
     width: 25%;
 }
@@ -120,6 +130,16 @@ h5{
     border: 1px solid #0275d8;
 }
 
+.opened .red{
+    border: 1px solid #ff001988;
+    background-color: #ff001988;
+}
+
+.opened .green{
+    border: 1px solid rgba(0, 139, 0, 0.671);
+    background-color: rgba(0, 139, 0, 0.671);
+}
+
 .requets-brief-info>p:nth-child(2){
     transition: 0.5s;
     max-width: 45%;
@@ -153,6 +173,14 @@ h5{
 .requets-brief-info:hover{
     box-shadow: 0px 0px 10px 0px lightgrey;
     border: 1px solid #0275d8;
+}
+
+.red:hover{
+    border: 1px solid #ff0019;
+}
+
+.green:hover{
+    border: 1px solid rgb(0, 187, 0);
 }
 
 @media (max-width: 991px){

@@ -85,7 +85,7 @@ class VacationApproving extends React.PureComponent<VacationApprovingProps, { re
                     <div id='vacation-approving'>
                         <h2>Vacation approving</h2>
                         {!this.state.isLoading?
-                                this.state.requestsForConsideration.map((r) =>
+                                this.state.requestsForConsideration.sort((a, b) => a.startDate != b.startDate? a.startDate > b.startDate? 1 : -1 : 0).map((r) =>
                                     <ApprovingItem key={r.id} token={this.props.token? this.props.token: ''} request={r} considerRequest={async (requestId: number, response: boolean, comment: string) => await this.considerRequest(requestId, response, comment)}/>
                                 ):
                                 <LoadingAnimation/>

@@ -13,17 +13,16 @@ namespace Scheduling.Domain
         private void SetComputedData(VacationRequest request, int userId, StatusType status)
         {
             var user = Context.Users
-                .Single(u => u.Id == userId);
+                .Single(it => it.Id == userId);
 
             request.Status = status;
-
-            request.UserName =  $"{user.Name} {user.Surname}";
+            request.UserName = $"{user.Name} {user.Surname}";
         }
 
         private void SetResponderName(VacationResponse response)
         {
             var responder = Context.Users
-                .Single(u => u.Id == response.ResponderId);
+                .Single(it => it.Id == response.ResponderId);
 
             response.ResponderName = $"{responder.Name} {responder.Surname}";
         }
@@ -31,14 +30,20 @@ namespace Scheduling.Domain
         public IEnumerable<VacationRequest> GetUserVacationRequests(int userId)
         {
             var requests = Context.VacationRequests
-                .Where(r => r.UserId == userId).ToList();
+                .Where(it => it.UserId == userId && it.FinishDate > DateTime.UtcNow)
+                .ToList();
 
             requests.ForEach(request =>
             {
-                var currentResponses = Context.VacationResponses.Where(r => r.RequestId == request.Id).ToList();
+                var currentResponses = Context.VacationResponses
+                    .Where(r => r.RequestId == request.Id)
+                    .ToList();
+
                 currentResponses.ForEach(it =>
                 {
-                    var responder = Context.Users.Single(u => u.Id == it.ResponderId);
+                    var responder = Context.Users
+                        .Single(u => u.Id == it.ResponderId);
+
                     it.ResponderName = $"{responder.Name} {responder.Surname}";
                 });
 
@@ -47,7 +52,6 @@ namespace Scheduling.Domain
                     StatusType.Declined : StatusType.Approved : StatusType.PendingConsideration;
 
                 SetComputedData(request, userId, status);
-
             });
 
             return requests;
@@ -55,11 +59,15 @@ namespace Scheduling.Domain
 
         public IEnumerable<VacationResponse> GetVacationRequestResponses(int requestId)
         {
-            var request = Context.VacationRequests.Single(r => r.Id == requestId);
+            var request = Context.VacationRequests
+                .Single(r => r.Id == requestId);
 
-            var currentResponses = Context.VacationResponses.Where(r => r.RequestId == request.Id).ToList();
+            var currentResponses = Context.VacationResponses
+                .Where(r => r.RequestId == request.Id)
+                .ToList();
 
-            currentResponses.ForEach(it => SetResponderName(it));
+            currentResponses
+                .ForEach(it => SetResponderName(it));
 
             return currentResponses;
         }
@@ -71,14 +79,15 @@ namespace Scheduling.Domain
                 .Select(r => r.RequestId);
 
             var requests = Context.VacationRequests
-                .Where(r => !idList.Contains(r.Id) && r.UserId != responderId).ToList();
+                .Where(r => !idList.Contains(r.Id) && r.UserId != responderId && r.StartDate > DateTime.UtcNow).ToList();
 
-            requests.ForEach(request =>
-            {
-                var status = StatusType.PendingConsideration;
+            requests
+                .ForEach(request =>
+                {
+                    var status = StatusType.PendingConsideration;
 
-                SetComputedData(request, request.UserId, status);
-            });
+                    SetComputedData(request, request.UserId, status);
+                });
 
             return requests;
         }
@@ -86,19 +95,24 @@ namespace Scheduling.Domain
         public IEnumerable<VacationRequest> GetConsideredRequests(int responderId)
         {
             var currentResponses = Context.VacationResponses
-                .Where(r => r.ResponderId == responderId).ToList();
+                .Where(r => r.ResponderId == responderId)
+                .ToList();
 
             var idList = currentResponses
                 .Select(r => r.RequestId);
 
-            var requests = Context.VacationRequests.Where(r => idList.Contains(r.Id) && r.UserId != responderId).ToList();
+            var requests = Context.VacationRequests
+                .Where(r => idList.Contains(r.Id) && r.UserId != responderId)
+                .ToList();
 
-            requests.ForEach(request =>
-            {
-                var status = currentResponses.Find(r => r.RequestId == request.Id).Response ? StatusType.Approved : StatusType.Declined;
+            requests
+                .ForEach(request =>
+                {
+                    var status = currentResponses
+                        .Find(r => r.RequestId == request.Id).Response ? StatusType.Approved : StatusType.Declined;
 
-                SetComputedData(request, request.UserId, status);
-            });
+                    SetComputedData(request, request.UserId, status);
+                });
 
             return requests;
         }
@@ -110,7 +124,7 @@ namespace Scheduling.Domain
                 UserId = userId,
                 StartDate = startDate,
                 FinishDate = finishDate,
-                Comment = comment,
+                Comment = comment
             };
 
             Context.VacationRequests.Add(vacationRequest);
@@ -149,7 +163,8 @@ namespace Scheduling.Domain
 
             Context.SaveChanges();
 
-            var vacationRequest = Context.VacationRequests.Single(r => r.Id == requestId);
+            var vacationRequest = Context.VacationRequests
+                .Single(r => r.Id == requestId);
 
             var status = response ? StatusType.Approved : StatusType.Declined;
 

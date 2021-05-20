@@ -107,6 +107,20 @@ class VacationRequestPage extends React.PureComponent<VacationPageProps, {}> {
         }
     }
 
+    checkDateRange(startDate: Date, finishDate: Date){
+        let error = false;
+        this.props.requestHistory.forEach(r => 
+            {
+                let existingStartDate = new Date(r.startDate);
+                let existingFinishDate = new Date(r.finishDate);
+                if(startDate >= existingStartDate && startDate <= existingFinishDate || finishDate >= existingStartDate && finishDate <= existingFinishDate)
+                    error = true;
+            });
+        console.log(error);
+        if(!error)
+            this.setState({startDate: startDate, finishDate: finishDate});
+    }
+
     public render(){
         if(this.props.logged && this.props.token){
             return (
@@ -117,7 +131,7 @@ class VacationRequestPage extends React.PureComponent<VacationPageProps, {}> {
                                 <h2>Vacation</h2>
                                 <div className='data-container'>
                                     <label>Data range</label>
-                                    <DataRangePicker availableDays={7} setRange={(startDate: Date, finishDate: Date) => this.setState({startDate, finishDate})}/>
+                                    <DataRangePicker availableDays={7} setRange={(startDate: Date, finishDate: Date) => this.checkDateRange(startDate, finishDate)}/>
                                 </div>
                                 <div className='data-container'>
                                     <label htmlFor='comment'>Comment</label>
@@ -132,14 +146,24 @@ class VacationRequestPage extends React.PureComponent<VacationPageProps, {}> {
                             </div>
                         </div>
                         <div id='vacation-history'>
-                            <h5>Vacation history</h5>
+                            <h5>Current vacation</h5>
                             {!this.state.isLoading?
-                                this.props.requestHistory.reverse().map((r) =>
+                                this.props.requestHistory.sort((a, b) => a.startDate != b.startDate? a.startDate > b.startDate? 1 : -1 : 0)
+                                .filter(r => new Date(r.finishDate).getTime() > Date.now() && r.status == 'Approved').map((r) =>
                                     <RequestItem key={r.id} token={this.props.token? this.props.token: ''} request={r} removeRequest={async (id: number) => await this.removeRequest(id)}/>
                                 ):
                                 <LoadingAnimation/>
                             }
-                            {/* // <RequestsTable loading={this.state.loading} requests={this.props.requestHistory} removeRequest={async (id: number) => await this.removeRequest(id)}/> */}
+                        </div>
+                        <div id='vacation-history'>
+                            <h5>Vacation history</h5>
+                            {!this.state.isLoading?
+                                this.props.requestHistory.sort((a, b) => a.startDate != b.startDate? a.startDate > b.startDate? 1 : -1 : 0)
+                                .filter(r => new Date(r.startDate).getTime() > Date.now()).map((r) =>
+                                    <RequestItem key={r.id} token={this.props.token? this.props.token: ''} request={r} removeRequest={async (id: number) => await this.removeRequest(id)}/>
+                                ):
+                                <LoadingAnimation/>
+                            }
                         </div>
                     </main>
                 </React.Fragment>

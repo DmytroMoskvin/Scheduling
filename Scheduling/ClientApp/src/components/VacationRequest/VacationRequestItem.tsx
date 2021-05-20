@@ -80,10 +80,21 @@ export const RequestItem: React.FunctionComponent<ItemProps> = ({ token, request
         infoDiv = (<LoadingAnimation/>);
     }
 
+    let briefInfoClass = () => {
+        switch(request.status){
+            case 'Approved':
+                return 'green';
+            case 'Declined':
+                return 'red';
+            default:
+                return null;
+        }
+    }
+
     return (
         <React.Fragment>
             <div className={`request-item ${isOpen? 'opened' : ''}`}>
-                <div className='requets-brief-info' onClick={() => isOpen? setOpen(false): getFullInfo()}>
+                <div className={`requets-brief-info ${briefInfoClass()}`} onClick={() => isOpen? setOpen(false): getFullInfo()}>
                     <p>{convertDate(request.startDate)}-{convertDate(request.finishDate)}</p>
                     <p>{request.comment}</p>
                     <p>{request.status}</p>
