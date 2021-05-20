@@ -202,7 +202,8 @@ namespace Scheduling.GraphQl
                 description: "Add start time"
 
             ).AuthorizeWith("Authenticated");
-            Field<TimerHistoryType>(
+
+        Field<TimerHistoryType>(
                 "addTimerValue",
                 arguments: new QueryArguments(
                     new QueryArgument<DateTimeGraphType> { Name = "StartTime", Description = "Timer started" },

@@ -1,6 +1,7 @@
 import Cookies from 'js-cookie';
 import * as React from 'react';
 import { Component } from 'react';
+import { Accordion, Card } from "react-bootstrap";
 import { connect } from 'react-redux';
 import { ApplicationState } from '../../store/configureStore';
 import { actionCreators } from '../../store/Timer/actions';
@@ -45,15 +46,16 @@ class TimerHistoryTable extends React.Component<IProps, IState> {
         }
         console.log(this.props.timerHistory);
     }
-    async deleteTimerValue(id: number){
+    async deleteTimerValue(id: number) {
         const token = Cookies.get('token');
         let data;
-        if(token != undefined)
+        if (token != undefined)
             data = await deleteTimer(token, id);
 
         if (data.data) {
             this.props.deleteTime(data.data.deleteTimerFinishValue.id);
         }
+
     }
     convertMiliseconds(finishTime: Date, startTime: Date) {
         if (finishTime == null) {
@@ -68,7 +70,7 @@ class TimerHistoryTable extends React.Component<IProps, IState> {
         hours = (hours < 10) ? "0" + hours : hours;
         minutes = (minutes < 10) ? "0" + minutes : minutes;
 
-        return hours + ":" + minutes ;
+        return hours + ":" + minutes;
     }
     togglePopup(idArg = "", startTime = new Date(), finishTime = new Date()) {
         if (idArg == "")
@@ -79,15 +81,15 @@ class TimerHistoryTable extends React.Component<IProps, IState> {
                 finishTime: new Date(new Date(finishTime) + " UTC"),
             });
         else {
-            if (typeof(idArg) == "string") {
+            if (typeof (idArg) == "string") {
                 var date = this.props.timerHistory.find(({ id }) => id == Number(idArg));
                 if (date != undefined)
-                this.setState({
-                    showPopup: !this.state.showPopup,
-                    startTime: new Date(new Date(date.startTime) + " UTC"),
-                    editId: Number(idArg),
-                    finishTime: new Date(new Date(date.finishTime) + " UTC"),
-                });
+                    this.setState({
+                        showPopup: !this.state.showPopup,
+                        startTime: new Date(new Date(date.startTime) + " UTC"),
+                        editId: Number(idArg),
+                        finishTime: new Date(new Date(date.finishTime) + " UTC"),
+                    });
             }
             else {
                 this.setState({
@@ -111,51 +113,85 @@ class TimerHistoryTable extends React.Component<IProps, IState> {
     getConvertedDate(date: Date) {
         return (new Date(date + " UTC").toLocaleDateString());
     }
+    renderAccordions = (array) => {
+
+        var b = [... new Set(array.map((item) =>
+            (new Date(item["startTime"]).toLocaleDateString())
+        ))];
+
+        var a = b.map(item => array.filter(a => new Date(a.startTime).toLocaleDateString() == item));
+
+
+        var j = (b.map((item) => [item, array.filter(a => new Date(a.startTime).toLocaleDateString() == item)]));
+
+        console.log(a);
+
+        //var b = [... new Set(array.map(function (item) { return new Date(item["startTime"]).toLocaleDateString(); }))]; // унікальні стартові дати
+
+
+         return (
+             j.map(this.renderAccordion)
+        )
+    }
+    renderAccordion = (r, index) => {
+        return (
+            <td colSpan={5} style={{ textAlign: "center" }}>
+                <Accordion key={index} >
+                    <Accordion.Toggle as={Card.Header} eventKey={r} style={{ display: "flex", justifyContent: "space-between" }}>
+                            {r[0]} <i>+</i>
+                        </Accordion.Toggle>
+                    <Accordion.Collapse eventKey={r}>
+                        <table>
+                            <thead><th>Date</th><th>Interval</th><th>Time(h:m)</th><th>Modified time</th><th></th></thead>
+                                {this.renderRow(r[1])}
+                        </table>
+
+                        
+                        </Accordion.Collapse>
+                </Accordion>
+            </td>
+            )
+    }
+    renderRow(arr) {
+        return (arr.map((r) => <tr key={arr[0].id}>
+            <td>
+                {this.getConvertedDate(new Date(r.startTime))}
+            </td>
+            <td>{
+                ((new Date((new Date(r.startTime)).toString() + " UTC"))
+                    .toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }))}-{(r.finishTime == null ? "still in action" :
+                        ((new Date((new Date(r.finishTime)).toString() + " UTC"))
+                            .toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })))}</td>
+            <td>{
+                this.convertMiliseconds(r.finishTime, new Date(r.startTime))
+            }</td>
+            <td>{
+                r.isModified == true &&
+                "+"
+            }</td>
+            <td>
+                <button onClick={() => {
+                    this.togglePopup(r.id.toString(), new Date(r.startTime), new Date(r.finishTime))
+                    this.changePopUpButtonText("Edit")
+                }}>Edit</button>
+                <button onClick={() => {
+                    this.deleteTimerValue(r.id)
+                }}>Delete</button>
+            </td>
+        </tr>))
+    }
     render() {
         if (this.props.timerHistory != undefined && this.props.timerHistory.length > 0) {
             this.props.timerHistory
-                .sort((a:  TimerType, b: TimerType) => new Date(a.startTime).valueOf() - new Date(b.startTime).valueOf());
+                .sort((a: TimerType, b: TimerType) => new Date(a.startTime).valueOf() - new Date(b.startTime).valueOf());
             console.log('table' + this.props.timerHistory[0].id);
             return (
                 <React.Fragment>
                     <div id='vacation-history'>
                         <h5>Timer history</h5>
-                        <table id='history'>
-                            <tbody>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Interval</th>
-                                    <th>Time(h:m)</th>
-                                    <th>Modified time</th>
-                                    <th></th>
-                                </tr>
-                                {this.props.timerHistory.slice(0).reverse().map((r) => <tr key={this.props.timerHistory.indexOf(r)}>
-                                    <td>
-                                        {this.getConvertedDate(new Date(r.startTime))}
-                                    </td>
-                                    <td>{
-                                        ((new Date((new Date(r.startTime)).toString() + " UTC"))
-                                            .toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }))}-{(r.finishTime == null ? "still in action" :
-                                        ((new Date((new Date(r.finishTime)).toString() + " UTC"))
-                                            .toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })))}</td>
-                                    <td>{
-                                        this.convertMiliseconds(r.finishTime, new Date(r.startTime))
-                                    }</td>
-                                    <td>{
-                                        r.isModified == true &&
-                                            "+"
-                                    }</td>
-                                    <td>
-                                        <button onClick={() => {
-                                            this.togglePopup(r.id.toString(), new Date (r.startTime), new Date(r.finishTime))
-                                            this.changePopUpButtonText("Edit")
-                                        }}>Edit</button>
-                                        <button onClick={() => {
-                                        this.deleteTimerValue(r.id)
-                                    }}>Delete</button>
-                                    </td>
-
-                                </tr>)}
+                        <table id='history' style={{ display: "flex", flexDirection: "column", width: "25vw" }}>
+                            <tbody style={{ display: "flex", flexDirection: "column" }}>
+                                {this.renderAccordions(this.props.timerHistory.slice(0).reverse())}
                             </tbody>
                         </table>
                         <button id='send-request' onClick={() => {

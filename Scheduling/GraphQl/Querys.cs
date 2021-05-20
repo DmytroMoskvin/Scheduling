@@ -32,18 +32,25 @@ namespace Scheduling.GraphQl
 
 
                     System.DateTime? selectedMonth = context.GetArgument<System.DateTime?>("CalendarDay");
+                    DateTime dt;
                     if (selectedMonth.HasValue)
                     {
                         var a = dataBaseRepository.GetTimerHistory(user.Id, selectedMonth);
 
                         user.ComputedProps.AddTimerHistory(new List<TimerHistory>(a.OfType<TimerHistory>()));
 
+                        dt = new DateTime(selectedMonth.Value.Year, selectedMonth.Value.Month, selectedMonth.Value.Day, selectedMonth.Value.Hour, 0, 0);
                     }
                     else
+                    {
                         user.ComputedProps.AddTimerHistory(dataBaseRepository.GetTimerHistory(user.Id));
+                        dt = DateTime.Now;
+                    }
+                    int? b = dataBaseRepository.GetTimeByMonth(user.Id, dt);
+                    var g = dataBaseRepository.GetTimesByMonth(user.Id, dt);
+                    int? c = dataBaseRepository.GetTimeByDay(user.Id, dt);
+                    var j = dataBaseRepository.GetTimesByDay(user.Id, dt);
 
-                    DateTime dt = new DateTime(2021, 4, 3, 5, 10, 20);
-                    int? b = dataBaseRepository.GetTimeByMonth(1321313, dt);
                     Console.WriteLine(b);
                     return user;
                 }

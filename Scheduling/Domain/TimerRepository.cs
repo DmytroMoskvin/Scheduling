@@ -186,11 +186,49 @@ namespace Scheduling.Domain
                         .Where(it => it.UserId == userId 
                         && it.StartTime.Value.Month == monthDate.Month
                         && it.StartTime.Value.Year == monthDate.Year
+                        && it.IsModified == false
                         )
                         ;
 
             return dbRecords.Select(it => (EF.Functions.DateDiffMinute(it.StartTime, it.FinishTime))).Sum();
 
+        }
+        public List<TimerHistory> GetTimesByMonth(int userId, DateTime monthDate)
+        {
+            var dbRecords = Context.TimerHistories
+                        .Where(it => it.UserId == userId 
+                        && it.StartTime.Value.Month == monthDate.Month
+                        && it.StartTime.Value.Year == monthDate.Year
+                        && it.IsModified == false
+                        );
+
+            return dbRecords.ToList();
+
+        }
+        public int? GetTimeByDay(int userId, DateTime Day)
+        {
+            var dbRecords = Context.TimerHistories
+                        .Where(it => it.UserId == userId
+                        && it.StartTime.Value.Day == Day.Day
+                        && it.StartTime.Value.Month == Day.Month
+                        && it.StartTime.Value.Year == Day.Year
+                        //&& it.IsModified == false
+                        )
+                        ;
+
+            return dbRecords.Select(it => (EF.Functions.DateDiffMinute(it.StartTime, it.FinishTime))).Sum();
+        }
+        public List<TimerHistory> GetTimesByDay(int userId, DateTime Day)
+        {
+            var dbRecords = Context.TimerHistories
+                        .Where(it => it.UserId == userId
+                        && it.StartTime.Value.Day == Day.Day
+                        && it.StartTime.Value.Month == Day.Month
+                        && it.StartTime.Value.Year == Day.Year
+                        //&& it.IsModified == false
+                        );
+
+            return dbRecords.ToList();
         }
     }
 }
