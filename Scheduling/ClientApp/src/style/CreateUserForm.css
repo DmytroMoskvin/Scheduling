@@ -38,3 +38,17 @@ input {
 #cancelButton:hover {
     text-decoration: none;
 }
+
+#attributesTable > tbody > tr > td {
+    padding-right: 100px;
+}
+
+#attributesTable > tbody > tr > td td {
+    padding-right: 5px;
+}
+
+
+
+.borderInnerTable > * {
+    padding: 10px;
+}

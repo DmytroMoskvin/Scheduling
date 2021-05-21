@@ -12,6 +12,7 @@ export interface ComputedProps {
 }
 
 export interface Team {
+	id: number,
 	name: string
 }
 

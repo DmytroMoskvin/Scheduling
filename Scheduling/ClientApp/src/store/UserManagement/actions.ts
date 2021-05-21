@@ -1,4 +1,4 @@
-import { UserData } from "../User/types";
+import { Team, UserData } from "../User/types";
 
 
 export interface ReceivedUsersDataAction { type: 'RECEIVED_USERS', payload: Array<UserData> };
@@ -14,7 +14,10 @@ export interface UserDeletedAction { type: 'USER_DELETED', payload: string };
 export interface RequestedDeleteUserAction { type: 'REQUESTED_DELETE_USER', payload: string };
 
 export interface UserEditedAction { type: 'USER_EDITED', payload: { email: string, user: UserData }};
-export interface RequestedEditUserAction { type: 'REQUESTED_EDIT_USER', payload: { email: string, user: UserData }};
+export interface RequestedEditUserAction { type: 'REQUESTED_EDIT_USER', payload: { email: string, user: UserData } };
+
+export interface ReceivedTeamsAction { type: 'RECEIVED_TEAMS', payload: Array<Team> };
+export interface RequestedTeamsAction { type: 'REQUESTED_TEAMS' };
 
 
 const receivedUsersData = (users: Array<UserData>) => ({ type: 'RECEIVED_USERS', payload: users } as ReceivedUsersDataAction);
@@ -32,6 +35,9 @@ const requestedDeleteUser = (email: string) => ({ type: 'REQUESTED_DELETE_USER',
 const editUser = (email: string, user: UserData) => ({ type: 'USER_EDITED', payload: { email: email, user: user }} as UserEditedAction);
 const requestedEditUser = (email: string, user: UserData) => ({ type: 'REQUESTED_EDIT_USER', payload: { email: email, user: user } } as RequestedEditUserAction);
 
+const receivedTeams = (teams: Array<Team>) => ({ type: 'RECEIVED_TEAMS', payload: teams } as ReceivedTeamsAction);
+const requestedTeams = () => ({ type: 'REQUESTED_TEAMS' } as RequestedTeamsAction);
+
 export const actionCreators = {
     receivedUsersData, requestedUsersData,
     checkPermissions,
@@ -39,11 +45,13 @@ export const actionCreators = {
     accessDenied,
     createUser, requestedCreateUser,
     deleteUser, requestedDeleteUser,
-    editUser, requestedEditUser
+    editUser, requestedEditUser,
+    receivedTeams, requestedTeams
 };
 
 export type KnownAction = ReceivedUsersDataAction | CheckPermissions |
     RequestedUsersDataAction | AccessAllowed | AccessDenied |
     UserCreatedAction | RequestedCreateUserAction |
     UserDeletedAction | RequestedDeleteUserAction |
-    UserEditedAction  | RequestedEditUserAction;
+    UserEditedAction | RequestedEditUserAction |
+    ReceivedTeamsAction | RequestedTeamsAction;

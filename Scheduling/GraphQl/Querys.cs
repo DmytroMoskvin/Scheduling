@@ -36,12 +36,12 @@ namespace Scheduling.GraphQl
                 arguments: null,
                 resolve: context =>
                 {
-                    string email = httpContext.HttpContext.User.Claims.First(claim => claim.Type == "Email").Value.ToString();
-                    User user = dataBaseRepository.Get(email);
+                    /*string email = httpContext.HttpContext.User.Claims.First(claim => claim.Type == "Email").Value.ToString();
+                    User user = dataBaseRepository.Get(email);*/
                     return dataBaseRepository.GetListOfAvailableTeams();
                 },
                 description: "Get list of available teams."
-            ).AuthorizeWith(PermissionName.UserManagement.ToString());
+            )/*.AuthorizeWith(PermissionName.UserManagement.ToString())*/;
 
 
             /*Field<ListGraphType<TeamType>>(
@@ -101,7 +101,7 @@ namespace Scheduling.GraphQl
                     return dataBaseRepository.Get();
                 }
 
-            ).AuthorizeWith(PermissionName.UserManagement.ToString());
+            )/*.AuthorizeWith(PermissionName.UserManagement.ToString())*/;
 
         }
     }

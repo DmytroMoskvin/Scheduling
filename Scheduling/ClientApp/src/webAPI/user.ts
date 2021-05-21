@@ -1,4 +1,3 @@
-
 export const getUserData = async (token: string) => {
 	const query = JSON.stringify({
 		query: `{

@@ -3,7 +3,8 @@ import { put, takeEvery, all } from "redux-saga/effects";
 import { getUsersData } from "../../webAPI/users";
 import { createUser } from "../../webAPI/createUser";
 import { removeUser } from "../../webAPI/removeUser";
-import { UserData } from "../User/types";
+import { getAllTeams } from "../../webAPI/teams";
+import { Team, UserData } from "../User/types";
 import { actionCreators } from "./actions";
 import * as actions from "./actions"
 
@@ -12,12 +13,27 @@ export default function* watchUserManagementSagas() {
         takeEvery('REQUESTED_USERS', receiveUsersSaga),
         takeEvery('REQUESTED_CREATE_USER', createUserSaga),
         takeEvery('REQUESTED_DELETE_USER', removeUserSaga),
+        takeEvery('REQUESTED_TEAMS', receiveTeamsSaga),
     ]);
+}
+
+function* receiveTeamsSaga(action: actions.ReceivedTeamsAction) {
+    const token = Cookies.get('token');
+    if (token) {
+        try {
+            const response: Team[] = yield getAllTeams(token).then(response => response.data.getTeams);
+            console.log(response);
+            yield put(actionCreators.receivedTeams(response));
+        } catch {
+            yield put(actionCreators.accessDenied());
+        }
+    }
+    else
+        yield put(actionCreators.accessDenied());
 }
 
 function* receiveUsersSaga(action: actions.ReceivedUsersDataAction) {
     const token = Cookies.get('token');
-    console.log(token);
     if (token) {
         try {
             const response: UserData[] = yield getUsersData(token).then(response => response.data.getUsers);
@@ -37,8 +53,10 @@ function* createUserSaga(action: actions.UserCreatedAction) {
         try {
             const response: UserData = yield createUser(
                 action.payload!.name, action.payload!.surname,
-                action.payload!.email, action.payload!.position, action.payload!.password, ["TIME_TRACKING"],
-                1, token).then(response => response.data);
+                action.payload!.email, action.payload!.position, action.payload!.department,
+                action.payload!.userPermissions.map((up) => up.permission.name),
+                action.payload!.team.id, token)
+                    .then(response => response.data);
             console.log(response);
             yield put(actionCreators.createUser(response));
         } catch {

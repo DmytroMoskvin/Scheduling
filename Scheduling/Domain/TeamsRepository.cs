@@ -46,10 +46,8 @@ namespace Scheduling.Domain
 
         public void AddUserToTeam(int userId, int teamId)
         {
-            if (
-                Context.Teams.FirstOrDefault(team => team.Id == teamId) == null
-                || Context.Users.FirstOrDefault(user => user.Id == userId) == null
-            )
+            if (Context.Teams.FirstOrDefault(team => team.Id == teamId) == null || 
+                Context.Users.FirstOrDefault(user => user.Id == userId) == null)
             {
                 return;
             }
@@ -59,12 +57,10 @@ namespace Scheduling.Domain
             Context.SaveChanges();
         }
 
-        public void RemoveUserFromTeam(int userId)
+        public void RemoveUserFromTeam(int userId, int teamId)
         {
-            if (
-                /*Context.Teams.FirstOrDefault(team => team.Id == teamId) == null
-                ||*/ Context.Users.FirstOrDefault(user => user.Id == userId) == null
-            )
+            if (Context.Teams.FirstOrDefault(team => team.Id == teamId) == null || 
+                Context.Users.FirstOrDefault(user => user.Id == userId) == null)
             {
                 return;
             }
@@ -72,7 +68,7 @@ namespace Scheduling.Domain
             //Context.userTeams.Remove(Context.userTeams.Single(team => team.TeamId == teamId && team.UserId == userId));
             var user = Context.Users
                 .Include(u => u.Team)
-               .FirstOrDefault(us => us.Id == userId);
+                .FirstOrDefault(us => us.Id == userId);
             Context.SaveChanges();
         }
 
