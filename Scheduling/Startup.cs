@@ -80,10 +80,13 @@ namespace Scheduling
             services.AddScoped<IdentityService>();
             services.AddScoped<EmailService>();
             services.AddScoped<DataBaseRepository>();
+            services.AddScoped<TimerRepository>();
             services.AddHttpContextAccessor();
 
             services.AddScoped<Querys>();
+            services.AddScoped<TimerQuery>();
             services.AddScoped<Mutations>();
+            services.AddScoped<TimerMutation>();
             services.AddScoped<UserType>();
             services.AddScoped<PermissionType>();
             services.AddScoped<TeamType>();
