@@ -84,9 +84,7 @@ namespace Scheduling
             services.AddHttpContextAccessor();
 
             services.AddScoped<Querys>();
-            services.AddScoped<TimerQuery>();
             services.AddScoped<Mutations>();
-            services.AddScoped<TimerMutation>();
             services.AddScoped<UserType>();
             services.AddScoped<PermissionType>();
             services.AddScoped<TeamType>();

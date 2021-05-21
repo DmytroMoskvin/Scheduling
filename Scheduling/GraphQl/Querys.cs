@@ -12,7 +12,7 @@ namespace Scheduling.GraphQl
 {
     public class Querys : ObjectGraphType
     {
-        public Querys(IHttpContextAccessor httpContext, DataBaseRepository dataBaseRepository, TimerRepository timerRepository)
+        public Querys(IHttpContextAccessor httpContext, DataBaseRepository dataBaseRepository, TimerRepository timerRepository, IServiceProvider serviceProvider)
         {
 
             Name = "Query";
@@ -160,6 +160,8 @@ namespace Scheduling.GraphQl
                     return teammatesOnVacation;
                 }
             ).AuthorizeWith("Authenticated");
+
+            new TimerQuery(this, serviceProvider);
         }
     }
 }

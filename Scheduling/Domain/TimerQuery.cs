@@ -17,54 +17,54 @@ namespace Scheduling.Domain
     {
         public TimerQuery(Querys queries, IServiceProvider serviceProvider)
         {
-        var httpContext = serviceProvider.GetRequiredService<IHttpContextAccessor>();
-        var dataBaseRepository = serviceProvider.GetRequiredService<DataBaseRepository>();
-        var timerRepository = serviceProvider.GetRequiredService<TimerRepository>();
+            var httpContext = serviceProvider.GetRequiredService<IHttpContextAccessor>();
+            var dataBaseRepository = serviceProvider.GetRequiredService<DataBaseRepository>();
+            var timerRepository = serviceProvider.GetRequiredService<TimerRepository>();
 
-        queries.Field<UserType>(
-            "GetCurrentUserTimerHistory",
-            arguments: new QueryArguments(
-                new QueryArgument<DateGraphType> { Name = "CalendarDay", Description = "Selected day" }
-                ),
-            resolve: context =>
-            {
-                string email = httpContext.HttpContext.User.Claims.First(claim => claim.Type == "Email").Value.ToString();
-                User user = dataBaseRepository.Get(email);
-
-
-                System.DateTime? selectedMonth = context.GetArgument<System.DateTime?>("CalendarDay");
-                DateTime dt;
-                if (selectedMonth.HasValue)
+            queries.Field<UserType>(
+                "GetCurrentUserTimerHistory",
+                arguments: new QueryArguments(
+                    new QueryArgument<DateGraphType> { Name = "CalendarDay", Description = "Selected day" }
+                    ),
+                resolve: context =>
                 {
-                    var a = timerRepository.GetTimerHistory(user.Id, selectedMonth);
+                    string email = httpContext.HttpContext.User.Claims.First(claim => claim.Type == "Email").Value.ToString();
+                    User user = dataBaseRepository.Get(email);
 
-                    user.ComputedProps.AddTimerHistory(new List<TimerHistory>(a.OfType<TimerHistory>()));
 
-                    dt = new DateTime(selectedMonth.Value.Year, selectedMonth.Value.Month, selectedMonth.Value.Day, selectedMonth.Value.Hour, 0, 0);
+                    System.DateTime? selectedMonth = context.GetArgument<System.DateTime?>("CalendarDay");
+                    DateTime dt;
+                    if (selectedMonth.HasValue)
+                    {
+                        var a = timerRepository.GetTimerHistory(user.Id, selectedMonth);
+
+                        user.ComputedProps.AddTimerHistory(new List<TimerHistory>(a.OfType<TimerHistory>()));
+
+                        dt = new DateTime(selectedMonth.Value.Year, selectedMonth.Value.Month, selectedMonth.Value.Day, selectedMonth.Value.Hour, 0, 0);
+                    }
+                    else
+                    {
+                        user.ComputedProps.AddTimerHistory(timerRepository.GetTimerHistory(user.Id));
+                        dt = DateTime.Now;
+                    }
+                    int? b = timerRepository.GetTimeByMonth(user.Id, dt);
+                    var g = timerRepository.GetTimesByMonth(user.Id, dt);
+                    int? c = timerRepository.GetTimeByDay(user.Id, dt);
+                    var j = timerRepository.GetTimesByDay(user.Id, dt);
+
+                    Console.WriteLine(b);
+                    return user;
                 }
-                else
+            ).AuthorizeWith("Authenticated");
+
+
+            queries.FieldAsync<ListGraphType<TimerHistoryType>, IReadOnlyCollection<TimerHistory>>(
+                "GetTimerHistories",
+                resolve: ctx =>
                 {
-                    user.ComputedProps.AddTimerHistory(timerRepository.GetTimerHistory(user.Id));
-                    dt = DateTime.Now;
+                    return timerRepository.GetTimerHistory();
                 }
-                int? b = timerRepository.GetTimeByMonth(user.Id, dt);
-                var g = timerRepository.GetTimesByMonth(user.Id, dt);
-                int? c = timerRepository.GetTimeByDay(user.Id, dt);
-                var j = timerRepository.GetTimesByDay(user.Id, dt);
-
-                Console.WriteLine(b);
-                return user;
-            }
-        ).AuthorizeWith("Authenticated");
-
-
-        queries.FieldAsync<ListGraphType<TimerHistoryType>, IReadOnlyCollection<TimerHistory>>(
-            "GetTimerHistories",
-            resolve: ctx =>
-            {
-                return timerRepository.GetTimerHistory();
-            }
-        ).AuthorizeWith("Authenticated");
-    }
+            ).AuthorizeWith("Authenticated");
+        }
     }
 }
