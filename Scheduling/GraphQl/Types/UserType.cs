@@ -13,7 +13,7 @@ namespace Scheduling.GraphQl.Types
        {
             Name = "User";
             Description = "User info";
-
+            Field(user => user.Id).Description("User id.");
             Field(user => user.Name).Description("User name.");
             Field(user => user.Surname).Description("User Surname.");
             Field(user => user.Email).Description("User email.");

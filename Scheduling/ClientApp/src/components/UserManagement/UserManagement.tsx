@@ -63,7 +63,7 @@ export const UserManagement: React.FC<UserManagementProps> = (props) => {
                                             <div key={u.userPermissions.indexOf(up)}>{up.permission.name}</div>)})}
                                         </td>
                                         <td>
-                                            <Link to="/edituser" className="editUserButton">Edit</Link>
+                                            <Link to="/edituser" onClick={() => props.setEditUser(props.users.indexOf(u))} className="editUserButton">Edit</Link>
                                         </td>
                                         <td>
                                             <button

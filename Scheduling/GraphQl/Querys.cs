@@ -19,14 +19,10 @@ namespace Scheduling.GraphQl
                 arguments: null,
                 resolve: context =>
                 {
-                    string email = httpContext.HttpContext.User.Claims.First(claim => claim.Type == "Email").Value.ToString();
-                    User user = dataBaseRepository.Get(email);
+                    var id = int.Parse(httpContext.HttpContext.User.Claims
+                        .First(claim => claim.Type == "Id").Value);
 
-                    /*user.ComputedProps = new ComputedProps();
-                    user.ComputedProps.AddPermission(dataBaseRepository.GetPermissions(user.Id));
-                    user.ComputedProps.Teams = dataBaseRepository.GetUserTeams(user.Id);*/
-
-                    return user;
+                    return dataBaseRepository.Get(id);
                 }
             ).AuthorizeWith("Authenticated");
 
@@ -34,12 +30,8 @@ namespace Scheduling.GraphQl
             Field<ListGraphType<TeamType>>(
                 "GetTeams",
                 arguments: null,
-                resolve: context =>
-                {
-                    string email = httpContext.HttpContext.User.Claims.First(claim => claim.Type == "Email").Value.ToString();
-                    User user = dataBaseRepository.Get(email);
-                    return dataBaseRepository.GetListOfAvailableTeams();
-                },
+                resolve: context => dataBaseRepository.GetListOfAvailableTeams(),
+
                 description: "Get list of available teams."
             ).AuthorizeWith(PermissionName.UserManagement.ToString());
 
@@ -82,10 +74,9 @@ namespace Scheduling.GraphQl
                 arguments: null,
                 resolve: context =>
                 {
-                    string email = httpContext.HttpContext.User.Claims.First(claim => claim.Type == "Email").Value.ToString();
-                    User user = dataBaseRepository.Get(email);
-                    int id = user.Id;
-                    return dataBaseRepository.GetUserRequests(user.Id);
+                    var id = int.Parse(httpContext.HttpContext.User.Claims
+                        .First(claim => claim.Type == "Id").Value);
+                    return dataBaseRepository.GetUserRequests(id);
                 }
             ).AuthorizeWith("Authenticated");
 

@@ -1,4 +1,5 @@
 import { UserData } from "../User/types";
+import { ReceivedUsersDataAction } from "./actions";
 
 export enum PermissionName{
 	UserManagement,
@@ -8,5 +9,6 @@ export enum PermissionName{
 }
 
 export interface UserManagementState {
-	users: Array<UserData>
+	users: Array<UserData>,
+	onEditingUser: UserData,
 }

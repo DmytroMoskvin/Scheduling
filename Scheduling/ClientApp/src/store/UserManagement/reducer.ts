@@ -4,7 +4,8 @@ import { KnownAction } from "./actions";
 import { UserManagementState } from "./types";
 
 const initialState: UserManagementState = {
-    users: []
+    users: [],
+    onEditingUser: null
 };
 
 const reducer: Reducer<UserManagementState> =
@@ -25,24 +26,39 @@ const reducer: Reducer<UserManagementState> =
                 }
                 console.log("red");
                 return {
-                    ...state, 
+                    ...state,
                     users: state.users.concat(action.payload as UserData)
                 };
             }
-                
-            case 'USER_EDITED': {
-                return{
+
+            case 'SET_EDIT_USER': {
+                return {
                     ...state,
-                    users: state.users.map(user => {
-                        if (user!.email !== action.payload!.email) {
-                            return user;
-                        } else {
-                            return action.payload.user;
-                        }
-                    }),
-                };
+                    onEditingUser: state.users[action.payload]
+                }
             }
-                
+
+            case 'USER_EDITED_SUCCESS': {
+                const index = state.users.findIndex(u => u!.id !== state.onEditingUser!.id); //finding index of the item
+                const updatedUsers = [...state.users]; //making a new array
+                updatedUsers[index] = state.onEditingUser//changing value in the new array
+                return {
+                    ...state, //copying the orignal state
+                    users: updatedUsers,
+                    onEditingUser: null //reassingning todos to new array
+                }
+                // return {
+                //     ...state,
+                //     users: [...]
+                //     users: state.users.map(user => {
+                //         if (user!.id === state.onEditingUser!.id) {
+                //             user = state.onEditingUser
+                //         }
+                //     }),
+
+                // };
+            }
+
             case 'USER_DELETED': {
                 return {
                     ...state,

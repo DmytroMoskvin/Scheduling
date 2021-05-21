@@ -2,6 +2,7 @@ export const getUsersData = async (token: string) => {
   const query = JSON.stringify({
     query: `{
       getUsers{
+        id
         name
         surname
         email

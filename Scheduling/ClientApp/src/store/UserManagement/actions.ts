@@ -13,8 +13,9 @@ export interface RequestedCreateUserAction { type: 'REQUESTED_CREATE_USER', payl
 export interface UserDeletedAction { type: 'USER_DELETED', payload: string };
 export interface RequestedDeleteUserAction { type: 'REQUESTED_DELETE_USER', payload: string };
 
-export interface UserEditedAction { type: 'USER_EDITED', payload: { email: string, user: UserData }};
-export interface RequestedEditUserAction { type: 'REQUESTED_EDIT_USER', payload: { email: string, user: UserData }};
+export interface UserEditedAction { type: 'USER_EDITED_SUCCESS' };
+export interface RequestedEditUserAction { type: 'REQUESTED_EDIT_USER', payload: { id: number, email: string, name: string, surname: string, position: string } };
+export interface SetEditUserAction { type: 'SET_EDIT_USER', payload: number };
 
 
 const receivedUsersData = (users: Array<UserData>) => ({ type: 'RECEIVED_USERS', payload: users } as ReceivedUsersDataAction);
@@ -29,8 +30,14 @@ const requestedCreateUser = (user: UserData) => ({ type: 'REQUESTED_CREATE_USER'
 const deleteUser = (email: string) => ({ type: 'USER_DELETED', payload: email } as UserDeletedAction);
 const requestedDeleteUser = (email: string) => ({ type: 'REQUESTED_DELETE_USER', payload: email } as RequestedDeleteUserAction);
 
-const editUser = (email: string, user: UserData) => ({ type: 'USER_EDITED', payload: { email: email, user: user }} as UserEditedAction);
-const requestedEditUser = (email: string, user: UserData) => ({ type: 'REQUESTED_EDIT_USER', payload: { email: email, user: user } } as RequestedEditUserAction);
+const editedUserSuccess = () => ({ type: 'USER_EDITED_SUCCESS' } as UserEditedAction);
+const requestedEditUser = (id: number, email: string, name: string, surname: string, position: string) => (
+    {
+        type: 'REQUESTED_EDIT_USER',
+        payload: { id, email, name, surname, position }
+    } as RequestedEditUserAction);
+
+const setEditUser = (id: number) => ({ type: 'SET_EDIT_USER', payload: id } as SetEditUserAction);
 
 export const actionCreators = {
     receivedUsersData, requestedUsersData,
@@ -39,11 +46,11 @@ export const actionCreators = {
     accessDenied,
     createUser, requestedCreateUser,
     deleteUser, requestedDeleteUser,
-    editUser, requestedEditUser
+    editedUserSuccess, requestedEditUser, setEditUser
 };
 
 export type KnownAction = ReceivedUsersDataAction | CheckPermissions |
     RequestedUsersDataAction | AccessAllowed | AccessDenied |
     UserCreatedAction | RequestedCreateUserAction |
     UserDeletedAction | RequestedDeleteUserAction |
-    UserEditedAction  | RequestedEditUserAction;
+    UserEditedAction | RequestedEditUserAction | SetEditUserAction;

@@ -20,8 +20,8 @@ export interface UserPermission {
 }
 
 export type UserData = { 
-	email: string, 
-	password: string, 
+	id: number,
+	email: string,  
 	name: string,
 	surname: string, 
 	position: string, 

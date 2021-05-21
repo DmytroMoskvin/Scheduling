@@ -6,12 +6,14 @@ import { removeUser } from "../../webAPI/removeUser";
 import { UserData } from "../User/types";
 import { actionCreators } from "./actions";
 import * as actions from "./actions"
+import { editUser } from "../../webAPI/editUser";
 
 export default function* watchUserManagementSagas() {
     yield all([
         takeEvery('REQUESTED_USERS', receiveUsersSaga),
         takeEvery('REQUESTED_CREATE_USER', createUserSaga),
         takeEvery('REQUESTED_DELETE_USER', removeUserSaga),
+        takeEvery('REQUESTED_USER_EDIT', editUserSaga)
     ]);
 }
 
@@ -37,7 +39,7 @@ function* createUserSaga(action: actions.UserCreatedAction) {
         try {
             const response: UserData = yield createUser(
                 action.payload!.name, action.payload!.surname,
-                action.payload!.email, action.payload!.position, action.payload!.password, ["TIME_TRACKING"],
+                action.payload!.email, action.payload!.position, ["TIME_TRACKING"],
                 1, token).then(response => response.data);
             console.log(response);
             yield put(actionCreators.createUser(response));
@@ -56,6 +58,22 @@ function* removeUserSaga(action: actions.UserDeletedAction) {
             const response: UserData = yield removeUser(action.payload, token);
             console.log(response);
             yield put(actionCreators.deleteUser(action.payload));
+        } catch {
+            yield put(actionCreators.accessDenied());
+        }
+    }
+    else
+        yield put(actionCreators.accessDenied());
+}
+
+function* editUserSaga(action: actions.RequestedEditUserAction) {
+    const token = Cookies.get('token');
+    if (token) {
+        try {
+            const response = yield editUser(action.payload.id, action.payload.name,
+                 action.payload.surname, action.payload.email, action.payload.position, token);
+            console.log(response);
+            yield put(actionCreators.editedUserSuccess());
         } catch {
             yield put(actionCreators.accessDenied());
         }

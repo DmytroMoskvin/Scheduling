@@ -34,45 +34,31 @@ namespace Scheduling.GraphQl
                 description: "Returns JWT."
             );
 
-            /*Field<BooleanGraphType>(
+            Field<BooleanGraphType>(
                 "editUser",
                 arguments: new QueryArguments(
-                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "Original email", Description = "User original email"},
+                    new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "Id", Description = "User id"},
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "Name", Description = "User name" },
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "Surname", Description = "User surname" },
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "Email", Description = "User email" },
-                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "Position", Description = "User position" },
-                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "Password", Description = "User password" },
-                    new QueryArgument<NonNullGraphType<ListGraphType<StringGraphType>>> { Name = "Permissions", Description = "User permisions" },
-                    new QueryArgument<ListGraphType<IntGraphType>> { Name = "Teams", Description = "User teams id" }
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "Position", Description = "User position" }
+                    /*new QueryArgument<NonNullGraphType<ListGraphType<PermissionNameEnum>>> { Name = "Permissions", Description = "User permissions" },
+                    new QueryArgument<IntGraphType> { Name = "TeamId", Description = "User team id" }*/
                 ),
                 resolve: context =>
                 {
-                    string originalEmail = context.GetArgument<string>("Original email");
-                    string email = context.GetArgument<string>("Email");
-                    string name = context.GetArgument<string>("Name");
-                    string surname = context.GetArgument<string>("Surname");
-                    string position = context.GetArgument<string>("Position");
-                    string password = context.GetArgument<string>("Password");
-                    List<string> permissions = context.GetArgument<List<string>>("Permissions");
-                    List<int> teamsId = context.GetArgument<List<int>>("Teams");
+                    var id = context.GetArgument<int>("Id");
+                    var email = context.GetArgument<string>("Email");
+                    var name = context.GetArgument<string>("Name");
+                    var surname = context.GetArgument<string>("Surname");
+                    var position = context.GetArgument<string>("Position");
+                    /*var permissions = context.GetArgument<List<PermissionName>>("Permissions");
+                    var teamId = context.GetArgument<int>("TeamId");*/
 
-                    bool isSuccesful = dataBaseRepository.EditUser(originalEmail, name, surname, email, position, password, permissions, teamsId);
+                    return dataBaseRepository.EditUser(id, email, name, surname, position);
 
-                    *//*if(user.Email != null)
-                    {
-                        try
-                        {
-                            emailService.SendEmail(email, password);
-                        }catch 
-                        {
-                            return false;
-                        }
-                    }*//*
-
-                    return true;
                 }
-            );*/
+            );
 
             Field<BooleanGraphType>(
                 "createUser",
@@ -87,28 +73,27 @@ namespace Scheduling.GraphQl
                 ),
                 resolve: context =>
                 {
-                    string email = context.GetArgument<string>("Email");
-                    string name = context.GetArgument<string>("Name");
-                    string surname = context.GetArgument<string>("Surname");
-                    string position = context.GetArgument<string>("Position");
-                    string department = context.GetArgument<string>("Department");
-                    List<PermissionName> permissions = context.GetArgument<List<PermissionName>>("Permissions");
-                    int teamId = context.GetArgument<int>("Team");
+                    var email = context.GetArgument<string>("Email");
+                    var name = context.GetArgument<string>("Name");
+                    var surname = context.GetArgument<string>("Surname");
+                    var position = context.GetArgument<string>("Position");
+                    var department = context.GetArgument<string>("Department");
+                    var permissions = context.GetArgument<List<PermissionName>>("Permissions");
+                    var teamId = context.GetArgument<int>("Team");
 
-                    string password = Guid.NewGuid().ToString();
+                    var password = Guid.NewGuid().ToString();
 
-                    User user = dataBaseRepository.CreateUser(name, surname, email, position, department, password, permissions, teamId);
+                    dataBaseRepository
+                        .CreateUser(name, surname, email, position, department,
+                            password, permissions, teamId);
 
-                    if (user.Email != null)
+                    try
                     {
-                        try
-                        {
-                            emailService.SendEmail(email, password);
-                        }
-                        catch
-                        {
-                            return false;
-                        }
+                        emailService.SendEmail(email, password);
+                    }
+                    catch
+                    {
+                        return false;
                     }
 
                     return true;
@@ -120,7 +105,7 @@ namespace Scheduling.GraphQl
                 arguments: new QueryArguments(new QueryArgument<NonNullGraphType<StringGraphType>>{ Name = "Email", Description = "User email" }),
                 resolve: context =>
                 {
-                    return dataBaseRepository.RemoveUser(context.GetArgument<string>("Email"));
+                    return dataBaseRepository.RemoveUser(context.GetArgument<int>("Id"));
                 }
             );
 

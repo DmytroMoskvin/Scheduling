@@ -31,7 +31,7 @@ namespace Scheduling.Services
 
         public string Authenticate(string email, string password)
         {
-            User user = dataBaseRepository.Get(email);
+            var user = dataBaseRepository.Get(email);
 
             if (user == null || user.Password != Hashing.GetHashString(password + user.Salt)) {
                 return ""; 

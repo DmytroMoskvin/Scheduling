@@ -11,14 +11,26 @@ namespace Scheduling.Domain
     public partial class DataBaseRepository
     {
         public IEnumerable<User> Get() =>
-            Context.Users.Include(u => u.UserPermissions)
-                .ThenInclude(up => up.Permission).Include(u => u.Team).ToList();
+            Context.Users
+                .Include(u => u.UserPermissions)
+                .ThenInclude(up => up.Permission)
+                .Include(u => u.Team).ToList();
+
+        public User Get(int id)
+        {
+            return Context.Users
+                .Include(u => u.UserPermissions)
+                .ThenInclude(up => up.Permission)
+                .Include(u => u.Team)
+                .FirstOrDefault(us => us.Id == id);
+        }
 
         public User Get(string email)
         {
             return Context.Users
                 .Include(u => u.UserPermissions)
-                .ThenInclude(up => up.Permission).Include(u => u.Team)
+                .ThenInclude(up => up.Permission)
+                .Include(u => u.Team)
                 .FirstOrDefault(us => us.Email == email);
         }
 
@@ -27,20 +39,22 @@ namespace Scheduling.Domain
             string position, string department, string password, List<PermissionName> permissionNames, int teamId)
         {
             //string userId = Guid.NewGuid().ToString();
-            if (Context.Users.FirstOrDefault(u => u.Email == email) != null)
-            {
-                return null;
-            }
-
-            string salt = Guid.NewGuid().ToString();
-            List<Permission> permissions = new List<Permission>(Context.Permissions.Where(p => permissionNames.Contains(p.Name)));
+            if (Context.Users.FirstOrDefault(u => u.Email == email) != null) 
+                throw new Exception("Email has been already used.");
+            
+            var salt = Guid.NewGuid().ToString();
+            var permissions = new List<Permission>(
+                Context.Permissions
+                    .Where(p => permissionNames.Contains(p.Name))
+                );
             /* foreach (var permission in permissions)
              {
                  userPermissions.Add(new UserPermission {Permission = permission});
              }*/
-            var userPermissions = new List<UserPermission>();
-            permissions.ForEach(p => userPermissions.Add(new UserPermission(){Permission = p}));
-            User user = new User()
+            var userPermissions = permissions
+                .ConvertAll(p => new UserPermission() {Permission = p});
+          
+            var user = new User()
             {
                 Email = email,
                 Password = Hashing.GetHashString(password + salt),
@@ -53,70 +67,32 @@ namespace Scheduling.Domain
                 UserPermissions = userPermissions
             };
 
-
-
             Context.Users.Add(user);
             Context.SaveChangesAsync();
-
-            /* User newUser = Context.Users.Single(user => user.Email == email);
-
-             //foreach (string perm in permission)
-             //{
-             //    CreateUserPermission(newUser.Id, perm);
-             //}
-
-             //if (teams == null)
-             //    return newUser;
-
-             foreach (int teamId in teams)
-             {
-                 AddUserToTeam(user.Id, teamId);
-             }*/
 
             return user;
         }
 
 
-        public bool RemoveUser(string email)
+        public bool RemoveUser(int id)
         {
-            User user = Context.Users.FirstOrDefault(user => user.Email == email);
+            var user = Context.Users.FirstOrDefault(user => user.Id == id);
             if (user == null)
                 return false;
-            //RemoveUserPermissions(user.Id);
-            /*List<UserTeams> teams = Context.userTeams.Where(team => team.UserId == user.Id).ToList();
-            foreach (UserTeams team in teams)
-            {
-                RemoveUserFromTeam(team.UserId, team.TeamId);
-            }*/
+           
             Context.Users.Remove(user);
             Context.SaveChangesAsync();
             return true;
         }
-        public bool EditUser(User user)
+        public bool EditUser(int id, string email, string name, string surname,
+            string position/*, List<PermissionName> permissionNames, int teamId*/)
         {
-            if (Context.Users.Find(user.Id) == null)
-                return false;
-
-            if (!RemoveUser(user.Email))
-                return false;
-
-            /*if (!RemoveUser(user.Email))
-                return false;*/
-            /* List<Team> teams = GetUserTeams(user.Id);
-
-             //RemoveUserPermissions(user.Id);
-
-             foreach (Permission permmision in user.ComputedProps.Permissions)
-             {
-                 CreateUserPermission(user.Id, permmision.Name);
-             }
-
-             foreach (Team team in teams)
-             {
-                 AddUserToTeam(user.Id, team.Id);
-             }*/
+            var user = Context.Users.Single(it => it.Id == id);
+            user.Email = email;
+            user.Name = name;
+            user.Surname = surname;
+            user.Position = position;
             Context.Users.Update(user);
-            //Context.Users.Add(user);
             Context.SaveChanges();
             return true;
         }

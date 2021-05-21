@@ -1,9 +1,14 @@
-﻿export const createUser = async (originalEmail: string, name: string, surname: string, email: string, position: string,
-    password: string, permissions: string[], teams: number[], token: string) => {
+﻿export const editUser = async (id: number, name: string, surname: string, email: string, position: string, token: string) => {
     const query = JSON.stringify({
         query: `mutation {
-            editUser (originalemail: "${originalEmail}" name: "${name}" surname: "${surname}" email: "${email}" position: "${position}" password: "${password}" permissions: "${permissions}" teams: [${teams}])
-		}`
+            editUser(
+                id: ${id}
+                name: ${name}
+                surname: ${surname}
+                email: ${email}
+                position: ${position}
+              )
+            }`
     });
 
     return fetch('/graphql', {
