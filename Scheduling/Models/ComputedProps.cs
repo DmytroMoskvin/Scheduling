@@ -11,7 +11,7 @@ namespace Scheduling.Models
         public List<Team> Teams { get; set; }
         public List<TimerHistory> TimerHistories { get; set; }
         public List<VacationRequest> VacationRequests { get; set; }
-
+        public int? TotalWorkTime { get; set; }
         public ComputedProps()
         {
 

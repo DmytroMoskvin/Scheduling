@@ -196,7 +196,7 @@ namespace Scheduling.Domain
                         )
                         ;
 
-            return dbRecords.Select(it => (EF.Functions.DateDiffMinute(it.StartTime, it.FinishTime))).Sum();
+            return dbRecords.Select(it => (EF.Functions.DateDiffMinute(it.StartTime, it.FinishTime))).Sum()/ 60;
 
         }
         public List<TimerHistory> GetTimesByMonth(int userId, DateTime monthDate)

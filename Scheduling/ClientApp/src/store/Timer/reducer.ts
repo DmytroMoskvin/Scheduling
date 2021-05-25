@@ -6,7 +6,7 @@ import { TimerHistoryState } from "./types";
 const reducer: Reducer<TimerHistoryState> = (state: TimerHistoryState | undefined, incomingAction: Action): TimerHistoryState => {
 	if (state === undefined) {
 		const token = Cookies.get('token');
-		console.log(token);
+		
 		if(token)
 			return {
 				logged: true, token: token, timerHistory: [], date: new Date(),

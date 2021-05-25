@@ -9,6 +9,7 @@ import { TimerType } from '../../store/Timer/types';
 import '../../style/RequestsTable.css';
 import { deleteTimer, getUserTimerData } from '../../webAPI/timer';
 import Popup from './Popup';
+import { TotalWorkTime } from '../TotalWorkTime/TotalWorkTime';
 
 interface IProps {
     timerHistory: Array<TimerType>;
@@ -198,7 +199,7 @@ class TimerHistoryTable extends React.Component<IProps, IState> {
                             this.togglePopup()
                             this.changePopUpButtonText("Add")
                         }}>Add new item</button>
-
+                        <TotalWorkTime />
                         {this.state.showPopup ?
                             <Popup
                                 closePopup={this.togglePopup.bind(this)}

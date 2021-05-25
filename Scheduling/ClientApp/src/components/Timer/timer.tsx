@@ -28,8 +28,6 @@ class Timer extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
 
-        console.log(props);
-
         var timer = new EasyTimer.Timer();
 
         this.state = {

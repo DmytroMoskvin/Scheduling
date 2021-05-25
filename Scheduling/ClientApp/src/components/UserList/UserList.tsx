@@ -8,7 +8,7 @@ type UserListProps = {
 }
 
 const UserList: React.FunctionComponent<UserListProps> = (props: UserListProps) => {
-    console.log(props);
+    
 
     return (
         <div className="user-list">

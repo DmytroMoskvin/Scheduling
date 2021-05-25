@@ -5,7 +5,8 @@ export interface UserState {
 }
 
 export interface ComputedProps {
-	permissions: Array<string>
+	permissions: Array<string>,
+	totalWorkTime: number | null
 }
 
 export type UserData = { 

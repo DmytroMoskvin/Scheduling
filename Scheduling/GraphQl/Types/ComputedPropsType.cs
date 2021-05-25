@@ -16,6 +16,7 @@ namespace Scheduling.GraphQl.Types
             Field<ListGraphType<TeamType>>(nameof(ComputedProps.Teams));
             Field<ListGraphType<TimerHistoryType>>(nameof(ComputedProps.TimerHistories));
             Field<ListGraphType<VacationRequestType>>(nameof(ComputedProps.VacationRequests));
+            Field<IntGraphType>(nameof(ComputedProps.TotalWorkTime));
         }
     }
 }
