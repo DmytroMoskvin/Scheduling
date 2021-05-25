@@ -12,7 +12,7 @@ namespace Scheduling.GraphQl
 {
     public class Querys : ObjectGraphType
     {
-        public Querys(IHttpContextAccessor httpContext, DataBaseRepository dataBaseRepository, TimerRepository timerRepository, IServiceProvider serviceProvider)
+        public Querys(IHttpContextAccessor httpContext, DataBaseRepository dataBaseRepository, IServiceProvider serviceProvider)
         {
 
             Name = "Query";
@@ -32,28 +32,16 @@ namespace Scheduling.GraphQl
 
 
                     System.DateTime? selectedMonth = context.GetArgument<System.DateTime?>("CalendarDay");
-<<<<<<< HEAD
-
-                    
-=======
                     DateTime dt;
->>>>>>> 0d85fe4dde3033c66fa1ba6246cf24c6a1c3c12d
                     if (selectedMonth.HasValue)
                     {
                         var a = timerRepository.GetTimerHistory(user.Id, selectedMonth);
 
                         user.ComputedProps.AddTimerHistory(new List<TimerHistory>(a.OfType<TimerHistory>()));
-<<<<<<< HEAD
                     }
                     else
                     {
                         user.ComputedProps.AddTimerHistory(dataBaseRepository.GetTimerHistory(user.Id));
-                    }
-
-
-                    user.ComputedProps.TotalWorkTime = dataBaseRepository.GetTimeByMonth(user.Id, DateTime.Now); ;
-
-=======
 
                         dt = new DateTime(selectedMonth.Value.Year, selectedMonth.Value.Month, selectedMonth.Value.Day, selectedMonth.Value.Hour, 0, 0);
                     }
@@ -69,6 +57,7 @@ namespace Scheduling.GraphQl
 
                     Console.WriteLine(b);
 >>>>>>> 0d85fe4dde3033c66fa1ba6246cf24c6a1c3c12d
+                    user.ComputedProps.TotalWorkTime = dataBaseRepository.GetTimeByMonth(user.Id, DateTime.Now); ;
                     return user;
                 }
             ).AuthorizeWith("Authenticated");

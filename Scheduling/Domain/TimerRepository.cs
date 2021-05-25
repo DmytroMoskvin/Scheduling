@@ -7,14 +7,10 @@ using System.Threading.Tasks;
 
 namespace Scheduling.Domain
 {
-    public class TimerRepository
+    public partial class DataBaseRepository
     {
         private readonly DBContext dbContext;
 
-        public TimerRepository(DBContext dbContext)
-        {
-            this.dbContext = dbContext;
-        }
         public async Task<IReadOnlyCollection<TimerHistory>> GetTimerHistory()
         {
             return await dbContext.TimerHistories.AsNoTracking().ToListAsync();
