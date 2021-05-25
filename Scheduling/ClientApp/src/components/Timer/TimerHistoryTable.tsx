@@ -7,9 +7,9 @@ import { ApplicationState } from '../../store/configureStore';
 import { actionCreators } from '../../store/Timer/actions';
 import { TimerType } from '../../store/Timer/types';
 import '../../style/RequestsTable.css';
-import { deleteTimer, getUserTimerData } from '../../webAPI/timer';
-import { TotalWorkTime } from '../TotalWorkTime/TotalWorkTime';
+import { deleteTimer, getUserTimerData } from '../../webAPI/timer'; 
 import Popup from './Popup';
+import { TotalWorkTime } from '../TotalWorkTime/TotalWorkTime';
 
 interface IProps {
     timerHistory: Array<TimerType>;

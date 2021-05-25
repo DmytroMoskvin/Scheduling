@@ -11,11 +11,12 @@ export const getUserData = async (token: string) => {
 				computedProps {
 					permissions
 					timerHistories
-						  {
-							id
-							startTime
-							finishTime
-						  }
+					{
+						id
+						startTime
+						finishTime
+					},
+					totalWorkTime
 				}
 			}
 		}`

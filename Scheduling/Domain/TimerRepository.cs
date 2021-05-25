@@ -7,10 +7,7 @@ using System.Threading.Tasks;
 
 namespace Scheduling.Domain
 {
-    public partial class DataBaseRepository 
-    {
-
-     
+    public partial class DataBaseRepository { 
         public async Task<IReadOnlyCollection<TimerHistory>> GetTimerHistory()
         {
             return await Context.TimerHistories.AsNoTracking().ToListAsync();
@@ -192,7 +189,7 @@ namespace Scheduling.Domain
                         )
                         ;
 
-            return dbRecords.Select(it => (EF.Functions.DateDiffMinute(it.StartTime, it.FinishTime))).Sum();
+            return dbRecords.Select(it => (EF.Functions.DateDiffMinute(it.StartTime, it.FinishTime))).Sum()/ 60;
 
         }
         public List<TimerHistory> GetTimesByMonth(int userId, DateTime monthDate)
