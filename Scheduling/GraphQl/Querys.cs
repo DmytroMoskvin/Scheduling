@@ -38,12 +38,13 @@ namespace Scheduling.GraphQl
                         var a = dataBaseRepository.GetTimerHistory(user.Id, selectedMonth);
 
                         user.ComputedProps.AddTimerHistory(new List<TimerHistory>(a.OfType<TimerHistory>()));
+                        dt = new DateTime(selectedMonth.Value.Year, selectedMonth.Value.Month, selectedMonth.Value.Day, selectedMonth.Value.Hour, 0, 0);
                     }
                     else
                     {
                         user.ComputedProps.AddTimerHistory(dataBaseRepository.GetTimerHistory(user.Id));
 
-                        dt = new DateTime(selectedMonth.Value.Year, selectedMonth.Value.Month, selectedMonth.Value.Day, selectedMonth.Value.Hour, 0, 0);
+                        dt = DateTime.Now;
                     }
 
                     int? b = dataBaseRepository.GetTimeByMonth(user.Id, dt);
