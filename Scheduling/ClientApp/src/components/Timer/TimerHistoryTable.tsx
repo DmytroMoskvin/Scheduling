@@ -8,6 +8,7 @@ import { actionCreators } from '../../store/Timer/actions';
 import { TimerType } from '../../store/Timer/types';
 import '../../style/RequestsTable.css';
 import { deleteTimer, getUserTimerData } from '../../webAPI/timer';
+import { TotalWorkTime } from '../TotalWorkTime/TotalWorkTime';
 import Popup from './Popup';
 
 interface IProps {
@@ -126,7 +127,7 @@ class TimerHistoryTable extends React.Component<IProps, IState> {
 
         console.log(a);
 
-        //var b = [... new Set(array.map(function (item) { return new Date(item["startTime"]).toLocaleDateString(); }))]; // унікальні стартові дати
+        //var b = [... new Set(array.map(function (item) { return new Date(item["startTime"]).toLocaleDateString(); }))]; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
 
 
          return (
@@ -198,7 +199,7 @@ class TimerHistoryTable extends React.Component<IProps, IState> {
                             this.togglePopup()
                             this.changePopUpButtonText("Add")
                         }}>Add new item</button>
-
+                        <TotalWorkTime />
                         {this.state.showPopup ?
                             <Popup
                                 closePopup={this.togglePopup.bind(this)}

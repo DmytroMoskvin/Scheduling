@@ -19,7 +19,6 @@ namespace Scheduling.GraphQl
         {
             var httpContext = serviceProvider.GetRequiredService<IHttpContextAccessor>();
             var dataBaseRepository = serviceProvider.GetRequiredService<DataBaseRepository>();
-            var timerRepository = serviceProvider.GetRequiredService<TimerRepository>();
 
             mutations.Field<TimerHistoryType>(
                 "addTimerStartValue",
@@ -30,7 +29,7 @@ namespace Scheduling.GraphQl
 
                     DateTime startTime = DateTime.UtcNow;
 
-                    return timerRepository.AddTimerStartValue(startTime, user.Id);
+                    return dataBaseRepository.AddTimerStartValue(startTime, user.Id);
                 },
                 description: "Add start time"
 
@@ -51,7 +50,7 @@ namespace Scheduling.GraphQl
                         Nullable<DateTime> startTime = context.GetArgument<Nullable<DateTime>>("StartTime", defaultValue: null);
                         Nullable<DateTime> finishTime = context.GetArgument<Nullable<DateTime>>("FinishTime", defaultValue: null);
 
-                        return timerRepository.AddTimerValue(startTime, finishTime, user.Id);
+                        return dataBaseRepository.AddTimerValue(startTime, finishTime, user.Id);
                     },
                     description: "Add start time"
 
@@ -78,7 +77,7 @@ namespace Scheduling.GraphQl
 
                     int id = context.GetArgument<int>("id");
 
-                    return timerRepository.EditTimerValue(startTime, finishTime, user.Id, id);
+                    return dataBaseRepository.EditTimerValue(startTime, finishTime, user.Id, id);
                 },
                 description: "Update value: added finish time"
             ).AuthorizeWith("Authenticated");
@@ -93,7 +92,7 @@ namespace Scheduling.GraphQl
 
                     User user = dataBaseRepository.Get(email);
 
-                    return timerRepository.AddTimerFinishValue(user.Id);
+                    return dataBaseRepository.AddTimerFinishValue(user.Id);
                 },
                 description: "Update value: added finish time"
             ).AuthorizeWith("Authenticated");
@@ -109,7 +108,7 @@ namespace Scheduling.GraphQl
 
                     int id = context.GetArgument<int>("id");
 
-                    return timerRepository.DeteleTimerValue(id);
+                    return dataBaseRepository.DeteleTimerValue(id);
                 },
                 description: "Update value: added finish time"
             );

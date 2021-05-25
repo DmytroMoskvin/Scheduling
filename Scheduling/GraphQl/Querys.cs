@@ -12,7 +12,7 @@ namespace Scheduling.GraphQl
 {
     public class Querys : ObjectGraphType
     {
-        public Querys(IHttpContextAccessor httpContext, DataBaseRepository dataBaseRepository, TimerRepository timerRepository, IServiceProvider serviceProvider)
+        public Querys(IHttpContextAccessor httpContext, DataBaseRepository dataBaseRepository, IServiceProvider serviceProvider)
         {
 
             Name = "Query";
@@ -35,7 +35,7 @@ namespace Scheduling.GraphQl
                     DateTime dt;
                     if (selectedMonth.HasValue)
                     {
-                        var a = timerRepository.GetTimerHistory(user.Id, selectedMonth);
+                        var a = dataBaseRepository.GetTimerHistory(user.Id, selectedMonth);
 
                         user.ComputedProps.AddTimerHistory(new List<TimerHistory>(a.OfType<TimerHistory>()));
 
@@ -43,15 +43,15 @@ namespace Scheduling.GraphQl
                     }
                     else
                     {
-                        user.ComputedProps.AddTimerHistory(timerRepository.GetTimerHistory(user.Id));
+                        user.ComputedProps.AddTimerHistory(dataBaseRepository.GetTimerHistory(user.Id));
                         dt = DateTime.Now;
                     }
-                    int? b = timerRepository.GetTimeByMonth(user.Id, dt);
-                    var g = timerRepository.GetTimesByMonth(user.Id, dt);
-                    int? c = timerRepository.GetTimeByDay(user.Id, dt);
-                    var j = timerRepository.GetTimesByDay(user.Id, dt);
+                    int? b = dataBaseRepository.GetTimeByMonth(user.Id, dt);
+                    var g = dataBaseRepository.GetTimesByMonth(user.Id, dt);
+                    int? c = dataBaseRepository.GetTimeByDay(user.Id, dt);
+                    var j = dataBaseRepository.GetTimesByDay(user.Id, dt);
 
-                    Console.WriteLine(b);
+                    user.ComputedProps.TotalWorkTime = dataBaseRepository.GetTimeByMonth(user.Id, DateTime.Now);
                     return user;
                 }
             ).AuthorizeWith("Authenticated");
@@ -161,7 +161,6 @@ namespace Scheduling.GraphQl
                 }
             ).AuthorizeWith("Authenticated");
 
-            new TimerQuery(this, serviceProvider);
         }
     }
 }

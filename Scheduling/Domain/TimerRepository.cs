@@ -7,17 +7,13 @@ using System.Threading.Tasks;
 
 namespace Scheduling.Domain
 {
-    public class TimerRepository
+    public partial class DataBaseRepository 
     {
-        private readonly DBContext dbContext;
 
-        public TimerRepository(DBContext dbContext)
-        {
-            this.dbContext = dbContext;
-        }
+     
         public async Task<IReadOnlyCollection<TimerHistory>> GetTimerHistory()
         {
-            return await dbContext.TimerHistories.AsNoTracking().ToListAsync();
+            return await Context.TimerHistories.AsNoTracking().ToListAsync();
         }
 
         //public List<TimerHistory> GetTimerHistory(int userId)
@@ -29,7 +25,7 @@ namespace Scheduling.Domain
 
         public List<TimerHistory> GetTimerHistory(int userId, DateTime? monthFilter = null)
         {
-            var userTimerHistories = dbContext.TimerHistories.Where(team => team.UserId == userId);
+            var userTimerHistories = Context.TimerHistories.Where(team => team.UserId == userId);
             if (monthFilter.HasValue)
             {
                 userTimerHistories = userTimerHistories
@@ -85,7 +81,7 @@ namespace Scheduling.Domain
 
         public TimerHistory AddTimerValue(DateTime? startTime, DateTime? finishTime, int userId, bool isModified = true)
         {
-            TimerHistory? dbRecordTimerValue = dbContext.TimerHistories.SingleOrDefault(timeH => timeH.UserId == userId && timeH.FinishTime == null);
+            TimerHistory? dbRecordTimerValue = Context.TimerHistories.SingleOrDefault(timeH => timeH.UserId == userId && timeH.FinishTime == null);
 
             if (dbRecordTimerValue != null)
             {
@@ -101,15 +97,15 @@ namespace Scheduling.Domain
                 IsModified = isModified,
             };
 
-            dbContext.Add(timerValues);
+            Context.Add(timerValues);
 
-            dbContext.SaveChanges();
+            Context.SaveChanges();
 
             return timerValues;
         }
         public TimerHistory EditTimerValue(DateTime startTime, DateTime finishTime, int userId, int recordId)
         {
-            var dbRecord = dbContext.TimerHistories.Single(it => it.Id == recordId && it.UserId == userId);
+            var dbRecord = Context.TimerHistories.Single(it => it.Id == recordId && it.UserId == userId);
 
             dbRecord.IsModified = true;
 
@@ -117,7 +113,7 @@ namespace Scheduling.Domain
 
             dbRecord.StartTime = startTime;
 
-            dbContext.SaveChanges();
+            Context.SaveChanges();
 
             return dbRecord;
         }
@@ -126,18 +122,18 @@ namespace Scheduling.Domain
             TimerHistory dbRecordTimerValue;
             try
             {
-                dbRecordTimerValue = dbContext.TimerHistories.Single(timeH => timeH.UserId == userId && timeH.FinishTime == null);
+                dbRecordTimerValue = Context.TimerHistories.Single(timeH => timeH.UserId == userId && timeH.FinishTime == null);
             }
             catch (InvalidOperationException)
             {
-                dbRecordTimerValue = dbContext.TimerHistories.Where(timeH => timeH.UserId == userId).OrderBy(timeH => timeH.FinishTime).Last();
+                dbRecordTimerValue = Context.TimerHistories.Where(timeH => timeH.UserId == userId).OrderBy(timeH => timeH.FinishTime).Last();
                 return dbRecordTimerValue;
             }
             //dbRecordTimerValue.FinishTime = finishTime;
 
             dbRecordTimerValue.FinishTime = DateTime.UtcNow;
 
-            dbContext.SaveChanges();
+            Context.SaveChanges();
 
             return dbRecordTimerValue;
         }
@@ -175,20 +171,20 @@ namespace Scheduling.Domain
         //}
         public TimerHistory DeteleTimerValue(int id)
         {
-            var dbRecord = dbContext.TimerHistories.Single(timerHistory => timerHistory.Id == id);
+            var dbRecord = Context.TimerHistories.Single(timerHistory => timerHistory.Id == id);
 
-            dbContext.Remove(dbRecord);
+            Context.Remove(dbRecord);
 
             //Context.TimerHistories.Single(timerHistory => timerHistory.Id == id).FinishTime = finishtTime;
 
             //Context.Update(TimerValues);
-            dbContext.SaveChanges();
+            Context.SaveChanges();
 
             return dbRecord;
         }
         public int? GetTimeByMonth(int userId, DateTime monthDate)
         {
-            var dbRecords = dbContext.TimerHistories
+            var dbRecords = Context.TimerHistories
                         .Where(it => it.UserId == userId 
                         && it.StartTime.Value.Month == monthDate.Month
                         && it.StartTime.Value.Year == monthDate.Year
@@ -201,7 +197,7 @@ namespace Scheduling.Domain
         }
         public List<TimerHistory> GetTimesByMonth(int userId, DateTime monthDate)
         {
-            var dbRecords = dbContext.TimerHistories
+            var dbRecords = Context.TimerHistories
                         .Where(it => it.UserId == userId 
                         && it.StartTime.Value.Month == monthDate.Month
                         && it.StartTime.Value.Year == monthDate.Year
@@ -213,7 +209,7 @@ namespace Scheduling.Domain
         }
         public int? GetTimeByDay(int userId, DateTime Day)
         {
-            var dbRecords = dbContext.TimerHistories
+            var dbRecords = Context.TimerHistories
                         .Where(it => it.UserId == userId
                         && it.StartTime.Value.Day == Day.Day
                         && it.StartTime.Value.Month == Day.Month
@@ -222,11 +218,11 @@ namespace Scheduling.Domain
                         )
                         ;
 
-            return dbRecords.Select(it => (EF.Functions.DateDiffMinute(it.StartTime, it.FinishTime))).Sum();
+            return dbRecords.Select(it => (EF.Functions.DateDiffMinute(it.StartTime, it.FinishTime))).Sum() / 60;
         }
         public List<TimerHistory> GetTimesByDay(int userId, DateTime Day)
         {
-            var dbRecords = dbContext.TimerHistories
+            var dbRecords = Context.TimerHistories
                         .Where(it => it.UserId == userId
                         && it.StartTime.Value.Day == Day.Day
                         && it.StartTime.Value.Month == Day.Month
