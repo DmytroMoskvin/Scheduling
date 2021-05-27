@@ -57,8 +57,8 @@ namespace Scheduling.Domain
                 Id = 1321315,
                 Email = "admin3@gmail.com",
                 Password = "5dj3bhWCfxuHmONkBdvFrA==",
-                Name = "Arkadiy",
-                Surname = "Cisterna",
+                Name = "Tolik",
+                Surname = "Balkon",
                 Position = "Pochti nachalstvo",
                 Department = "Nachalstvo",
                 Salt = "91ed90df-3289-4fdf-a927-024b24bea8b7",
@@ -69,8 +69,8 @@ namespace Scheduling.Domain
                 Id = 13213133,
                 Email = "user@gmail.com",
                 Password = "u9DAYiHl+liIqRMvuuciBA==",
-                Name = "User",
-                Surname = "Userov",
+                Name = "Yarik",
+                Surname = "Obichniy",
                 Position = "lol",
                 Department = "Memes",
                 Salt = "f0e30e73-fac3-4182-8641-ecba862fed69",
@@ -171,54 +171,63 @@ namespace Scheduling.Domain
 
             modelBuilder.Entity<VacationRequest>().HasData(new VacationRequest
             {
-                Id = 1,
+                Id = 15001,
                 UserId = 13213133,
+                UserName = "Yarik Obichniy",
                 StartDate = new DateTime(2021, 04, 20),
                 FinishDate = new DateTime(2021, 05, 20),
-                Comment = "I want to see a bober."
+                Comment = "I want to see a bober.",
+                Status = VacationRequest.StatusType.Declined
             });
 
             modelBuilder.Entity<VacationRequest>().HasData(new VacationRequest
             {
-                Id = 2,
+                Id = 15002,
                 UserId = 13213133,
+                UserName = "Yarik Obichniy",
                 StartDate = new DateTime(2021, 04, 22),
                 FinishDate = new DateTime(2021, 04, 28),
-                Comment = "I really want to see a bober."
+                Comment = "I really want to see a bober.",
+                Status = VacationRequest.StatusType.PendingConsideration
             });
 
             modelBuilder.Entity<VacationRequest>().HasData(new VacationRequest
             {
-                Id = 3,
+                Id = 15003,
                 UserId = 13213133,
+                UserName = "Yarik Obichniy",
                 StartDate = new DateTime(2021, 04, 25),
                 FinishDate = new DateTime(2021, 04, 29),
-                Comment = "Please, it`s my dream to see a bober."
+                Comment = "Please, it`s my dream to see a bober.",
+                Status = VacationRequest.StatusType.PendingConsideration
             });
 
             modelBuilder.Entity<VacationResponse>().HasData(new VacationResponse
             {
-                Id = 1,
-                RequestId = 1,
+                Id = 6001,
+                RequestId = 15001,
                 ResponderId = 1321313,
+                ResponderName = "Denis Pensiya",
                 Response = true,
                 Comment = "No problem. Let`s go!"
             });
 
             modelBuilder.Entity<VacationResponse>().HasData(new VacationResponse
             {
-                Id = 2,
-                RequestId = 1,
+                Id = 6002,
+                RequestId = 15001,
                 ResponderId = 1321314,
+                ResponderName = "Arkadiy Cisterna",
                 Response = true,
                 Comment = "Oke. Goodbye :((((((((("
             });
 
             modelBuilder.Entity<VacationResponse>().HasData(new VacationResponse
             {
-                Id = 3,
-                RequestId = 1,
+                Id = 6003,
+                RequestId = 15001,
                 ResponderId = 1321315,
+                ResponderName = "Tolik Balkon",
                 Response = false,
                 Comment = "Nea. Sidi tut!"
             });

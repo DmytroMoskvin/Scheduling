@@ -12,17 +12,16 @@ namespace Scheduling.Models
 
         public int UserId { get; set; }
 
+        public string UserName { get; set; }
+
         public DateTime StartDate { get; set; }
 
         public DateTime FinishDate { get; set; }
 
         public string Comment { get; set; }
 
-        [NotMapped]
         public StatusType Status { get; set; }
 
-        [NotMapped]
-        public string UserName { get; set; }
 
         public enum StatusType
         {
