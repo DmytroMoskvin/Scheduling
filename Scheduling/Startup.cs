@@ -14,6 +14,7 @@ using Scheduling.GraphQl.Types;
 using Scheduling.Services;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
+using Scheduling.GraphQl.Types.Responses;
 using Scheduling.Models;
 
 namespace Scheduling
@@ -88,6 +89,7 @@ namespace Scheduling
             services.AddScoped<VacationRequestType>();
             services.AddScoped<PermissionNameEnum>();
             services.AddScoped<UserPermissionType>();
+            services.AddScoped<GraphQlResponseType>();
 
             services.AddScoped<ISchema, GraphSchema>();
 

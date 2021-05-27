@@ -5,7 +5,13 @@ import { UserManagementState } from "./types";
 
 const initialState: UserManagementState = {
     users: [],
-    onEditingUser: null
+    userEdit: {
+        message: {
+            editedSuccessfuly: undefined,
+            text: ''
+        },
+        onEditingUser: null
+    }
 };
 
 const reducer: Reducer<UserManagementState> =
@@ -34,29 +40,24 @@ const reducer: Reducer<UserManagementState> =
             case 'SET_EDIT_USER': {
                 return {
                     ...state,
-                    onEditingUser: state.users[action.payload]
+                    userEdit: {
+                        ...state.userEdit,
+                        onEditingUser: state.users[action.payload],
+                    },
                 }
             }
 
             case 'USER_EDITED_SUCCESS': {
-                const index = state.users.findIndex(u => u!.id !== state.onEditingUser!.id); //finding index of the item
-                const updatedUsers = [...state.users]; //making a new array
-                updatedUsers[index] = state.onEditingUser//changing value in the new array
                 return {
-                    ...state, //copying the orignal state
-                    users: updatedUsers,
-                    onEditingUser: null //reassingning todos to new array
+                    ...state,
+                    userEdit: {
+                        ...state.userEdit,
+                       message: {
+                           editedSuccessfuly: true,
+                           text: "Success! User is edited."
+                       }
+                    },
                 }
-                // return {
-                //     ...state,
-                //     users: [...]
-                //     users: state.users.map(user => {
-                //         if (user!.id === state.onEditingUser!.id) {
-                //             user = state.onEditingUser
-                //         }
-                //     }),
-
-                // };
             }
 
             case 'USER_DELETED': {

@@ -3,11 +3,14 @@
         query: `mutation {
             editUser(
                 id: ${id}
-                name: ${name}
-                surname: ${surname}
-                email: ${email}
-                position: ${position}
-              )
+                name: "${name}"
+                surname: "${surname}"
+                email: "${email}"
+                position: "${position}"
+              ) {
+                  success
+                  message
+              }
             }`
     });
 

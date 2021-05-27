@@ -7,13 +7,14 @@ import { UserData } from "../User/types";
 import { actionCreators } from "./actions";
 import * as actions from "./actions"
 import { editUser } from "../../webAPI/editUser";
+import { EditUserResponse } from "./types";
 
 export default function* watchUserManagementSagas() {
     yield all([
         takeEvery('REQUESTED_USERS', receiveUsersSaga),
         takeEvery('REQUESTED_CREATE_USER', createUserSaga),
         takeEvery('REQUESTED_DELETE_USER', removeUserSaga),
-        takeEvery('REQUESTED_USER_EDIT', editUserSaga)
+        takeEvery('REQUESTED_EDIT_USER', editUserSaga)
     ]);
 }
 
@@ -70,8 +71,8 @@ function* editUserSaga(action: actions.RequestedEditUserAction) {
     const token = Cookies.get('token');
     if (token) {
         try {
-            const response = yield editUser(action.payload.id, action.payload.name,
-                 action.payload.surname, action.payload.email, action.payload.position, token);
+            const response: EditUserResponse = yield editUser(action.payload.id, action.payload.name,
+                action.payload.surname, action.payload.email, action.payload.position, token);
             console.log(response);
             yield put(actionCreators.editedUserSuccess());
         } catch {

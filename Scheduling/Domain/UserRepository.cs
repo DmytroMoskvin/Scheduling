@@ -14,7 +14,8 @@ namespace Scheduling.Domain
             Context.Users
                 .Include(u => u.UserPermissions)
                 .ThenInclude(up => up.Permission)
-                .Include(u => u.Team).ToList();
+                .Include(u => u.Team)
+                .ToList();
 
         public User Get(int id)
         {
@@ -38,7 +39,6 @@ namespace Scheduling.Domain
         public User CreateUser(string name, string surname, string email,
             string position, string department, string password, List<PermissionName> permissionNames, int teamId)
         {
-            //string userId = Guid.NewGuid().ToString();
             if (Context.Users.FirstOrDefault(u => u.Email == email) != null) 
                 throw new Exception("Email has been already used.");
             
@@ -47,10 +47,7 @@ namespace Scheduling.Domain
                 Context.Permissions
                     .Where(p => permissionNames.Contains(p.Name))
                 );
-            /* foreach (var permission in permissions)
-             {
-                 userPermissions.Add(new UserPermission {Permission = permission});
-             }*/
+           
             var userPermissions = permissions
                 .ConvertAll(p => new UserPermission() {Permission = p});
           

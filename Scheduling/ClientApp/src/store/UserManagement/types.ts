@@ -6,9 +6,20 @@ export enum PermissionName{
 	Accountant,
 	TimeTracking,
 	VacationApprovals
-}
+};
 
 export interface UserManagementState {
 	users: Array<UserData>,
-	onEditingUser: UserData,
-}
+	userEdit: {
+		onEditingUser: UserData,
+		message:{
+			editedSuccessfuly: boolean | undefined,
+			text: string
+		}
+	}
+};
+
+export type EditUserResponse = {
+	success: boolean,
+	message: string,
+};

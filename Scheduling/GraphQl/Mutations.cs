@@ -9,6 +9,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Scheduling.GraphQl.Types.Responses;
+using Scheduling.Models.Responses;
 
 namespace Scheduling.GraphQl
 {
@@ -22,22 +24,22 @@ namespace Scheduling.GraphQl
                 "authentication",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "Email", Description = "User email." },
-                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "Password", Description = "User password."}
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "Password", Description = "User password." }
                 ),
                 resolve: context =>
                 {
                     string email = context.GetArgument<string>("Email");
                     string password = context.GetArgument<string>("Password");
 
-                    return identityService.Authenticate(email, password);   
+                    return identityService.Authenticate(email, password);
                 },
                 description: "Returns JWT."
             );
 
-            Field<BooleanGraphType>(
+            Field<GraphQlResponseType>(
                 "editUser",
                 arguments: new QueryArguments(
-                    new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "Id", Description = "User id"},
+                    new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "Id", Description = "User id" },
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "Name", Description = "User name" },
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "Surname", Description = "User surname" },
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "Email", Description = "User email" },
@@ -55,8 +57,21 @@ namespace Scheduling.GraphQl
                     /*var permissions = context.GetArgument<List<PermissionName>>("Permissions");
                     var teamId = context.GetArgument<int>("TeamId");*/
 
-                    return dataBaseRepository.EditUser(id, email, name, surname, position);
+                    var response = new GraphQlResponse();
 
+                    try
+                    {
+                        dataBaseRepository.EditUser(id, email, name, surname, position);
+                        response.Success = true;
+                        response.Message = "Success! User is edited.";
+                    }
+                    catch (Exception e)
+                    {
+                        response.Success = false;
+                        response.Message = "Something went wrong.";
+                    }
+
+                    return response;
                 }
             );
 
@@ -98,11 +113,11 @@ namespace Scheduling.GraphQl
 
                     return true;
                 }
-            )/*.AuthorizeWith(PermissionName.UserManagement.ToString())*/;
+            ).AuthorizeWith(PermissionName.UserManagement.ToString());
 
             Field<BooleanGraphType>(
                 "removeUser",
-                arguments: new QueryArguments(new QueryArgument<NonNullGraphType<StringGraphType>>{ Name = "Email", Description = "User email" }),
+                arguments: new QueryArguments(new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "Email", Description = "User email" }),
                 resolve: context =>
                 {
                     return dataBaseRepository.RemoveUser(context.GetArgument<int>("Id"));
