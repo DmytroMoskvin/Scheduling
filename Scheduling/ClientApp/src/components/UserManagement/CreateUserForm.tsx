@@ -9,8 +9,7 @@ import '../../style/RequestsTableAndUsersTable.css';
 import '../../style/DeleteBoxUserManagement.css';
 import '../../style/CreateUserForm.css';
 import { Link } from 'react-router-dom';
-import { UserPermission, UserState } from '../../store/User/types';
-import { delay } from 'redux-saga/effects';
+import { Permission, UserPermission } from '../../store/User/types';
 
 
 type UserManagementProps =
@@ -25,10 +24,7 @@ export const CreateUserForm: React.FC<UserManagementProps> = (props) => {
     const [position, setPosition] = useState("");
     const [department, setDepartment] = useState("");
     const [teamId, setTeamId] = useState(0);
-    const [userManagementPermission, setUserManagementPermission] = useState(false);
-    const [vacationApprovalsPermission, setVacationApprovalsPermission] = useState(false);
-    const [timeTrackingPermission, setTimeTrackingPermission] = useState(false);
-    const [accountantPermission, setAccountantPermission] = useState(false);
+    const [userPermissions, setUserPermissions] = useState([] as UserPermission[]);
     let permissionsArray: UserPermission[] = [];
 
     const history = useHistory();
@@ -42,33 +38,40 @@ export const CreateUserForm: React.FC<UserManagementProps> = (props) => {
             password: "",
             position: position,
             department: department,
-            userPermissions: permissionsArray,
+            userPermissions: userPermissions,
             team: { id: teamId, name: "" }
         }
     });
 
     const requestTeams = () => dispatch({ type: 'REQUESTED_TEAMS' });
+    const requestPermissions = () => dispatch({ type: 'REQUESTED_PERMISSIONS' });
     useEffect(() => {
         requestTeams();
-        console.log(props.teams);
+        requestPermissions();
     }, []);
 
     const handleSubmit = async (e: { preventDefault: () => void; }) => {
         e.preventDefault();
         if (name !== "" && surname !== "" && /^\w+@\w+\.\w+$/.test(email) && department !== "" && position !== "") {
-            if (userManagementPermission)
-                    permissionsArray.push({ permission: { name: "USER_MANAGEMENT" } });
-            if (vacationApprovalsPermission)
-                    permissionsArray.push({ permission: { name: "VACATION_APPROVALS" } });
-            if (timeTrackingPermission)
-                    permissionsArray.push({ permission: { name: "TIME_TRACKING" } });
-            if (accountantPermission)
-                    permissionsArray.push({ permission: { name: "ACCOUNTANT" } });
-
+            /*for (let i = 0; i < props.permissions.length; i++) {
+                if(props.permissions[i].id)
+                permissionsArray.push({ permission: props.permissions[i] });
+            }*/
             requestCreateUser();
             history.push('/usermanagement');
         }
     }
+
+    function handlePermissionCheckboxChange(id: number) {
+        let permission = props.permissions.find(p => p.id == id);
+
+        if (permission != undefined)
+            userPermissions.push({ permission: permission })
+        else
+            setUserPermissions(
+                userPermissions.filter(p => p.permission.id != id)
+            );
+    } 
 
     return (
         <React.Fragment>
@@ -113,7 +116,10 @@ export const CreateUserForm: React.FC<UserManagementProps> = (props) => {
                                                     if (t != null) {
                                                         return (<tr key={index}>
                                                             <td>
-                                                                <input type="radio" name="team" checked={teamId === t.id} onChange={() => setTeamId(t.id)} />
+                                                                <input type="radio" name="team"
+                                                                    checked={teamId === t.id}
+                                                                    onChange={() => setTeamId(t.id)}
+                                                                />
                                                             </td>
                                                             <td>{t.name}</td>
                                                         </tr>);
@@ -125,18 +131,21 @@ export const CreateUserForm: React.FC<UserManagementProps> = (props) => {
                                     <td>
                                         <table className="borderInnerTable">
                                             <tbody>
-                                                <tr>
-                                                    <td><input type="checkbox" value="USER_MANAGEMENT" onChange={(e) => setUserManagementPermission(e.target.checked)} /></td>User Management<td></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><input type="checkbox" value="VACATION_APPROVALS" onChange={(e) => setVacationApprovalsPermission(e.target.checked)} /></td><td>Vacation Approvals</td>
-                                                </tr>
-                                                <tr>
-                                                    <td><input type="checkbox" value="TIME_TRACKING" onChange={(e) => setTimeTrackingPermission(e.target.checked)} /></td><td>Time Tracking</td>
-                                                </tr>
-                                                <tr>
-                                                    <td><input type="checkbox" value="ACCOUNTANT" onChange={(e) => setAccountantPermission(e.target.checked)} /></td><td>Accountant</td>
-                                                </tr>
+                                                {props.permissions.map((t, index) => {
+                                                    let name = t.name.toLowerCase();
+                                                    name = name.replace(/_/g, " ");
+                                                    if (t != null) {
+                                                        return (<tr key={index}>
+                                                            <td>
+                                                                <input
+                                                                    type="checkbox" value={t.name}
+                                                                    onChange={() => handlePermissionCheckboxChange(t.id)}
+                                                                />
+                                                            </td>
+                                                            <td>{name}</td>
+                                                        </tr>);
+                                                    }
+                                                })}
                                             </tbody>
                                         </table>
                                     </td>

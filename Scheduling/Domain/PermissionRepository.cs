@@ -33,9 +33,9 @@ namespace Scheduling.Domain
             return permissions;*/
         }
 
-        public void CreateUserPermission(int userId, PermissionName permissionName)
+        public void CreateUserPermission(int userId, int permissionId)
         {
-            Permission permission = Context.Permissions.FirstOrDefault(permission => permission.Name == permissionName);
+            Permission permission = Context.Permissions.FirstOrDefault(permission => permission.Id == permissionId);
             if (permission == null)
                 return;
 

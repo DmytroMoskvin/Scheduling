@@ -82,7 +82,7 @@ namespace Scheduling.GraphQl
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "Email", Description = "User email" },
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "Position", Description = "User position" },
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "Department", Description = "User department" },
-                    new QueryArgument<NonNullGraphType<ListGraphType<PermissionNameEnum>>> { Name = "Permissions", Description = "User permissions" },
+                    new QueryArgument<NonNullGraphType<ListGraphType<IntGraphType>>> { Name = "Permissions", Description = "User permissions" },
                     new QueryArgument<IntGraphType> { Name = "Team", Description = "User team id" }
                 ),
                 resolve: context =>
@@ -92,12 +92,12 @@ namespace Scheduling.GraphQl
                     string surname = context.GetArgument<string>("Surname");
                     string position = context.GetArgument<string>("Position");
                     string department = context.GetArgument<string>("Department");
-                    List<PermissionName> permissions = context.GetArgument<List<PermissionName>>("Permissions");
+                    List<int> permissionsIds = context.GetArgument<List<int>>("Permissions");
                     int teamId = context.GetArgument<int>("Team");
 
                     string password = Guid.NewGuid().ToString();
 
-                    User user = dataBaseRepository.CreateUser(name, surname, email, position, department, password, permissions, teamId);
+                    User user = dataBaseRepository.CreateUser(name, surname, email, position, department, password, permissionsIds, teamId);
 
                     if (user.Email != null)
                     {

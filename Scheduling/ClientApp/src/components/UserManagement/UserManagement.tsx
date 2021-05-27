@@ -65,9 +65,10 @@ export const UserManagement: React.FC<UserManagementProps> = (props) => {
                                         <td>{u.position}</td>
                                         <td>{u.team.name}</td>
                                         <td>{u.userPermissions.map((up) => {
-                                            console.log(up.permission.name)
+                                            let name = up.permission.name.toLowerCase();
+                                            name = name.replace(/_/g, " ");
                                             return (
-                                                <div key={u.userPermissions.indexOf(up)}>{permissions.get(up.permission.name)}</div>)
+                                                <div key={u.userPermissions.indexOf(up)}>{name}</div>)
                                         })}
                                         </td>
                                         <td>

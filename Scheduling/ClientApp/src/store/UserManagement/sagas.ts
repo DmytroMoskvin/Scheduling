@@ -4,7 +4,8 @@ import { getUsersData } from "../../webAPI/users";
 import { createUser } from "../../webAPI/createUser";
 import { removeUser } from "../../webAPI/removeUser";
 import { getAllTeams } from "../../webAPI/teams";
-import { Team, UserData } from "../User/types";
+import { getPermissions } from "../../webAPI/permissions";
+import { Permission, Team, UserData } from "../User/types";
 import { actionCreators } from "./actions";
 import * as actions from "./actions"
 
@@ -14,6 +15,7 @@ export default function* watchUserManagementSagas() {
         takeEvery('REQUESTED_CREATE_USER', createUserSaga),
         takeEvery('REQUESTED_DELETE_USER', removeUserSaga),
         takeEvery('REQUESTED_TEAMS', receiveTeamsSaga),
+        takeEvery('REQUESTED_PERMISSIONS', receivePermissionsSaga)
     ]);
 }
 
@@ -54,7 +56,7 @@ function* createUserSaga(action: actions.UserCreatedAction) {
             const response: UserData = yield createUser(
                 action.payload!.name, action.payload!.surname,
                 action.payload!.email, action.payload!.position, action.payload!.department,
-                action.payload!.userPermissions.map((up) => up.permission.name),
+                action.payload!.userPermissions.map((up) => up.permission.id),
                 action.payload!.team.id, token)
                     .then(response => response.data);
             console.log(response);
@@ -81,3 +83,20 @@ function* removeUserSaga(action: actions.UserDeletedAction) {
     else
         yield put(actionCreators.accessDenied());
 }
+
+function* receivePermissionsSaga(action: actions.ReceivedPermissionsAction) {
+    const token = Cookies.get('token');
+    if (token) {
+        try {
+            const response: Permission[] = yield getPermissions(token).then(response => response.data.getAllPermissions);
+            console.log(response);
+            yield put(actionCreators.receivedPermissions(response));
+        } catch {
+            yield put(actionCreators.accessDenied());
+        }
+    }
+    else
+        yield put(actionCreators.accessDenied());
+}
+
+

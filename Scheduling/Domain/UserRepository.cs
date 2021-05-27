@@ -24,7 +24,7 @@ namespace Scheduling.Domain
 
 
         public User CreateUser(string name, string surname, string email,
-            string position, string department, string password, List<PermissionName> permissionNames, int teamId)
+            string position, string department, string password, List<int> permissionsIds, int teamId)
         {
             //string userId = Guid.NewGuid().ToString();
             if (Context.Users.FirstOrDefault(u => u.Email == email) != null)
@@ -33,11 +33,7 @@ namespace Scheduling.Domain
             }
 
             string salt = Guid.NewGuid().ToString();
-            List<Permission> permissions = new List<Permission>(Context.Permissions.Where(p => permissionNames.Contains(p.Name)));
-            /* foreach (var permission in permissions)
-             {
-                 userPermissions.Add(new UserPermission {Permission = permission});
-             }*/
+            List<Permission> permissions = new List<Permission>(Context.Permissions.Where(p => permissionsIds.Contains(p.Id)));
             var userPermissions = new List<UserPermission>();
             permissions.ForEach(p => userPermissions.Add(new UserPermission(){Permission = p}));
             User user = new User()
@@ -57,21 +53,6 @@ namespace Scheduling.Domain
 
             Context.Users.Add(user);
             Context.SaveChangesAsync();
-
-            /* User newUser = Context.Users.Single(user => user.Email == email);
-
-             //foreach (string perm in permission)
-             //{
-             //    CreateUserPermission(newUser.Id, perm);
-             //}
-
-             //if (teams == null)
-             //    return newUser;
-
-             foreach (int teamId in teams)
-             {
-                 AddUserToTeam(user.Id, teamId);
-             }*/
 
             return user;
         }

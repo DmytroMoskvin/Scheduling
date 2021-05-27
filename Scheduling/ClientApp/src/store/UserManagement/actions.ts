@@ -1,4 +1,4 @@
-import { Team, UserData } from "../User/types";
+import { Permission, Team, UserData } from "../User/types";
 
 
 export interface ReceivedUsersDataAction { type: 'RECEIVED_USERS', payload: Array<UserData> };
@@ -19,6 +19,9 @@ export interface RequestedEditUserAction { type: 'REQUESTED_EDIT_USER', payload:
 export interface ReceivedTeamsAction { type: 'RECEIVED_TEAMS', payload: Array<Team> };
 export interface RequestedTeamsAction { type: 'REQUESTED_TEAMS' };
 
+export interface ReceivedPermissionsAction { type: 'RECEIVED_PERMISSIONS', payload: Array<Permission> };
+export interface RequestedPermissionsAction { type: 'REQUESTED_PERMISSIONS' };
+
 
 const receivedUsersData = (users: Array<UserData>) => ({ type: 'RECEIVED_USERS', payload: users } as ReceivedUsersDataAction);
 const requestedUsersData = () => ({ type: 'REQUESTED_USERS' } as RequestedUsersDataAction);
@@ -38,6 +41,9 @@ const requestedEditUser = (email: string, user: UserData) => ({ type: 'REQUESTED
 const receivedTeams = (teams: Array<Team>) => ({ type: 'RECEIVED_TEAMS', payload: teams } as ReceivedTeamsAction);
 const requestedTeams = () => ({ type: 'REQUESTED_TEAMS' } as RequestedTeamsAction);
 
+const receivedPermissions = (permissions: Array<Permission>) => ({ type: 'RECEIVED_PERMISSIONS', payload: permissions } as ReceivedPermissionsAction);
+const requestedPermissions = () => ({ type: 'REQUESTED_PERMISSIONS' } as RequestedPermissionsAction);
+
 export const actionCreators = {
     receivedUsersData, requestedUsersData,
     checkPermissions,
@@ -46,7 +52,8 @@ export const actionCreators = {
     createUser, requestedCreateUser,
     deleteUser, requestedDeleteUser,
     editUser, requestedEditUser,
-    receivedTeams, requestedTeams
+    receivedTeams, requestedTeams,
+    receivedPermissions, requestedPermissions
 };
 
 export type KnownAction = ReceivedUsersDataAction | CheckPermissions |
@@ -54,4 +61,5 @@ export type KnownAction = ReceivedUsersDataAction | CheckPermissions |
     UserCreatedAction | RequestedCreateUserAction |
     UserDeletedAction | RequestedDeleteUserAction |
     UserEditedAction | RequestedEditUserAction |
-    ReceivedTeamsAction | RequestedTeamsAction;
+    ReceivedTeamsAction | RequestedTeamsAction |
+    ReceivedPermissionsAction | RequestedPermissionsAction;

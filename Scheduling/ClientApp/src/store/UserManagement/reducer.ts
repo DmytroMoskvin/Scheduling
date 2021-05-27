@@ -5,7 +5,8 @@ import { UserManagementState } from "./types";
 
 const initialState: UserManagementState = {
     users: [],
-    teams: []
+    teams: [],
+    permissions: []
 };
 
 const reducer: Reducer<UserManagementState> =
@@ -13,6 +14,13 @@ const reducer: Reducer<UserManagementState> =
         const action = incomingAction as KnownAction;
 
         switch (action.type) {
+            case 'RECEIVED_PERMISSIONS': {
+                return {
+                    ...state,
+                    permissions: action.payload
+                };
+            }
+
             case 'RECEIVED_TEAMS': {
                 return {
                     ...state,

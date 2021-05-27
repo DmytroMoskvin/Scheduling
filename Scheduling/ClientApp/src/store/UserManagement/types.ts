@@ -1,4 +1,4 @@
-import { Team, UserData } from "../User/types";
+import { Permission, Team, UserData } from "../User/types";
 
 export enum PermissionName{
 	UserManagement,
@@ -9,5 +9,6 @@ export enum PermissionName{
 
 export interface UserManagementState {
 	users: Array<UserData>,
-	teams: Array<Team>
+	teams: Array<Team>,
+	permissions: Array<Permission>
 }
