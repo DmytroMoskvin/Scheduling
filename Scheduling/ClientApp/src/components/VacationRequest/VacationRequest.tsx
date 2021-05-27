@@ -33,7 +33,8 @@ class VacationRequestPage extends React.PureComponent<VacationPageProps, {}> {
         finishDate: null,
         focusedInput: null,
         comment: '',
-        isLoading: false
+        isLoading: false,
+        showError: false
     };
 
     async requestListUpdate() {
@@ -107,6 +108,25 @@ class VacationRequestPage extends React.PureComponent<VacationPageProps, {}> {
         }
     }
 
+    checkDateRange(startDate: Date, finishDate: Date){
+        let error = false;
+
+        this.props.requestHistory.forEach(r => 
+            {
+                let existingStartDate = new Date(r.startDate);
+                let existingFinishDate = new Date(r.finishDate);
+                if(startDate >= existingStartDate && startDate <= existingFinishDate || finishDate >= existingStartDate && finishDate <= existingFinishDate){
+                    error = true;
+                }
+            });
+        
+        console.log(this.state.showError);
+        if(!error)
+            this.setState({showError: false, startDate: startDate, finishDate: finishDate});
+        else
+            this.setState({showError: true, startDate: null, finishDate: null});
+    }
+
     public render(){
         if(this.props.logged && this.props.token){
             return (
@@ -117,11 +137,14 @@ class VacationRequestPage extends React.PureComponent<VacationPageProps, {}> {
                                 <h2>Vacation</h2>
                                 <div className='data-container'>
                                     <label>Data range</label>
-                                    <DataRangePicker availableDays={7} setRange={(startDate: Date, finishDate: Date) => this.setState({startDate, finishDate})}/>
+                                    <DataRangePicker availableDays={7} setRange={(startDate: Date, finishDate: Date) => this.checkDateRange(startDate, finishDate)}/>
                                 </div>
                                 <div className='data-container'>
                                     <label htmlFor='comment'>Comment</label>
                                     <textarea id='comment' onInput={(event) => this.setState({comment: event.currentTarget.value})}></textarea>
+                                </div>
+                                <div className='error-message-container'>
+                                    {!!this.state.showError ? <p className='error-message'>You have already requested a vacation for this period!</p>: null}
                                 </div>
                                 <button id='send-request' type='button' disabled={this.state.isLoading} onClick={()=> this.handleSubmit()}>Request vacation</button>
                             </form>
@@ -134,12 +157,13 @@ class VacationRequestPage extends React.PureComponent<VacationPageProps, {}> {
                         <div id='vacation-history'>
                             <h5>Vacation history</h5>
                             {!this.state.isLoading?
-                                this.props.requestHistory.reverse().map((r) =>
+                                this.props.requestHistory
+                                .sort((a, b) => a.startDate != b.startDate? a.startDate > b.startDate? 1 : -1 : 0)
+                                .map((r) =>
                                     <RequestItem key={r.id} token={this.props.token? this.props.token: ''} request={r} removeRequest={async (id: number) => await this.removeRequest(id)}/>
                                 ):
                                 <LoadingAnimation/>
                             }
-                            {/* // <RequestsTable loading={this.state.loading} requests={this.props.requestHistory} removeRequest={async (id: number) => await this.removeRequest(id)}/> */}
                         </div>
                     </main>
                 </React.Fragment>

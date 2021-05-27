@@ -187,7 +187,7 @@ namespace Scheduling.GraphQl
 
                     user.ComputedProps.Teams.ForEach((team) => {
                         dataBaseRepository.GetTeamUsers(team.Id).ForEach((user) => {
-                            dataBaseRepository.GetUserVacationRequests(user.Id).ForEach((request) => {
+                            dataBaseRepository.GetUserVacationRequests(user.Id).ToList().ForEach((request) => {
                                 if(request.FinishDate >= DateToCheck && request.StartDate <= DateToCheck)
                                 {
                                     if (teammatesOnVacation.Contains(user))
@@ -210,7 +210,7 @@ namespace Scheduling.GraphQl
                     string email = httpContext.HttpContext.User.Claims.First(claim => claim.Type == "Email").Value.ToString();
                     User user = dataBaseRepository.Get(email);
                     int id = user.Id;
-                    return dataBaseRepository.GetUserRequests(user.Id);
+                    return dataBaseRepository.GetUserEvents(user.Id);
                 }
             ).AuthorizeWith("Authenticated");
         }

@@ -7,9 +7,9 @@ namespace Scheduling.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "Status",
-                table: "VacationRequests");
+            //migrationBuilder.DropColumn(
+            //    name: "Status",
+            //    table: "VacationRequests");
 
             //migrationBuilder.CreateTable(
             //    name: "TimerHistories",

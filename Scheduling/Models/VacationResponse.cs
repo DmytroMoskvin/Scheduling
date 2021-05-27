@@ -11,10 +11,9 @@ namespace Scheduling.Models
         public int Id { get; set; }
         public int RequestId { get; set; }
         public int ResponderId { get; set; }
+        public string ResponderName { get; set; }
         public bool Response { get; set; }
         public string Comment { get; set; }
-        [NotMapped]
-        public string ResponderName { get; set; }
         public VacationResponse()
         {
 
