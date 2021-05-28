@@ -1,4 +1,5 @@
-import { UserData } from "../User/types";
+import { Permission, Team, UserData } from "../User/types";
+import { UserDataSend } from "./types";
 
 
 export interface ReceivedUsersDataAction { type: 'RECEIVED_USERS', payload: Array<UserData> };
@@ -13,9 +14,16 @@ export interface RequestedCreateUserAction { type: 'REQUESTED_CREATE_USER', payl
 export interface UserDeletedAction { type: 'USER_DELETED', payload: string };
 export interface RequestedDeleteUserAction { type: 'REQUESTED_DELETE_USER', payload: string };
 
-export interface UserEditedAction { type: 'USER_EDITED_SUCCESS' };
-export interface RequestedEditUserAction { type: 'REQUESTED_EDIT_USER', payload: { id: number, email: string, name: string, surname: string, position: string } };
+export interface UserEditedAction { type: 'USER_EDITED_SUCCESS', payload: { messageText: string}};
+export interface RequestedEditUserAction { type: 'REQUESTED_EDIT_USER', payload: { user: UserDataSend } };
 export interface SetEditUserAction { type: 'SET_EDIT_USER', payload: number };
+
+
+export interface ReceivedTeamsAction { type: 'RECEIVED_TEAMS', payload: Array<Team> };
+export interface RequestedTeamsAction { type: 'REQUESTED_TEAMS' };
+
+export interface ReceivedPermissionsAction { type: 'RECEIVED_PERMISSIONS', payload: Array<Permission> };
+export interface RequestedPermissionsAction { type: 'REQUESTED_PERMISSIONS' };
 
 
 const receivedUsersData = (users: Array<UserData>) => ({ type: 'RECEIVED_USERS', payload: users } as ReceivedUsersDataAction);
@@ -30,14 +38,20 @@ const requestedCreateUser = (user: UserData) => ({ type: 'REQUESTED_CREATE_USER'
 const deleteUser = (email: string) => ({ type: 'USER_DELETED', payload: email } as UserDeletedAction);
 const requestedDeleteUser = (email: string) => ({ type: 'REQUESTED_DELETE_USER', payload: email } as RequestedDeleteUserAction);
 
-const editedUserSuccess = () => ({ type: 'USER_EDITED_SUCCESS' } as UserEditedAction);
-const requestedEditUser = (id: number, email: string, name: string, surname: string, position: string) => (
+const editedUserSuccess = (messageText: string) => ({ type: 'USER_EDITED_SUCCESS', payload: {messageText} } as UserEditedAction);
+const requestedEditUser = (user: UserDataSend) => (
     {
         type: 'REQUESTED_EDIT_USER',
-        payload: { id, email, name, surname, position }
+        payload: { user }
     } as RequestedEditUserAction);
 
 const setEditUser = (id: number) => ({ type: 'SET_EDIT_USER', payload: id } as SetEditUserAction);
+
+const receivedTeams = (teams: Array<Team>) => ({ type: 'RECEIVED_TEAMS', payload: teams } as ReceivedTeamsAction);
+const requestedTeams = () => ({ type: 'REQUESTED_TEAMS' } as RequestedTeamsAction);
+
+const receivedPermissions = (permissions: Array<Permission>) => ({ type: 'RECEIVED_PERMISSIONS', payload: permissions } as ReceivedPermissionsAction);
+const requestedPermissions = () => ({ type: 'REQUESTED_PERMISSIONS' } as RequestedPermissionsAction);
 
 export const actionCreators = {
     receivedUsersData, requestedUsersData,
@@ -46,11 +60,17 @@ export const actionCreators = {
     accessDenied,
     createUser, requestedCreateUser,
     deleteUser, requestedDeleteUser,
-    editedUserSuccess, requestedEditUser, setEditUser
+    requestedEditUser,
+    receivedTeams, requestedTeams,
+    receivedPermissions, requestedPermissions,
+    editedUserSuccess, setEditUser
 };
 
 export type KnownAction = ReceivedUsersDataAction | CheckPermissions |
     RequestedUsersDataAction | AccessAllowed | AccessDenied |
     UserCreatedAction | RequestedCreateUserAction |
     UserDeletedAction | RequestedDeleteUserAction |
-    UserEditedAction | RequestedEditUserAction | SetEditUserAction;
+    UserEditedAction | RequestedEditUserAction |
+    ReceivedTeamsAction | RequestedTeamsAction |
+    ReceivedPermissionsAction | RequestedPermissionsAction |
+    SetEditUserAction;

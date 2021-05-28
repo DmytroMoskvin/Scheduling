@@ -1,7 +1,7 @@
-﻿export const getPermissions = async (token: string) => {
+﻿export const getAllTeams = async (token: string) => {
     const query = JSON.stringify({
         query: `{
-            getAllPermissions {
+            getTeams {
                id
                name
 		    }

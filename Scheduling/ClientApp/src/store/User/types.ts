@@ -5,6 +5,7 @@ export interface UserState {
 }
 
 export interface Permission {
+	id: number,
 	name: string
 }
 export interface ComputedProps {
@@ -12,6 +13,7 @@ export interface ComputedProps {
 }
 
 export interface Team {
+	id: number,
 	name: string
 }
 

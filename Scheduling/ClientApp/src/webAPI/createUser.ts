@@ -1,5 +1,5 @@
 ﻿export const createUser = async (name: string, surname: string, email: string, position: string,
-    permissions: string[], teamId: number, token: string) => {
+    department: string, permissions: number[], teamId: number, token: string) => {
     const query = JSON.stringify({
         query: `mutation {
             createUser(
@@ -7,8 +7,8 @@
               surname: "${surname}",
               email: "${email}",
               position: "${position}",
-              department: " ",
-              permissions: ${permissions},
+              department: "${department}",
+              permissions: [${permissions}],
               team: ${teamId}
             )
           }`

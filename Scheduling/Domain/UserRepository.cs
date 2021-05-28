@@ -37,20 +37,20 @@ namespace Scheduling.Domain
 
 
         public User CreateUser(string name, string surname, string email,
-            string position, string department, string password, List<PermissionName> permissionNames, int teamId)
+            string position, string department, string password, List<int> permissionsIds, int teamId)
         {
-            if (Context.Users.FirstOrDefault(u => u.Email == email) != null) 
-                throw new Exception("Email has been already used.");
-            
+            //string userId = Guid.NewGuid().ToString();
+            if (Context.Users.Any(u => u.Email == email))
+            {
+                throw new Exception("User with such an id already exists.");
+            }
+
+
             var salt = Guid.NewGuid().ToString();
-            var permissions = new List<Permission>(
-                Context.Permissions
-                    .Where(p => permissionNames.Contains(p.Name))
-                );
-           
-            var userPermissions = permissions
-                .ConvertAll(p => new UserPermission() {Permission = p});
-          
+            var permissions = new List<Permission>(Context.Permissions.Where(p => permissionsIds.Contains(p.Id)));
+            var userPermissions = new List<UserPermission>();
+            permissions.ForEach(p => userPermissions.Add(new UserPermission() { Permission = p }));
+
             var user = new User()
             {
                 Email = email,
@@ -70,27 +70,36 @@ namespace Scheduling.Domain
             return user;
         }
 
-
         public bool RemoveUser(int id)
         {
             var user = Context.Users.FirstOrDefault(user => user.Id == id);
             if (user == null)
                 return false;
-           
+
             Context.Users.Remove(user);
             Context.SaveChangesAsync();
             return true;
         }
-        public bool EditUser(int id, string email, string name, string surname,
-            string position/*, List<PermissionName> permissionNames, int teamId*/)
+        public bool EditUser(int id, string name, string surname, string email,
+            string position, string department, List<int> permissionsIds, int teamId)
         {
             var user = Context.Users.Single(it => it.Id == id);
             user.Email = email;
             user.Name = name;
             user.Surname = surname;
             user.Position = position;
+            user.Department = department;
+            user.TeamId = teamId;
+
+            user.UserPermissions = Context.Permissions
+                .Where(p => permissionsIds
+                .Contains(p.Id))
+                .Select(it => new UserPermission { UserId = id, PermissionId = it.Id })
+                .ToList();
+
             Context.Users.Update(user);
             Context.SaveChanges();
+
             return true;
         }
     }

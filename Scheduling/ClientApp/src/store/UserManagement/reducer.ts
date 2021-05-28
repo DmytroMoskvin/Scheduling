@@ -5,6 +5,8 @@ import { UserManagementState } from "./types";
 
 const initialState: UserManagementState = {
     users: [],
+    teams: [],
+    permissions: [],
     userEdit: {
         message: {
             editedSuccessfuly: undefined,
@@ -19,6 +21,20 @@ const reducer: Reducer<UserManagementState> =
         const action = incomingAction as KnownAction;
 
         switch (action.type) {
+            case 'RECEIVED_PERMISSIONS': {
+                return {
+                    ...state,
+                    permissions: action.payload
+                };
+            }
+
+            case 'RECEIVED_TEAMS': {
+                return {
+                    ...state,
+                    teams: action.payload
+                };
+            }
+
             case 'RECEIVED_USERS': {
                 return {
                     ...state,
@@ -30,7 +46,6 @@ const reducer: Reducer<UserManagementState> =
                 if (action.payload === null || action.payload === undefined || action.payload.email === undefined) {
                     return state;
                 }
-                console.log("red");
                 return {
                     ...state,
                     users: state.users.concat(action.payload as UserData)

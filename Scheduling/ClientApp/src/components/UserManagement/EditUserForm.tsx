@@ -2,12 +2,12 @@
 import { connect, useDispatch } from 'react-redux';
 import { RouteComponentProps, useHistory } from 'react-router';
 import { ApplicationState } from '../../store/configureStore';
-import { UserManagementState } from '../../store/UserManagement/types';
+import { UserDataSend, UserManagementState } from '../../store/UserManagement/types';
 import { actionCreators } from '../../store/UserManagement/actions';
 import { useState } from 'react';
 import '../../style/RequestsTableAndUsersTable.css';
 import { Link } from 'react-router-dom';
-import { Button } from 'reactstrap';
+import { UserData } from '../../store/User/types';
 
 
 type UserManagementProps =
@@ -30,13 +30,30 @@ export const EditUserForm: React.FC<UserManagementProps> = (props) => {
 
         if (name !== "" && surname !== "" && /^\w+@\w+\.\w+$/.test(email) && position !== "") {
             props.requestedEditUser(
-                props.userEdit.onEditingUser!.id,
-                email,
-                name,
-                surname,
-                position,
+                {
+                    id: props.userEdit.onEditingUser!.id,
+                    email,
+                    name,
+                    surname,
+                    position,
+                    department: props.userEdit.onEditingUser!.department,
+                    permissionIds: props.userEdit.onEditingUser!.userPermissions.map(it => it.permission.id),
+                    teamId: props.userEdit.onEditingUser!.team.id
+                } as UserDataSend
+
+                // {
+                //     id: props.userEdit.onEditingUser!.id,
+                //     email,
+                //     name,
+                //     surname,
+                //     position,
+                //     department: props.userEdit.onEditingUser!.department,
+                //     team: props.userEdit.onEditingUser!.team,
+                //     userPermissions: props.userEdit.onEditingUser!.userPermissions,
+                // } as UserData
+
+
                 // department: props.onEditingUser!.department,
-                // id: props.onEditingUser!.id,
                 // team: props.onEditingUser!.team,
                 // userPermissions: props.onEditingUser!.userPermissions,
             )

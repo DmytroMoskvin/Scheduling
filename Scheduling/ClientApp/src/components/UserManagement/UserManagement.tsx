@@ -27,6 +27,13 @@ export const UserManagement: React.FC<UserManagementProps> = (props) => {
         requestUsers();
     }, []);
 
+    const permissions = new Map<string, string>([
+        ["USER_MANAGEMENT", "User Management"],
+        ["VACATION_APPROVALS", "Vacation Approvals"],
+        ["TIME_TRACKING", "Time Tracking"],
+        ["ACCOUNTANT", "Accountant"]
+    ]);
+
     return (
         <React.Fragment>
             <DeleteBox
@@ -50,7 +57,7 @@ export const UserManagement: React.FC<UserManagementProps> = (props) => {
                         </tr>
                         {props.users.map((u) => {
                             if (u != null) {
-                                    
+                                if (u.team == null || u.team.name == null) u.team = { id: 0, name: "No Team" };
                                     return(<tr key={props.users.indexOf(u)}>
                                         <td>{u.name}</td>
                                         <td>{u.surname}</td>
@@ -58,9 +65,11 @@ export const UserManagement: React.FC<UserManagementProps> = (props) => {
                                         <td>{u.position}</td>
                                         <td>{u.team.name}</td>
                                         <td>{u.userPermissions.map((up) => {
-                                           console.log(up.permission.name)
-                                            return(
-                                            <div key={u.userPermissions.indexOf(up)}>{up.permission.name}</div>)})}
+                                            let name = up.permission.name.toLowerCase();
+                                            name = name.replace(/_/g, " ");
+                                            return (
+                                                <div key={u.userPermissions.indexOf(up)}>{name}</div>)
+                                        })}
                                         </td>
                                         <td>
                                             <Link to="/edituser" onClick={() => props.setEditUser(props.users.indexOf(u))} className="editUserButton">Edit</Link>

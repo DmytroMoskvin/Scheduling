@@ -30,8 +30,12 @@ namespace Scheduling.GraphQl
             Field<ListGraphType<TeamType>>(
                 "GetTeams",
                 arguments: null,
-                resolve: context => dataBaseRepository.GetListOfAvailableTeams(),
-
+                resolve: context =>
+                {
+                    /*string email = httpContext.HttpContext.User.Claims.First(claim => claim.Type == "Email").Value.ToString();
+                    User user = dataBaseRepository.Get(email);*/
+                    return dataBaseRepository.GetListOfAvailableTeams();
+                },
                 description: "Get list of available teams."
             ).AuthorizeWith(PermissionName.UserManagement.ToString());
 
@@ -60,14 +64,14 @@ namespace Scheduling.GraphQl
 
             ).AuthorizeWith("Authenticated");
 
-            Field<ListGraphType<StringGraphType>>(
+            Field<ListGraphType<PermissionType>>(
                 "GetAllPermissions",
                 arguments: null,
                 resolve: context =>
                 {
                     return dataBaseRepository.GetAllPermissions();
                 }
-            ).AuthorizeWith(PermissionName.UserManagement.ToString());
+            )/*.AuthorizeWith(PermissionName.UserManagement.ToString())*/;
 
             Field<ListGraphType<VacationRequestType>>(
                 "GetCurrentUserRequests",
@@ -92,7 +96,7 @@ namespace Scheduling.GraphQl
                     return dataBaseRepository.Get();
                 }
 
-            ).AuthorizeWith(PermissionName.UserManagement.ToString());
+            )/*.AuthorizeWith(PermissionName.UserManagement.ToString())*/;
 
         }
     }

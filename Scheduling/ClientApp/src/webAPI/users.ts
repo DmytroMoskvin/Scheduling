@@ -15,18 +15,19 @@ export const getUsersData = async (token: string) => {
         }
         team {
           name
+          id
         }
       }
 		}`
-  });
+    });
 
-  return fetch('/graphql', {
-    method: 'POST',
-    headers: {
-      'content-type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    },
-    body: query
-  })
-    .then(data => data.json());
+    return fetch('/graphql', {
+        method: 'POST',
+        headers: {
+            'content-type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: query
+    })
+        .then(data => data.json());
 };

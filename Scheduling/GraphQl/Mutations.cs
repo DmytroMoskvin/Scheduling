@@ -43,9 +43,10 @@ namespace Scheduling.GraphQl
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "Name", Description = "User name" },
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "Surname", Description = "User surname" },
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "Email", Description = "User email" },
-                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "Position", Description = "User position" }
-                    /*new QueryArgument<NonNullGraphType<ListGraphType<PermissionNameEnum>>> { Name = "Permissions", Description = "User permissions" },
-                    new QueryArgument<IntGraphType> { Name = "TeamId", Description = "User team id" }*/
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "Position", Description = "User position" },
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "Department", Description = "User department" },
+                    new QueryArgument<NonNullGraphType<ListGraphType<IntGraphType>>> { Name = "Permissions", Description = "User permissions" },
+                    new QueryArgument<IntGraphType> { Name = "Team", Description = "User team id" }
                 ),
                 resolve: context =>
                 {
@@ -54,14 +55,15 @@ namespace Scheduling.GraphQl
                     var name = context.GetArgument<string>("Name");
                     var surname = context.GetArgument<string>("Surname");
                     var position = context.GetArgument<string>("Position");
-                    /*var permissions = context.GetArgument<List<PermissionName>>("Permissions");
-                    var teamId = context.GetArgument<int>("TeamId");*/
+                    var department = context.GetArgument<string>("Department");
+                    var permissionsIds = context.GetArgument<List<int>>("Permissions");
+                    var teamId = context.GetArgument<int>("Team");
 
                     var response = new GraphQlResponse();
 
                     try
                     {
-                        dataBaseRepository.EditUser(id, email, name, surname, position);
+                        dataBaseRepository.EditUser(id, email, name, surname, position, department, permissionsIds, teamId);
                         response.Success = true;
                         response.Message = "Success! User is edited.";
                     }
@@ -83,24 +85,22 @@ namespace Scheduling.GraphQl
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "Email", Description = "User email" },
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "Position", Description = "User position" },
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "Department", Description = "User department" },
-                    new QueryArgument<NonNullGraphType<ListGraphType<PermissionNameEnum>>> { Name = "Permissions", Description = "User permissions" },
+                    new QueryArgument<NonNullGraphType<ListGraphType<IntGraphType>>> { Name = "Permissions", Description = "User permissions" },
                     new QueryArgument<IntGraphType> { Name = "Team", Description = "User team id" }
                 ),
                 resolve: context =>
                 {
-                    var email = context.GetArgument<string>("Email");
-                    var name = context.GetArgument<string>("Name");
-                    var surname = context.GetArgument<string>("Surname");
-                    var position = context.GetArgument<string>("Position");
-                    var department = context.GetArgument<string>("Department");
-                    var permissions = context.GetArgument<List<PermissionName>>("Permissions");
-                    var teamId = context.GetArgument<int>("Team");
+                    string email = context.GetArgument<string>("Email");
+                    string name = context.GetArgument<string>("Name");
+                    string surname = context.GetArgument<string>("Surname");
+                    string position = context.GetArgument<string>("Position");
+                    string department = context.GetArgument<string>("Department");
+                    List<int> permissionsIds = context.GetArgument<List<int>>("Permissions");
+                    int teamId = context.GetArgument<int>("Team");
 
                     var password = Guid.NewGuid().ToString();
 
-                    dataBaseRepository
-                        .CreateUser(name, surname, email, position, department,
-                            password, permissions, teamId);
+                    User user = dataBaseRepository.CreateUser(name, surname, email, position, department, password, permissionsIds, teamId);
 
                     try
                     {
