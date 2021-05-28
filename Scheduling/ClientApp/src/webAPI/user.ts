@@ -51,3 +51,21 @@ export const getUsersOnVacationWithinTeamByDate = async (token: string, date: Da
 	})
 	.then(data => data.json());
 };
+
+export const getAvailableVacationDays = async (token: string) => {
+	const query = JSON.stringify({
+		query: `query{
+				  getAvailableVacationDays
+				}`
+	});
+
+	return fetch('/graphql', {
+		method: 'POST',
+		headers: {
+			'content-type': 'application/json',
+			'Authorization': `Bearer ${token}`
+		},
+		body: query
+	})
+		.then(data => data.json());
+}

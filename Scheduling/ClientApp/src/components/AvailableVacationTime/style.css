@@ -1,0 +1,23 @@
+.available-vacation-time
+{
+    padding: 1rem;
+    border: 1px solid lightgray;
+    border-radius: 15px;
+}
+
+.request-vacation-button
+{
+    margin-top: 1rem;
+    background-color: #0275d8;
+    border: 1px solid lightgray;
+    border-radius: 10px;
+    padding: 10px 20px;
+    color: white;
+    font-weight: bolder;
+}
+
+.inactive
+{
+    background-color: #DFDFDF;
+    color: #696969;
+}
