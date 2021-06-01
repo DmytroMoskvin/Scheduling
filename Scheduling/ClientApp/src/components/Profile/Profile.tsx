@@ -2,9 +2,10 @@ import * as React from 'react';
 import './style.css';
 import profileImage from '../../pictures/profileImage.png'
 import { UserData } from '../../store/User/types';
-import {Link} from "react-router-dom";
 
 import './style.css';
+import AvailableVacationTime from "../AvailableVacationTime";
+import Cookies from "js-cookie";
 
 type ProfileProps = {
     user: UserData
@@ -21,17 +22,8 @@ const Profile: React.FunctionComponent<ProfileProps> = ({ user }) => {
             <p className="profile-text">{user.position}</p>
             <p className="profile-text">{user.department}</p>
 
-            <div className="test-work-time">
-                Work time 160/168h
-            </div>
-            <div className="test-vacation-time">
-                Available vacation time 3.00 days
-            </div>
-
-            <Link to="/VacationRequest">
-                <button className="request-vacation-button">Request vacation</button>
-            </Link>
-
+            <br/>
+            <AvailableVacationTime token={Cookies.get('token') || ""}/>
         </div>
     );
     return (

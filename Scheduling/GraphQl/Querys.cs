@@ -202,6 +202,43 @@ namespace Scheduling.GraphQl
                 }
             ).AuthorizeWith("Authenticated");
 
+            Field<DecimalGraphType>(
+                "GetAvailableVacationDays",
+                arguments: null,
+                resolve: context =>
+                {
+                    string email = httpContext.HttpContext.User.Claims.First(claim => claim.Type == "Email").Value.ToString();
+                    User user = dataBaseRepository.Get(email);
+
+                    user.ComputedProps = new ComputedProps();
+                    user.ComputedProps.AddVacationRequests(dataBaseRepository.GetUserVacationRequests(user.Id).ToList());
+
+                    DateTime currentDate = DateTime.Now;
+                    int vacationDaysSum = user.ComputedProps.VacationRequests
+                    .Select(request => (Start: request.StartDate, Finish: request.FinishDate)) //returns only the date pair
+                    .Where(date => //selects request the has the same month
+                        (date.Finish.Year == currentDate.Year && date.Finish.Month == currentDate.Month) ||
+                        (date.Start.Year == currentDate.Year && date.Start.Month == currentDate.Month))
+                    .Select(dates => //crops dates to be within the month
+                    {
+                        var newDates = (Start: dates.Start, Finish: dates.Finish);// makes a copy
+
+                        if (newDates.Start.Month < currentDate.Month)
+                            newDates.Start = new DateTime(currentDate.Year, currentDate.Month, 1);
+                        if (newDates.Finish.Month > currentDate.Month)
+                            newDates.Finish = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month));
+
+                        return newDates;
+                    })
+                    .Sum(dates => dates.Finish.DayOfYear - dates.Start.DayOfYear + 1);
+
+                    int availableVacationDaysPerMonth = 2;
+                    if (availableVacationDaysPerMonth - vacationDaysSum < 0)
+                        return 0;
+                    return availableVacationDaysPerMonth - vacationDaysSum;
+                }
+            ).AuthorizeWith("Authenticated");
+
             Field<ListGraphType<CalendarEventType>>(
                 "GetCurrentUserEvents",
                 arguments: null,
