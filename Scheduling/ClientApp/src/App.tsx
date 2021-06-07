@@ -10,12 +10,14 @@ import VacationApproving from './components/VacationApproving/VacationApproving'
 import TimerPage from './components/Timer/TimerPage';
 import MainPage from './components/MainPage';
 import Login from './components/LoginPage/Login';
+import MonthReport from './components/MonthReport/MonthReport';
 
 import Error from './components/ErrorPage/ErrorPage';
 
 import AppCalendar from './components/calendarComponent/app/index';
 
 import './custom.css'
+
 
 
 export default () => (
@@ -29,6 +31,7 @@ export default () => (
             <Route exact path='/login' component={Login} />
 
             <PrivateRoute exact path='/vacationRequest' component={VacationRequest} />
+            <PrivateRoute exact path='/monthReport' component={MonthReport} />
             <PrivateRoute exact path='/vacationApproving' component={VacationApproving} />
             <PrivateRoute exact path='/Timer' component={TimerPage} />
             <PrivateRoute exact path='/' component={MainPage} />

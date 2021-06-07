@@ -1,0 +1,17 @@
+main{
+    display: flex;
+}
+
+#mouth-selector{
+    margin-right: 10px;
+}
+
+#mounth-report-table{
+    width: auto;
+}
+
+
+#mounth-report-table tr :nth-child(1n) {
+    padding: 5px 10px;
+    border: 1px solid black;
+}
