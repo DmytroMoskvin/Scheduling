@@ -13,9 +13,14 @@ namespace Scheduling.Domain
         { }
 
         public DbSet<User> Users { get; set; }
+
         public DbSet<Permission> Permissions { get; set; }
+
         public DbSet<Team> Teams { get; set; }
+
         public DbSet<VacationRequest> VacationRequests { get; set; }
+
+        public DbSet<UserPermission> UserPermissions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -30,7 +35,7 @@ namespace Scheduling.Domain
 
             modelBuilder.Entity<UserPermission>()
                 .HasKey(u => new { u.UserId, u.PermissionId });
-
+        /*
             modelBuilder.Entity<UserPermission>()
                 .HasOne(up => up.User)
                 .WithMany(u => u.UserPermissions)
@@ -52,7 +57,7 @@ namespace Scheduling.Domain
             modelBuilder.Entity<VacationRequest>()
                 .HasOne(vr => vr.User)
                 .WithMany(u => u.VacationRequests);
-
+*/
 
 
             modelBuilder.Entity<UserPermission>().HasData(new List<UserPermission>
@@ -104,7 +109,6 @@ namespace Scheduling.Domain
                 Position = "lol",
                 Department = "Memes",
                 Salt = "91ed90df-3289-4fdf-a927-024b24bea8b7",
-                TeamId = 1,
             });
 
             modelBuilder.Entity<User>().HasData(new User
@@ -117,7 +121,6 @@ namespace Scheduling.Domain
                 Position = "lol",
                 Department = "Memes",
                 Salt = "f0e30e73-fac3-4182-8641-ecba862fed69",
-                TeamId = 1,
             });
 
             modelBuilder.Entity<VacationRequest>().HasData(new VacationRequest

@@ -8,15 +8,17 @@ export const getUserData = async (token: string) => {
 				email
 				position
 				department
-				userPermissions {
-				  permission {
+				computedProps {
+				  userPermissions {
+					permission {
+					  name
+					}
+					permissionId
+					userId
+				  }
+				  team {
 					name
 				  }
-				  permissionId
-				  userId
-				}
-				team {
-				  name
 				}
 			  }
 		}`

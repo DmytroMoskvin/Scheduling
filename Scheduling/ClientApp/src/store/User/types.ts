@@ -9,7 +9,8 @@ export interface Permission {
 	name: string
 }
 export interface ComputedProps {
-	permissions: Array<Permission>
+	userPermissions: Array<UserPermission>,
+	team: Team
 }
 
 export interface Team {
@@ -28,8 +29,8 @@ export type UserData = {
 	surname: string, 
 	position: string, 
 	department: string, 
-	//computedProps: ComputedProps
-	userPermissions: Array<UserPermission>,
-	team: Team
+	computedProps: ComputedProps
+	//userPermissions: Array<UserPermission>,
+	//team: Team
 } | null;
 

@@ -10,28 +10,35 @@ namespace Scheduling.Domain
 {
     public partial class DataBaseRepository
     {
-        public IEnumerable<User> Get() =>
-            Context.Users
-                .Include(u => u.UserPermissions)
+        public List<User> Get() =>
+            /*Context.Users
+                .Include(u => u.ComputedProps)
+                .ThenInclude(u => u.UserPermissions)
                 .ThenInclude(up => up.Permission)
-                .Include(u => u.Team)
-                .ToList();
+                .Include(u => u.ComputedProps)
+                .ThenInclude(up => up.Team)
+                .ToList();*/
+            Context.Users.ToList();
+
+        public IEnumerable<User> GetUsersWithCopmutedProps()
+        {
+            var users = Get();
+            users.ForEach(u => u.ComputedProps = new ComputedProps());
+            users.ForEach(u => u.ComputedProps.Team = GetUserTeam(u.Id));
+            users.ForEach(u => u.ComputedProps.UserPermissions = GetUserPermissions(u.Id));
+
+            return users;
+        }
 
         public User Get(int id)
         {
             return Context.Users
-                .Include(u => u.UserPermissions)
-                .ThenInclude(up => up.Permission)
-                .Include(u => u.Team)
-                .FirstOrDefault(us => us.Id == id);
+                .First(us => us.Id == id);
         }
 
         public User Get(string email)
         {
             return Context.Users
-                .Include(u => u.UserPermissions)
-                .ThenInclude(up => up.Permission)
-                .Include(u => u.Team)
                 .FirstOrDefault(us => us.Email == email);
         }
 
@@ -60,9 +67,9 @@ namespace Scheduling.Domain
                 Position = position,
                 Department = department,
                 Salt = salt,
-                Team = GetTeam(teamId),
-                UserPermissions = userPermissions
             };
+            user.ComputedProps.Team = GetTeam(teamId);
+            user.ComputedProps.UserPermissions = userPermissions;
 
             Context.Users.Add(user);
             Context.SaveChangesAsync();
@@ -80,6 +87,7 @@ namespace Scheduling.Domain
             Context.SaveChangesAsync();
             return true;
         }
+
         public bool EditUser(int id, string name, string surname, string email,
             string position, string department, List<int> permissionsIds, int teamId)
         {
@@ -89,9 +97,9 @@ namespace Scheduling.Domain
             user.Surname = surname;
             user.Position = position;
             user.Department = department;
-            user.TeamId = teamId;
+            user.ComputedProps.TeamId = teamId;
 
-            user.UserPermissions = Context.Permissions
+            user.ComputedProps.UserPermissions = Context.Permissions
                 .Where(p => permissionsIds
                 .Contains(p.Id))
                 .Select(it => new UserPermission { UserId = id, PermissionId = it.Id })

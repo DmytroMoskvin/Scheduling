@@ -5,21 +5,26 @@ using System.Threading.Tasks;
 
 namespace Scheduling.Models
 {
-    /*public class ComputedProps
+    public class ComputedProps
     {
-        public int Id { get; set; }
-        public List<Permission> Permissions { get; set; }
-        public List<Team> Teams { get; set; }
+        public List<UserPermission> UserPermissions { get; set; }
+
+        public Team Team { get; set; }
+
+        public int? TeamId { get; set; }
+
+        public List<VacationRequest> VacationRequests { get; set; }
 
         public ComputedProps()
         {
 
         }
+
         public void AddPermission(List<Permission> permissions)
         {
-            Permissions = permissions;
-            *//*foreach (Permission permission in permissions)
-                Permissions.Add(permission.Name);*//*
+            //Permissions = permissions;
+            /*foreach (Permission permission in permissions)
+                Permissions.Add(permission.Name);*/
         }
-    }*/
+    }
 }

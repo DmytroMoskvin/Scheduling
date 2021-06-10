@@ -9,6 +9,13 @@ namespace Scheduling.Domain
 {
     public partial class DataBaseRepository
     {
+        public Team GetUserTeam(int userId)
+        {
+            var user = Get(userId);
+            return Context.Teams.FirstOrDefault(it => it.Users.Contains(user));
+
+        }
+
         public void CreateTeam(string name, List<User> users) =>
            Context.Teams.Add(new Team { Name = name, Users = users });
 
@@ -44,7 +51,7 @@ namespace Scheduling.Domain
             return true;
         }
 
-        public void AddUserToTeam(int userId, int teamId)
+      /*  public void AddUserToTeam(int userId, int teamId)
         {
             if (Context.Teams.FirstOrDefault(team => team.Id == teamId) == null || 
                 Context.Users.FirstOrDefault(user => user.Id == userId) == null)
@@ -55,9 +62,9 @@ namespace Scheduling.Domain
             user.TeamId = teamId;
 
             Context.SaveChanges();
-        }
+        }*/
 
-        public void RemoveUserFromTeam(int userId, int teamId)
+        /*public void RemoveUserFromTeam(int userId, int teamId)
         {
             if (Context.Teams.FirstOrDefault(team => team.Id == teamId) == null || 
                 Context.Users.FirstOrDefault(user => user.Id == userId) == null)
@@ -70,7 +77,7 @@ namespace Scheduling.Domain
                 .Include(u => u.Team)
                 .FirstOrDefault(us => us.Id == userId);
             Context.SaveChanges();
-        }
+        }*/
 
         public List<Team> GetListOfAvailableTeams() =>
             Context.Teams.Include(t => t.Users).ToList();

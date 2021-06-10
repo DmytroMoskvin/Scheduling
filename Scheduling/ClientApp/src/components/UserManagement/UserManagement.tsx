@@ -57,18 +57,18 @@ export const UserManagement: React.FC<UserManagementProps> = (props) => {
                         </tr>
                         {props.users.map((u) => {
                             if (u != null) {
-                                if (u.team == null || u.team.name == null) u.team = { id: 0, name: "No Team" };
+                                if (u.computedProps.team == null || u.computedProps.team.name == null) u.computedProps.team = { id: 0, name: "No Team" };
                                     return(<tr key={props.users.indexOf(u)}>
                                         <td>{u.name}</td>
                                         <td>{u.surname}</td>
                                         <td>{u.email}</td>
                                         <td>{u.position}</td>
-                                        <td>{u.team.name}</td>
-                                        <td>{u.userPermissions.map((up) => {
+                                        <td>{u.computedProps.team.name}</td>
+                                        <td>{u.computedProps.userPermissions.map((up) => {
                                             let name = up.permission.name.toLowerCase();
                                             name = name.replace(/_/g, " ");
                                             return (
-                                                <div key={u.userPermissions.indexOf(up)}>{name}</div>)
+                                                <div key={u.computedProps.userPermissions.indexOf(up)}>{name}</div>)
                                         })}
                                         </td>
                                         <td>

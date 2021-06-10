@@ -25,12 +25,17 @@ namespace Scheduling.Models
 
         public string Salt { get; set; }
 
-        public List<UserPermission> UserPermissions { get; set; }
+        [NotMapped]
+        public ComputedProps ComputedProps { get; set; }
 
-        public List<VacationRequest> VacationRequests { get; set; }
 
-        public int? TeamId { get; set; }
-        public Team Team { get; set; }
+
+        //public List<UserPermission> UserPermissions { get; set; }
+
+        //public List<VacationRequest> VacationRequests { get; set; }
+
+        //public int? TeamId { get; set; }
+        //public Team Team { get; set; }
 
         public User()
         {

@@ -84,6 +84,7 @@ namespace Scheduling
             services.AddScoped<Querys>();
             services.AddScoped<Mutations>();
             services.AddScoped<UserType>();
+            services.AddScoped<ComputedPropsType>();
             services.AddScoped<PermissionType>();
             services.AddScoped<TeamType>();
             services.AddScoped<VacationRequestType>();

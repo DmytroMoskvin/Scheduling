@@ -93,7 +93,7 @@ namespace Scheduling.GraphQl
                    /* string email = httpContext.HttpContext.User.Claims.First(claim => claim.Type == "Email").Value.ToString();
                     User user = dataBaseRepository.Get(email);
                     int id = user.Id;*/
-                    return dataBaseRepository.Get();
+                    return dataBaseRepository.GetUsersWithCopmutedProps();
                 }
 
             )/*.AuthorizeWith(PermissionName.UserManagement.ToString())*/;
