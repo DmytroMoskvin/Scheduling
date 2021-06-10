@@ -63,7 +63,7 @@ namespace Scheduling.GraphQl
 
                     try
                     {
-                        dataBaseRepository.EditUser(id, email, name, surname, position, department, permissionsIds, teamId);
+                        dataBaseRepository.EditUser(id, name, surname, email, position, department, permissionsIds, teamId);
                         response.Success = true;
                         response.Message = "Success! User is edited.";
                     }
@@ -113,11 +113,11 @@ namespace Scheduling.GraphQl
 
                     return true;
                 }
-            ).AuthorizeWith(PermissionName.UserManagement.ToString());
+            )/*.AuthorizeWith(PermissionName.UserManagement.ToString())*/;
 
             Field<BooleanGraphType>(
                 "removeUser",
-                arguments: new QueryArguments(new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "Email", Description = "User email" }),
+                arguments: new QueryArguments(new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "Id", Description = "User Id" }),
                 resolve: context =>
                 {
                     return dataBaseRepository.RemoveUser(context.GetArgument<int>("Id"));

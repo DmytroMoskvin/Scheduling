@@ -18,7 +18,7 @@ type UserManagementProps =
 
 export const UserManagement: React.FC<UserManagementProps> = (props) => {
     const [isDeleteBoxOpen, setIsDeleteBoxOpen] = useState(false);
-    const [userEmail, setUserEmail] = useState("");
+    const [userId, setUserId] = useState(-1);
 
     const dispatch = useDispatch();
 
@@ -37,7 +37,7 @@ export const UserManagement: React.FC<UserManagementProps> = (props) => {
     return (
         <React.Fragment>
             <DeleteBox
-                email={userEmail} isOpen={isDeleteBoxOpen}
+                id={userId} isOpen={isDeleteBoxOpen}
                 setIsOpen={setIsDeleteBoxOpen}
             />
             <div id='usersTableBorder'>
@@ -77,7 +77,7 @@ export const UserManagement: React.FC<UserManagementProps> = (props) => {
                                         <td>
                                             <button
                                                 className="deleteUserButton"
-                                                onClick={() => { setIsDeleteBoxOpen(true); setUserEmail(u.email); }}>
+                                                onClick={() => { setIsDeleteBoxOpen(true); setUserId(u.id); }}>
                                                 Delete
                                             </button>
                                         </td>
@@ -95,14 +95,14 @@ export const UserManagement: React.FC<UserManagementProps> = (props) => {
 
 
 type DeleteBoxProps = {
-    email: string,
+    id: number,
     isOpen: boolean,
     setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
 };
 
-const DeleteBox: React.FC<DeleteBoxProps> = ({ email, isOpen, setIsOpen }) => {
+const DeleteBox: React.FC<DeleteBoxProps> = ({ id, isOpen, setIsOpen }) => {
     const dispatch = useDispatch();
-    const requestRemoveUser = () => dispatch({ type: 'REQUESTED_DELETE_USER', payload: email });
+    const requestRemoveUser = () => dispatch({ type: 'REQUESTED_DELETE_USER', payload: id });
     const handleRemoveUser = async (e: { preventDefault: () => void; }) => {
         e.preventDefault();
         requestRemoveUser();

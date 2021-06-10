@@ -54,9 +54,9 @@ namespace Scheduling.Domain
 
 
             var salt = Guid.NewGuid().ToString();
-            var permissions = new List<Permission>(Context.Permissions.Where(p => permissionsIds.Contains(p.Id)));
-            var userPermissions = new List<UserPermission>();
-            permissions.ForEach(p => userPermissions.Add(new UserPermission() { Permission = p }));
+            //var permissions = new List<Permission>(Context.Permissions.Where(p => permissionsIds.Contains(p.Id)));
+            //var userPermissions = new List<UserPermission>();
+            //permissions.ForEach(p => userPermissions.Add(new UserPermission() { Permission = p }));
 
             var user = new User()
             {
@@ -67,12 +67,15 @@ namespace Scheduling.Domain
                 Position = position,
                 Department = department,
                 Salt = salt,
+                ComputedProps = new ComputedProps()
             };
-            user.ComputedProps.Team = GetTeam(teamId);
-            user.ComputedProps.UserPermissions = userPermissions;
-
+            user.ComputedProps.TeamId = teamId;
+            //user.ComputedProps.UserPermissions = userPermissions;
             Context.Users.Add(user);
-            Context.SaveChangesAsync();
+            Context.SaveChanges();
+            permissionsIds.ForEach(it => AddUserPermission(user.Id, it));
+
+            Context.SaveChanges();
 
             return user;
         }
@@ -97,13 +100,16 @@ namespace Scheduling.Domain
             user.Surname = surname;
             user.Position = position;
             user.Department = department;
+            user.ComputedProps = new ComputedProps();
             user.ComputedProps.TeamId = teamId;
 
-            user.ComputedProps.UserPermissions = Context.Permissions
+            permissionsIds.ForEach(it => AddUserPermission(user.Id, it));
+
+            /*user.ComputedProps.UserPermissions = Context.Permissions
                 .Where(p => permissionsIds
                 .Contains(p.Id))
                 .Select(it => new UserPermission { UserId = id, PermissionId = it.Id })
-                .ToList();
+                .ToList();*/
 
             Context.Users.Update(user);
             Context.SaveChanges();

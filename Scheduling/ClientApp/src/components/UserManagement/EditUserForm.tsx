@@ -37,8 +37,8 @@ export const EditUserForm: React.FC<UserManagementProps> = (props) => {
                     surname,
                     position,
                     department: props.userEdit.onEditingUser!.department,
-                    permissionIds: props.userEdit.onEditingUser!.userPermissions.map(it => it.permission.id),
-                    teamId: props.userEdit.onEditingUser!.team.id
+                    permissionIds: props.userEdit.onEditingUser!.computedProps.userPermissions.map(it => it.permission.id),
+                    teamId: props.userEdit.onEditingUser!.computedProps.team.id
                 } as UserDataSend
 
                 // {
@@ -87,10 +87,6 @@ export const EditUserForm: React.FC<UserManagementProps> = (props) => {
                             <td><input onChange={(e) => setEmail(e.target.value)} required value={email} /></td>
                             <th><h4>Position</h4></th>
                             <td><input onChange={(e) => setPosition(e.target.value)} required value={position} /></td>
-                        </tr>
-                        <tr>
-                            <th><h4>Password</h4></th>
-                            <td><input /></td>
                         </tr>
                     </tbody>
                 </table>

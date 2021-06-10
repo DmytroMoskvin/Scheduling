@@ -91,6 +91,7 @@ namespace Scheduling
             services.AddScoped<PermissionNameEnum>();
             services.AddScoped<UserPermissionType>();
             services.AddScoped<GraphQlResponseType>();
+            services.AddScoped<UserTeamType>();
 
             services.AddScoped<ISchema, GraphSchema>();
 

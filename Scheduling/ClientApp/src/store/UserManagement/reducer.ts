@@ -78,7 +78,7 @@ const reducer: Reducer<UserManagementState> =
             case 'USER_DELETED': {
                 return {
                     ...state,
-                    users: state.users.filter(u => u!.email !== action.payload)
+                    users: state.users.filter(u => u!.id !== action.payload)
                 };
             }
 

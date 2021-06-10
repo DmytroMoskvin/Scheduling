@@ -51,7 +51,7 @@ namespace Scheduling.Domain
             return true;
         }
 
-      /*  public void AddUserToTeam(int userId, int teamId)
+      /*public void AddUserToTeam(int userId, int teamId)
         {
             if (Context.Teams.FirstOrDefault(team => team.Id == teamId) == null || 
                 Context.Users.FirstOrDefault(user => user.Id == userId) == null)

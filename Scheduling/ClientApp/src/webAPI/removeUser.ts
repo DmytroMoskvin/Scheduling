@@ -1,7 +1,7 @@
-﻿export const removeUser = async (email: string, token: string) => {
+﻿export const removeUser = async (id: number, token: string) => {
     const query = JSON.stringify({
         query: `mutation {
-            removeUser (email: "${email}")
+            removeUser (id: ${id})
 		}`
     });
 

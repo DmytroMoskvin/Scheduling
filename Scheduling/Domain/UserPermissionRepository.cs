@@ -16,5 +16,14 @@ namespace Scheduling.Domain
                 .Include(it => it.Permission)
                 .ToList();
         }
+
+        public void AddUserPermission(int userId, int permissionId)
+        {
+            Context.UserPermissions.Add(new UserPermission
+            {
+                PermissionId = permissionId,
+                UserId = userId
+            });
+        }
     }
 }

@@ -11,7 +11,7 @@ export interface AccessDenied { type: 'ACCESS_DENIED' };
 export interface UserCreatedAction { type: 'USER_CREATED', payload: UserData };
 export interface RequestedCreateUserAction { type: 'REQUESTED_CREATE_USER', payload: UserData };
 
-export interface UserDeletedAction { type: 'USER_DELETED', payload: string };
+export interface UserDeletedAction { type: 'USER_DELETED', payload: number };
 export interface RequestedDeleteUserAction { type: 'REQUESTED_DELETE_USER', payload: string };
 
 export interface UserEditedAction { type: 'USER_EDITED_SUCCESS', payload: { messageText: string}};
@@ -35,7 +35,7 @@ const accessDenied = () => ({ type: 'ACCESS_DENIED' } as AccessDenied);
 const createUser = (user: UserData) => ({ type: 'USER_CREATED', payload: user } as UserCreatedAction);
 const requestedCreateUser = (user: UserData) => ({ type: 'REQUESTED_CREATE_USER', payload: user } as RequestedCreateUserAction);
 
-const deleteUser = (email: string) => ({ type: 'USER_DELETED', payload: email } as UserDeletedAction);
+const deleteUser = (id: number) => ({ type: 'USER_DELETED', payload: id } as UserDeletedAction);
 const requestedDeleteUser = (email: string) => ({ type: 'REQUESTED_DELETE_USER', payload: email } as RequestedDeleteUserAction);
 
 const editedUserSuccess = (messageText: string) => ({ type: 'USER_EDITED_SUCCESS', payload: {messageText} } as UserEditedAction);

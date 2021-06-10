@@ -55,18 +55,17 @@ function* receiveUsersSaga(action: actions.ReceivedUsersDataAction) {
 function* createUserSaga(action: actions.UserCreatedAction) {
     const token = Cookies.get('token');
     if (token) {
-        try {
+        
             const response: UserData = yield createUser(
                 action.payload!.name, action.payload!.surname,
                 action.payload!.email, action.payload!.position, action.payload!.department,
-                action.payload!.userPermissions.map((up) => up.permission.id),
-                action.payload!.team.id, token)
+                action.payload!.computedProps.userPermissions.map((up) => up.permission.id),
+                action.payload!.computedProps.team.id, token)
                 .then(response => response.data);
             console.log(response);
             yield put(actionCreators.createUser(response));
-        } catch {
-            yield put(actionCreators.accessDenied());
-        }
+        
+        
     }
     else
         yield put(actionCreators.accessDenied());
