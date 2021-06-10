@@ -13,7 +13,7 @@ namespace Scheduling.GraphQl.Types
         {
             Name = "ComputedProps";
             Field<ListGraphType<UserPermissionType>>(nameof(ComputedProps.UserPermissions));
-            Field<TeamType>(nameof(ComputedProps.Team));
+            Field<UserTeamType>(nameof(ComputedProps.UserTeam));
             Field<ListGraphType<VacationRequestType>>(nameof(ComputedProps.VacationRequests));
         }
     }

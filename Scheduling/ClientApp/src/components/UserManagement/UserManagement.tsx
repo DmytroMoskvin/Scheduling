@@ -57,33 +57,36 @@ export const UserManagement: React.FC<UserManagementProps> = (props) => {
                         </tr>
                         {props.users.map((u) => {
                             if (u != null) {
-                                if (u.computedProps.team == null || u.computedProps.team.name == null) u.computedProps.team = { id: 0, name: "No Team" };
-                                    return(<tr key={props.users.indexOf(u)}>
-                                        <td>{u.name}</td>
-                                        <td>{u.surname}</td>
-                                        <td>{u.email}</td>
-                                        <td>{u.position}</td>
-                                        <td>{u.computedProps.team.name}</td>
-                                        <td>{u.computedProps.userPermissions.map((up) => {
-                                            let name = up.permission.name.toLowerCase();
-                                            name = name.replace(/_/g, " ");
-                                            return (
-                                                <div key={u.computedProps.userPermissions.indexOf(up)}>{name}</div>)
-                                        })}
-                                        </td>
-                                        <td>
-                                            <Link to="/edituser" onClick={() => props.setEditUser(props.users.indexOf(u))} className="editUserButton">Edit</Link>
-                                        </td>
-                                        <td>
-                                            <button
-                                                className="deleteUserButton"
-                                                onClick={() => { setIsDeleteBoxOpen(true); setUserId(u.id); }}>
-                                                Delete
-                                            </button>
-                                        </td>
-                                    </tr>);
-                                }
-                            })
+                                if (u.computedProps.userTeam.team == null ||
+                                    u.computedProps.userTeam.team.name == null)
+                                    u.computedProps.userTeam.team = { id: 0, name: "No Team" };
+
+                                return (<tr key={props.users.indexOf(u)}>
+                                    <td>{u.name}</td>
+                                    <td>{u.surname}</td>
+                                    <td>{u.email}</td>
+                                    <td>{u.position}</td>
+                                    <td>{u.computedProps.userTeam.team.name}</td>
+                                    <td>{u.computedProps.userPermissions.map((up) => {
+                                        let name = up.permission.name.toLowerCase();
+                                        name = name.replace(/_/g, " ");
+                                        return (
+                                            <div key={u.computedProps.userPermissions.indexOf(up)}>{name}</div>)
+                                    })}
+                                    </td>
+                                    <td>
+                                        <Link to="/edituser" onClick={() => props.setEditUser(props.users.indexOf(u))} className="editUserButton">Edit</Link>
+                                    </td>
+                                    <td>
+                                        <button
+                                            className="deleteUserButton"
+                                            onClick={() => { setIsDeleteBoxOpen(true); setUserId(u.id); }}>
+                                            Delete
+                                        </button>
+                                    </td>
+                                </tr>);
+                            }
+                        })
                         }
                     </tbody>
                 </table>
@@ -126,7 +129,7 @@ const DeleteBox: React.FC<DeleteBoxProps> = ({ id, isOpen, setIsOpen }) => {
         </div>
         : null;
 
-    return(
+    return (
         <React.Fragment>
             {content}
         </React.Fragment>

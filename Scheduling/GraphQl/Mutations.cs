@@ -113,7 +113,7 @@ namespace Scheduling.GraphQl
 
                     return true;
                 }
-            )/*.AuthorizeWith(PermissionName.UserManagement.ToString())*/;
+            ).AuthorizeWith(PermissionName.UserManagement.ToString());
 
             Field<BooleanGraphType>(
                 "removeUser",

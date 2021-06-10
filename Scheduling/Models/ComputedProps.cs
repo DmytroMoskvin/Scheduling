@@ -9,9 +9,7 @@ namespace Scheduling.Models
     {
         public List<UserPermission> UserPermissions { get; set; }
 
-        public Team Team { get; set; }
-
-        public int? TeamId { get; set; }
+        public UserTeam UserTeam { get; set; }
 
         public List<VacationRequest> VacationRequests { get; set; }
 

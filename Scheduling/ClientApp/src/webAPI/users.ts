@@ -16,8 +16,10 @@ export const getUsersData = async (token: string) => {
             permissionId
             userId
           }
-          team {
-            name
+          userTeam {
+            team {
+              name
+            }
           }
         }
       }

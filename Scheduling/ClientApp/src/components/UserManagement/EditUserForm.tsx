@@ -38,7 +38,7 @@ export const EditUserForm: React.FC<UserManagementProps> = (props) => {
                     position,
                     department: props.userEdit.onEditingUser!.department,
                     permissionIds: props.userEdit.onEditingUser!.computedProps.userPermissions.map(it => it.permission.id),
-                    teamId: props.userEdit.onEditingUser!.computedProps.team.id
+                    teamId: props.userEdit.onEditingUser!.computedProps.userTeam.team.id
                 } as UserDataSend
 
                 // {

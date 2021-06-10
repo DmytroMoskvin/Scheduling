@@ -40,7 +40,9 @@ export const CreateUserForm: React.FC<UserManagementProps> = (props) => {
             position: position,
             department: department,
             computedProps: {
-                team: { id: teamId, name: "" },
+                userTeam: {
+                    team: { id: teamId, name: "" },
+                },
                 userPermissions: userPermissions
             }
         } as UserData);

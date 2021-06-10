@@ -14,11 +14,6 @@ namespace Scheduling.GraphQl.Types
         {
             Name = "PermissionName";
             Description = "One of the possible permissions";
-            /*AddValue(PermissionName.UserManagement.ToString(), "Access to user management.", 0);
-            AddValue(PermissionName.Accountant.ToString(), "Access to reports", 1);
-            AddValue(PermissionName.PartTime.ToString(), "Access to timer", 2);
-            AddValue(PermissionName.FullTime.ToString(), "", 3);
-            AddValue(PermissionName.VacationApprovals.ToString(), "Access to vacation approvals.", 4);*/
         }
     }
 }

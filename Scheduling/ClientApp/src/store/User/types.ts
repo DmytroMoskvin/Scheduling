@@ -8,9 +8,14 @@ export interface Permission {
 	id: number,
 	name: string
 }
+
+export interface UserTeam {
+	team: Team
+}
+
 export interface ComputedProps {
 	userPermissions: Array<UserPermission>,
-	team: Team
+	userTeam: UserTeam
 }
 
 export interface Team {

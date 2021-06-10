@@ -60,7 +60,7 @@ function* createUserSaga(action: actions.UserCreatedAction) {
                 action.payload!.name, action.payload!.surname,
                 action.payload!.email, action.payload!.position, action.payload!.department,
                 action.payload!.computedProps.userPermissions.map((up) => up.permission.id),
-                action.payload!.computedProps.team.id, token)
+                action.payload!.computedProps.userTeam.team.id, token)
                 .then(response => response.data);
             console.log(response);
             yield put(actionCreators.createUser(response));

@@ -22,6 +22,8 @@ namespace Scheduling.Domain
 
         public DbSet<UserPermission> UserPermissions { get; set; }
 
+        public DbSet<UserTeam> UserTeams { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -35,30 +37,38 @@ namespace Scheduling.Domain
 
             modelBuilder.Entity<UserPermission>()
                 .HasKey(u => new { u.UserId, u.PermissionId });
-        /*
-            modelBuilder.Entity<UserPermission>()
-                .HasOne(up => up.User)
-                .WithMany(u => u.UserPermissions)
-                .HasForeignKey(up => up.UserId);
 
-            modelBuilder.Entity<User>()
-                .Navigation(up => up.UserPermissions)
-                .UsePropertyAccessMode(PropertyAccessMode.Property);
+            modelBuilder.Entity<UserTeam>()
+                .HasKey(ut => new { ut.UserId, ut.TeamId });
+            /*
+                modelBuilder.Entity<UserPermission>()
+                    .HasOne(up => up.User)
+                    .WithMany(u => u.UserPermissions)
+                    .HasForeignKey(up => up.UserId);
 
-            modelBuilder.Entity<UserPermission>()
-                .HasOne(up => up.Permission)
-                .WithMany(p => p.UserPermissions)
-                .HasForeignKey(p => p.PermissionId);
+                modelBuilder.Entity<User>()
+                    .Navigation(up => up.UserPermissions)
+                    .UsePropertyAccessMode(PropertyAccessMode.Property);
 
-            modelBuilder.Entity<User>()
-                .HasOne(u => u.Team)
-                .WithMany(t => t.Users);
+                modelBuilder.Entity<UserPermission>()
+                    .HasOne(up => up.Permission)
+                    .WithMany(p => p.UserPermissions)
+                    .HasForeignKey(p => p.PermissionId);
 
-            modelBuilder.Entity<VacationRequest>()
-                .HasOne(vr => vr.User)
-                .WithMany(u => u.VacationRequests);
-*/
+                modelBuilder.Entity<User>()
+                    .HasOne(u => u.Team)
+                    .WithMany(t => t.Users);
 
+                modelBuilder.Entity<VacationRequest>()
+                    .HasOne(vr => vr.User)
+                    .WithMany(u => u.VacationRequests);
+    */
+
+            modelBuilder.Entity<Team>().HasData(new Team
+            {
+                Id = 1,
+                Name = "Development",
+            });
 
             modelBuilder.Entity<UserPermission>().HasData(new List<UserPermission>
             {
@@ -67,6 +77,17 @@ namespace Scheduling.Domain
                 new UserPermission {PermissionId = 3, UserId = 13213133},
             });
 
+            modelBuilder.Entity<UserTeam>().HasData(new UserTeam
+            {
+                UserId = 1321313,
+                TeamId = 1
+            });
+
+            modelBuilder.Entity<UserTeam>().HasData(new UserTeam
+            {
+                UserId = 13213133,
+                TeamId = 1
+            });
 
             modelBuilder.Entity<Permission>().HasData(new Permission
             {
@@ -90,13 +111,6 @@ namespace Scheduling.Domain
             {
                 Id = 4,
                 Name = PermissionName.VacationApprovals,
-            });
-
-
-            modelBuilder.Entity<Team>().HasData(new Team
-            {
-                Id = 1,
-                Name = "Development",
             });
 
             modelBuilder.Entity<User>().HasData(new User
